@@ -2,9 +2,11 @@ from werkzeug.security import generate_password_hash
 import csv
 from faker import Faker
 
-num_users = 100
+num_users = 50
 num_products = 2000
 num_purchases = 2500
+num_sellers = 10
+num_cart_items = 100
 
 Faker.seed(0)
 fake = Faker()
@@ -15,7 +17,8 @@ def get_csv_writer(f):
 
 
 def gen_users(num_users):
-    with open('Users.csv', 'w') as f:
+    uids = []
+    with open('db/generated/Users.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Users...', end=' ', flush=True)
         for uid in range(num_users):
@@ -29,13 +32,29 @@ def gen_users(num_users):
             firstname = name_components[0]
             lastname = name_components[-1]
             writer.writerow([uid, email, password, firstname, lastname])
+            uids.append(uid)
         print(f'{num_users} generated')
-    return
+    return uids
+
+
+def gen_sellers(num_sellers, num_users):
+    s_uids = []
+    with open('db/generated/Sellers.csv', 'w') as f:
+        writer = get_csv_writer(f)
+        print('Sellers...', end=' ', flush=True)
+        for i in range(num_sellers):
+            if i % 5 == 0:
+                print(f'{i}', end=' ', flush=True)
+            s_uid = fake.unique.random_int(min=1, max=num_users)
+            s_uids.append(s_uid)
+            writer.writerow([s_uid])
+        print(f'{num_sellers} generated')
+    return s_uids
 
 
 def gen_products(num_products):
     available_pids = []
-    with open('Products.csv', 'w') as f:
+    with open('db/generated/Products.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Products...', end=' ', flush=True)
         for pid in range(num_products):
@@ -51,14 +70,30 @@ def gen_products(num_products):
     return available_pids
 
 
-def gen_purchases(num_purchases, available_pids):
-    with open('Purchases.csv', 'w') as f:
+def gen_carts(num_cart_items, uids, s_uids, available_pids):
+    with open('db/generated/Carts.csv', 'w') as f:
+        writer = get_csv_writer(f)
+        print('Carts...', end=' ', flush=True)
+        for i in range(num_cart_items):
+            if i % 10 == 0:
+                print(f'{i}', end=' ', flush=True)
+            uid = fake.random_element(elements=uids)
+            pid = fake.random_element(elements=available_pids)
+            s_uid = fake.random_element(elements=s_uids)
+            quantity = fake.random_int(min=1, max=10)
+            writer.writerow([i, uid, pid, s_uid, quantity])
+        print(f'{num_cart_items} generated')
+    return 
+
+
+def gen_purchases(num_purchases, available_pids, uids):
+    with open('db/generated/Purchases.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Purchases...', end=' ', flush=True)
         for id in range(num_purchases):
             if id % 100 == 0:
                 print(f'{id}', end=' ', flush=True)
-            uid = fake.random_int(min=0, max=num_users-1)
+            uid = fake.random_element(elements=uids)
             pid = fake.random_element(elements=available_pids)
             time_purchased = fake.date_time()
             writer.writerow([id, uid, pid, time_purchased])
@@ -66,6 +101,8 @@ def gen_purchases(num_purchases, available_pids):
     return
 
 
-gen_users(num_users)
+uids = gen_users(num_users)
 available_pids = gen_products(num_products)
-gen_purchases(num_purchases, available_pids)
+gen_purchases(num_purchases, available_pids, uids)
+s_uids = gen_sellers(num_sellers, num_users)
+gen_carts(num_cart_items, uids, s_uids, available_pids)
