@@ -14,14 +14,6 @@ CREATE TABLE Users (
 
 CREATE TABLE Sellers (
     id INT NOT NULL REFERENCES Users(id),
-    email VARCHAR(255) REFERENCES Users(email),
-    password VARCHAR(255) REFERENCES Users(password),
-    firstname VARCHAR(255) REFERENCES Users(firstname),
-    lastname VARCHAR(255) REFERENCES Users(lastname),
-    address VARCHAR(255) REFERENCES Users(address),
-    balance DECIMAL(12,2) REFERENCES Users(balance),
-    date DATE NOT NULL REFERENCES Users(date),
-    avg_rating DECIMAL(3,2) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -32,14 +24,12 @@ CREATE TABLE Products (
     description VARCHAR(255) UNIQUE NOT NULL,
     image NVARCHAR(Max) UNIQUE NOT NULL,
     price DECIMAL(12,2) NOT NULL,
-    avg_rating DECIMAL(3,2) NOT NULL,
     available BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE ForSale (
+CREATE TABLE ForSaleItems (
     pid INT NOT NULL REFERENCES Products(id),
     sid INT NOT NULL REFERENCES Sellers(id),
-    price DECIMAL(12,2) NOT NULL,
     quantity INT NOT NULL,
     PRIMARY KEY (pid, sid)
 );
@@ -49,24 +39,21 @@ CREATE TABLE Carts (
     pid INT NOT NULL REFERENCES Products(id),
     sid INT NOT NULL REFERENCES Sellers(id),
     quantity INT NOT NULL,
-    unit_price DECIMAL(12,2) NOT NULL,
-    total_amount DECIMAL(12,2) NOT NULL,
-    time_purchased timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
     PRIMARY KEY (uid, sid, pid)
 );
 
-CREATE TABLE Purchases (
+CREATE TABLE Transactions (
     uid INT NOT NULL REFERENCES Users(id),
     sid INT NOT NULL REFERENCES Sellers(id),
     pid INT NOT NULL REFERENCES Products(id),
-    number_of_items INT NOT NULL,
-    total_amount DECIMAL(12,2) NOT NULL,
+    quantity INT NOT NULL,
+    unit_price DECIMAL(12,2) NOT NULL,
     time_purchased timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
     order_status VARCHAR(255) NOT NULL,
-    PRIMARY KEY (uid, sid, pid)
+    PRIMARY KEY (uid, sid, pid, time_purchased)
 );
 
-CREATE TABLE RatedSeller (
+CREATE TABLE SellerRatings (
     uid INT NOT NULL REFERENCES Users(id),
     sid INT NOT NULL REFERENCES Sellers(id),
     rating DECIMAL(3,2) NOT NULL,
@@ -75,7 +62,7 @@ CREATE TABLE RatedSeller (
     PRIMARY KEY (uid, sid)
 );
 
-CREATE TABLE RatedProduct (
+CREATE TABLE ProductRatings (
     uid INT NOT NULL REFERENCES Users(id),
     pid INT NOT NULL REFERENCES Products(id),
     rating DECIMAL(3,2) NOT NULL,
