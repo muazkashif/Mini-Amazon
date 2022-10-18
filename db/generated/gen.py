@@ -119,7 +119,7 @@ def gen_purchases(num_purchases, available_pids, uids):
     return
 
 def gen_prod_ratings(num_product_ratings, available_pids, uids):
-    with open('db/generated/ForSales.csv', 'w') as f:
+    with open('db/generated/ProductRatings.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Product Ratings...', end=' ', flush=True)
         for i in range(num_product_ratings):
@@ -133,7 +133,7 @@ def gen_prod_ratings(num_product_ratings, available_pids, uids):
     return
 
 def gen_seller_ratings(num_seller_ratings, s_uids, uids):
-    with open('db/generated/ForSales.csv', 'w') as f:
+    with open('db/generated/SellerRatings.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Seller Ratings...', end=' ', flush=True)
         for i in range(num_product_ratings):

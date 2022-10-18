@@ -36,7 +36,7 @@ CREATE TABLE Products (
     available BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE ForSale (
+CREATE TABLE ForSales (
     pid INT NOT NULL REFERENCES Products(id),
     sid INT NOT NULL REFERENCES Sellers(id),
     price DECIMAL(12,2) NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE Purchases (
     PRIMARY KEY (uid, sid, pid)
 );
 
-CREATE TABLE RatedSeller (
+CREATE TABLE SellerRatings (
     uid INT NOT NULL REFERENCES Users(id),
     sid INT NOT NULL REFERENCES Sellers(id),
     rating DECIMAL(3,2) NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE RatedSeller (
     PRIMARY KEY (uid, sid)
 );
 
-CREATE TABLE RatedProduct (
+CREATE TABLE ProductRatings (
     uid INT NOT NULL REFERENCES Users(id),
     pid INT NOT NULL REFERENCES Products(id),
     rating DECIMAL(3,2) NOT NULL,
