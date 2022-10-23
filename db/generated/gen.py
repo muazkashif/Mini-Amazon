@@ -1,6 +1,7 @@
 from werkzeug.security import generate_password_hash
 import csv
 from faker import Faker
+import random
 
 num_users = 50
 num_products = 2000
@@ -34,7 +35,10 @@ def gen_users(num_users):
             name_components = profile['name'].split(' ')
             firstname = name_components[0]
             lastname = name_components[-1]
-            writer.writerow([uid, email, password, firstname, lastname])
+            address = fake.address()
+            balance = round(random.uniform(0, 10000), 2)
+            date = fake.date_between("2000-01-01")
+            writer.writerow([uid, email, firstname, lastname, password, address, balance, date])
             uids.append(uid)
         print(f'{num_users} generated')
     return uids
