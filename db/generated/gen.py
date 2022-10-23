@@ -38,7 +38,13 @@ def gen_users(num_users):
             firstname = name_components[0]
             lastname = name_components[-1]
             address = fake.address()
+<<<<<<< HEAD
+            balance = round(random.uniform(0, 10000), 2)
+            date = fake.date_between("2000-01-01")
+            writer.writerow([uid, email, firstname, lastname, password, address, balance, date])
+=======
             writer.writerow([uid, email, password, firstname, lastname, address])
+>>>>>>> main
             uids.append(uid)
         print(f'{num_users} generated')
     return uids
@@ -127,7 +133,11 @@ def gen_purchases(num_purchases, available_pids, uids):
     return
 
 def gen_prod_ratings(num_product_ratings, available_pids, uids):
+<<<<<<< HEAD
+    with open('db/generated/ProductRatings.csv', 'w') as f:
+=======
     with open(file_path + 'ProductRatings.csv', 'w') as f:
+>>>>>>> main
         writer = get_csv_writer(f)
         print('Product Ratings...', end=' ', flush=True)
         for i in range(num_product_ratings):
@@ -143,7 +153,11 @@ def gen_prod_ratings(num_product_ratings, available_pids, uids):
     return
 
 def gen_seller_ratings(num_seller_ratings, s_uids, uids):
+<<<<<<< HEAD
+    with open('db/generated/SellerRatings.csv', 'w') as f:
+=======
     with open(file_path + 'SellerRatings.csv', 'w') as f:
+>>>>>>> main
         writer = get_csv_writer(f)
         print('Seller Ratings...', end=' ', flush=True)
         for i in range(num_product_ratings):
