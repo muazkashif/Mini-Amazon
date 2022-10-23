@@ -12,6 +12,8 @@ num_forsale_items = 1000
 num_product_ratings = 1000
 num_seller_ratings = 5
 
+file_path = "../generated/"
+
 Faker.seed(0)
 fake = Faker()
 
@@ -22,7 +24,7 @@ def get_csv_writer(f):
 
 def gen_users(num_users):
     uids = []
-    with open('db/generated/Users.csv', 'w') as f:
+    with open(file_path + 'Users.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Users...', end=' ', flush=True)
         for uid in range(num_users):
@@ -36,9 +38,13 @@ def gen_users(num_users):
             firstname = name_components[0]
             lastname = name_components[-1]
             address = fake.address()
+<<<<<<< HEAD
             balance = round(random.uniform(0, 10000), 2)
             date = fake.date_between("2000-01-01")
             writer.writerow([uid, email, firstname, lastname, password, address, balance, date])
+=======
+            writer.writerow([uid, email, password, firstname, lastname, address])
+>>>>>>> main
             uids.append(uid)
         print(f'{num_users} generated')
     return uids
@@ -46,7 +52,7 @@ def gen_users(num_users):
 
 def gen_sellers(num_sellers, num_users):
     s_uids = []
-    with open('db/generated/Sellers.csv', 'w') as f:
+    with open(file_path + 'Sellers.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Sellers...', end=' ', flush=True)
         for i in range(num_sellers):
@@ -61,24 +67,28 @@ def gen_sellers(num_sellers, num_users):
 
 def gen_products(num_products):
     available_pids = []
-    with open('db/generated/Products.csv', 'w') as f:
+    with open(file_path + 'Products.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Products...', end=' ', flush=True)
         for pid in range(num_products):
             if pid % 100 == 0:
                 print(f'{pid}', end=' ', flush=True)
-            name = fake.sentence(nb_words=4)[:-1]
+            pname = fake.sentence(nb_words=4)[:-1]
             price = f'{str(fake.random_int(max=500))}.{fake.random_int(max=99):02}'
             available = fake.random_element(elements=('true', 'false'))
+            rating = random.uniform(0.0,5.0)
+            descriptions = fake.sentence() 
+            category = fake.sentence(nb_words = 2)[:-1]
+            images = fake.binary(length = 64) #Might be better generated some other way
             if available == 'true':
                 available_pids.append(pid)
-            writer.writerow([pid, name, price, available])
+            writer.writerow([pid, pname, category, images, descriptions, price, rating, available])
         print(f'{num_products} generated; {len(available_pids)} available')
     return available_pids
 
 
 def gen_carts(num_cart_items, uids, s_uids, available_pids):
-    with open('db/generated/Carts.csv', 'w') as f:
+    with open(file_path + 'Carts.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Carts...', end=' ', flush=True)
         for i in range(num_cart_items):
@@ -93,7 +103,7 @@ def gen_carts(num_cart_items, uids, s_uids, available_pids):
     return 
 
 def gen_forsales(num_forsale_items, s_uids, available_pids):
-    with open('db/generated/ForSales.csv', 'w') as f:
+    with open(file_path + 'ForSaleItems.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('ForSales...', end=' ', flush=True)
         for i in range(num_forsale_items):
@@ -109,7 +119,7 @@ def gen_forsales(num_forsale_items, s_uids, available_pids):
 
 
 def gen_purchases(num_purchases, available_pids, uids):
-    with open('db/generated/Purchases.csv', 'w') as f:
+    with open(file_path + 'Transactions.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Purchases...', end=' ', flush=True)
         for id in range(num_purchases):
@@ -123,7 +133,11 @@ def gen_purchases(num_purchases, available_pids, uids):
     return
 
 def gen_prod_ratings(num_product_ratings, available_pids, uids):
+<<<<<<< HEAD
     with open('db/generated/ProductRatings.csv', 'w') as f:
+=======
+    with open(file_path + 'ProductRatings.csv', 'w') as f:
+>>>>>>> main
         writer = get_csv_writer(f)
         print('Product Ratings...', end=' ', flush=True)
         for i in range(num_product_ratings):
@@ -132,12 +146,18 @@ def gen_prod_ratings(num_product_ratings, available_pids, uids):
             pid = fake.random_element(elements=available_pids)
             uid = fake.random_element(elements=uids)
             rating = fake.random_int(min=1, max=5)
-            writer.writerow([pid, uid, rating])
+            review = fake.sentence(nb_words=10)
+            time = fake.time()
+            writer.writerow([pid, uid, rating,review,time])
         print(f'{num_product_ratings} generated')
     return
 
 def gen_seller_ratings(num_seller_ratings, s_uids, uids):
+<<<<<<< HEAD
     with open('db/generated/SellerRatings.csv', 'w') as f:
+=======
+    with open(file_path + 'SellerRatings.csv', 'w') as f:
+>>>>>>> main
         writer = get_csv_writer(f)
         print('Seller Ratings...', end=' ', flush=True)
         for i in range(num_product_ratings):
@@ -146,7 +166,9 @@ def gen_seller_ratings(num_seller_ratings, s_uids, uids):
             s_uid = fake.random_element(elements=s_uids)
             uid = fake.random_element(elements=uids)
             rating = fake.random_int(min=1, max=5)
-            writer.writerow([s_uid, uid, rating])
+            review = fake.sentence(nb_words=10)
+            time = fake.time()
+            writer.writerow([s_uid, uid, rating,review,time])
         print(f'{num_seller_ratings} generated')
     return
 
@@ -159,3 +181,4 @@ gen_carts(num_cart_items, uids, s_uids, available_pids)
 gen_purchases(num_purchases, available_pids, uids)
 gen_prod_ratings(num_product_ratings, available_pids, uids)
 gen_seller_ratings(num_seller_ratings, s_uids, uids)
+gen_forsales(num_forsale_items, s_uids, available_pids)
