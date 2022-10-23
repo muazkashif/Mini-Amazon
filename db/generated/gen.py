@@ -13,7 +13,7 @@ num_forsale_items = 1000
 num_product_ratings = 1000
 num_seller_ratings = 5
 
-file_path = "../generated/"
+file_path = "../data/"
 
 Faker.seed(0)
 fake = Faker()
@@ -41,7 +41,7 @@ def gen_users(num_users):
             address = fake.address()
             balance = round(random.uniform(0, 10000), 2)
             date = fake.date_between(datetime.datetime(2000, 1, 1))
-            writer.writerow([uid, email, firstname, lastname, password, address, balance, date])
+            writer.writerow([uid, email, password, firstname, lastname, address, balance, date])
             uids.append(uid)
         print(f'{num_users} generated')
     return uids
