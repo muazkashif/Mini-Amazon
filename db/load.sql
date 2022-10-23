@@ -14,26 +14,26 @@ SELECT pg_catalog.setval('public.products_id_seq',
                          false);
 
 \COPY Transactions FROM 'Transactions.csv' WITH DELIMITER ',' NULL '' CSV
-SELECT pg_catalog.setval('public.transactions_id_seq',
-                         (SELECT MAX(id)+1 FROM Transactions),
-                         false);
+-- SELECT pg_catalog.setval('public.transactions_id_seq',
+--                          (SELECT MAX(id)+1 FROM Transactions),
+--                          false);
                     
 \COPY Carts FROM 'Carts.csv' WITH DELIMITER ',' NULL '' CSV
-SELECT pg_catalog.setval('public.carts_id_seq',
-                         (SELECT MAX(id)+1 FROM Carts),
-                         false);
+-- SELECT pg_catalog.setval('public.carts_id_seq',
+--                          (SELECT MAX(id)+1 FROM Carts),
+--                          false);
 
 \COPY ForSaleItems FROM 'ForSaleItems.csv' WITH DELIMITER ',' NULL '' CSV
-SELECT pg_catalog.setval('public.forsaleitems_id_seq',
-                         (SELECT MAX(id)+1 FROM ForSaleItems),
-                         false);
+-- SELECT pg_catalog.setval('public.forsaleitems_id_seq',
+--                          (SELECT MAX(id)+1 FROM ForSaleItems),
+--                          false);
 
 \COPY SellerRatings FROM 'SellerRatings.csv' WITH DELIMITER ',' NULL '' CSV
-SELECT pg_catalog.setval('public.sellerratings_id_seq',
-                         (SELECT MAX(id)+1 FROM SellerRatings),
-                         false);
+-- SELECT pg_catalog.setval('public.sellerratings_id_seq',
+--                          (SELECT MAX(id)+1 FROM SellerRatings),
+--                          false);
 
 \COPY ProductRatings FROM 'ProductRatings.csv' WITH DELIMITER ',' NULL '' CSV
-SELECT pg_catalog.setval('public.productratings_id_seq',
-                         (SELECT MAX(id)+1 FROM ProductRatings),
-                         false);
+-- SELECT pg_catalog.setval('public.productratings_id_seq',
+--                          (SELECT MAX(id)+1 FROM ProductRatings),
+--                          false);
