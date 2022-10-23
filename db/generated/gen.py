@@ -12,7 +12,7 @@ num_forsale_items = 1000
 num_product_ratings = 1000
 num_seller_ratings = 5
 
-file_path = "../data/"
+file_path = "../generated/"
 
 Faker.seed(0)
 fake = Faker()
