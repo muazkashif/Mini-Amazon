@@ -79,7 +79,7 @@ def gen_products(num_products):
             images = fake.binary(length = 64) #Might be better generated some other way
             if available == 'true':
                 available_pids.append(pid)
-            writer.writerow([pid, pname, category, images, descriptions, price, rating, available])
+            writer.writerow([pid, pname, category, descriptions, images, price, rating, available])
         print(f'{num_products} generated; {len(available_pids)} available')
     return available_pids
 
