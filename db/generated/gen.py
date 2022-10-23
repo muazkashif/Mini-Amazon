@@ -11,7 +11,7 @@ num_forsale_items = 1000
 num_product_ratings = 1000
 num_seller_ratings = 5
 
-file_path = "db/data/"
+file_path = "../generated/"
 
 Faker.seed(0)
 fake = Faker()
@@ -130,7 +130,9 @@ def gen_prod_ratings(num_product_ratings, available_pids, uids):
             pid = fake.random_element(elements=available_pids)
             uid = fake.random_element(elements=uids)
             rating = fake.random_int(min=1, max=5)
-            writer.writerow([pid, uid, rating])
+            review = fake.sentence(nb_words=10)
+            time = fake.time()
+            writer.writerow([pid, uid, rating,review,time])
         print(f'{num_product_ratings} generated')
     return
 
@@ -144,7 +146,9 @@ def gen_seller_ratings(num_seller_ratings, s_uids, uids):
             s_uid = fake.random_element(elements=s_uids)
             uid = fake.random_element(elements=uids)
             rating = fake.random_int(min=1, max=5)
-            writer.writerow([s_uid, uid, rating])
+            review = fake.sentence(nb_words=10)
+            time = fake.time()
+            writer.writerow([s_uid, uid, rating,review,time])
         print(f'{num_seller_ratings} generated')
     return
 
