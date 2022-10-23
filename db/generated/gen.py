@@ -36,7 +36,8 @@ def gen_users(num_users):
             name_components = profile['name'].split(' ')
             firstname = name_components[0]
             lastname = name_components[-1]
-            writer.writerow([uid, email, password, firstname, lastname])
+            address = fake.random.address()
+            writer.writerow([uid, email, password, firstname, lastname, address])
             uids.append(uid)
         print(f'{num_users} generated')
     return uids
@@ -65,12 +66,16 @@ def gen_products(num_products):
         for pid in range(num_products):
             if pid % 100 == 0:
                 print(f'{pid}', end=' ', flush=True)
-            name = fake.sentence(nb_words=4)[:-1]
+            pname = fake.sentence(nb_words=4)[:-1]
             price = f'{str(fake.random_int(max=500))}.{fake.random_int(max=99):02}'
             available = fake.random_element(elements=('true', 'false'))
+            rating = fake.random.float(min = 0.0, max = 5.0)
+            descriptions = fake.random.sentence() 
+            category = fake.random.sentence(nb_words = 2)[:-1]
+            images = fake.random.binary(length = 64) #Might be better generated some other way
             if available == 'true':
                 available_pids.append(pid)
-            writer.writerow([pid, name, price, available])
+            writer.writerow([pid, pname, category, images, descriptions, price, rating, available])
         print(f'{num_products} generated; {len(available_pids)} available')
     return available_pids
 
