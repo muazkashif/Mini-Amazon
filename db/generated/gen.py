@@ -47,17 +47,19 @@ def gen_users(num_users):
     return uids
 
 
-def gen_sellers(num_sellers, num_users):
+def gen_sellers(num_sellers, User_IDs):
     s_uids = []
     with open(file_path + 'Sellers.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Sellers...', end=' ', flush=True)
         for i in range(num_sellers):
-            if i % 5 == 0:
+            if i % 10 == 0:
                 print(f'{i}', end=' ', flush=True)
-            s_uid = fake.unique.random_int(min=1, max=num_users)
-            s_uids.append(s_uid)
-            writer.writerow([s_uid])
+            uid = fake.random_element(elements=User_IDs)
+            while uid in s_uids:
+                uid = fake.random_element(elements=User_IDs)
+            writer.writerow([uid])
+            s_uids.append(uid)
         print(f'{num_sellers} generated')
     return s_uids
 
@@ -73,7 +75,7 @@ def gen_products(num_products):
             pname = fake.sentence(nb_words=4)[:-1]
             price = f'{str(fake.random_int(max=500))}.{fake.random_int(max=99):02}'
             available = fake.random_element(elements=('true', 'false'))
-            rating = random.uniform(0.0,5.0)
+            rating = round(random.uniform(0.0,5.0),2)
             descriptions = fake.sentence() 
             category = fake.sentence(nb_words = 2)[:-1]
             images = fake.binary(length = 64) #Might be better generated some other way
@@ -165,7 +167,7 @@ def gen_seller_ratings(num_seller_ratings, s_uids, uids):
 uids = gen_users(num_users)
 available_pids = gen_products(num_products)
 gen_purchases(num_purchases, available_pids, uids)
-s_uids = gen_sellers(num_sellers, num_users)
+s_uids = gen_sellers(num_sellers, uids)
 gen_carts(num_cart_items, uids, s_uids, available_pids)
 gen_purchases(num_purchases, available_pids, uids)
 gen_prod_ratings(num_product_ratings, available_pids, uids)
