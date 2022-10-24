@@ -12,7 +12,7 @@ from flask import Blueprint
 bp = Blueprint('cart_form', __name__)
 
 class cart_form(FlaskForm):
-    id = IntegerField('name', validators=[DataRequired()])
+    id = IntegerField('User ID', validators=[DataRequired()])
     submit = SubmitField('Search')
 
 @bp.route('/cart_form', methods=['GET', 'POST'])

@@ -53,6 +53,8 @@ CREATE TABLE Transactions (
     PRIMARY KEY (uid, sid, pid, time_purchased)
 );
 
+
+
 CREATE TABLE SellerRatings (
     uid INT NOT NULL REFERENCES Users(id),
     sid INT NOT NULL REFERENCES Sellers(id),
