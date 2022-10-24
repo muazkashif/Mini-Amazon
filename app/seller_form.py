@@ -16,7 +16,7 @@ class seller_form(FlaskForm):
     submit = SubmitField('Search')
 
 @bp.route('/seller_form', methods=['GET', 'POST'])
-def cart_search():
+def seller_search():
     form = seller_form()
     seller = None
     if form.validate_on_submit():
