@@ -22,6 +22,17 @@ WHERE uid = :uid
         return [Rating(*row) for row in rows]
 
     @staticmethod
+    def get_recent(uid, k):
+        rows = app.db.execute('''
+SELECT uid, sid, pid, rating, review, time_reviewed
+FROM Ratings
+WHERE uid = :uid
+ORDER BY time_reviewed DESC
+''',
+                              uid=uid)
+        return [Rating(*row) for row in rows[:k]]
+
+    @staticmethod
     def get_all():
         rows = app.db.execute('''
 SELECT uid, sid, pid, rating, review, time_reviewed

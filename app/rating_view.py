@@ -20,6 +20,6 @@ def index():
 
 @bp.route('/rating/<uid>')
 def show_rating_uid(uid):
-    ratings = Rating.get(uid)
+    ratings = Rating.get_recent(uid, k=5)
     return render_template('rating_view.html',
                            ratings=ratings)
