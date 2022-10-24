@@ -25,5 +25,5 @@ def index():
 @bp.route('/products/<k>')
 def show_product_top(k):
     prod = Product.get_top_k_products(k)
-    return render_template('product_form.html',
+    return render_template('products.html',
                            prod_items=prod)

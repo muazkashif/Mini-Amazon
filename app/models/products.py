@@ -16,8 +16,8 @@ FROM Products
 ORDER BY price DESC
 LIMIT :k
 ''',
-                              k=k)
-        return Product(*(rows[0])) if rows is not None else None
+                            k= k)
+        return [Product(*row) for row in rows]
 
 
 
