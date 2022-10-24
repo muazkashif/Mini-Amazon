@@ -28,14 +28,4 @@ SELECT pg_catalog.setval('public.products_id_seq',
 --                          (SELECT MAX(id)+1 FROM ForSaleItems),
 --                          false);
 
-\COPY SellerRatings FROM 'SellerRatings.csv' WITH DELIMITER ',' NULL '' CSV
--- SELECT pg_catalog.setval('public.sellerratings_id_seq',
---                          (SELECT MAX(id)+1 FROM SellerRatings),
---                          false);
-
-\COPY ProductRatings FROM 'ProductRatings.csv' WITH DELIMITER ',' NULL '' CSV
--- SELECT pg_catalog.setval('public.productratings_id_seq',
---                          (SELECT MAX(id)+1 FROM ProductRatings),
---                          false);
-
 \COPY Ratings FROM 'Ratings.csv' WITH DELIMITER ',' NULL '' CSV

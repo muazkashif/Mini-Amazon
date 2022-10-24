@@ -62,21 +62,3 @@ CREATE TABLE Ratings (
     time_reviewed timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
     PRIMARY KEY (uid, sid, pid)
 );
-
-CREATE TABLE SellerRatings (
-    uid INT NOT NULL REFERENCES Users(id),
-    sid INT NOT NULL REFERENCES Sellers(id),
-    rating DECIMAL(3,2) NOT NULL,
-    review VARCHAR(255) NOT NULL,
-    time_reviewed timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
-    PRIMARY KEY (uid, sid)
-);
-
-CREATE TABLE ProductRatings (
-    uid INT NOT NULL REFERENCES Users(id),
-    pid INT NOT NULL REFERENCES Products(id),
-    rating DECIMAL(3,2) NOT NULL,
-    review VARCHAR(255) NOT NULL,
-    time_reviewed timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
-    PRIMARY KEY (uid, pid)
-);
