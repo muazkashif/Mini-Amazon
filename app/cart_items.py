@@ -7,7 +7,7 @@ from .models.purchase import Purchase
 from .models.cart import Cart
 
 from flask import Blueprint
-bp = Blueprint('index', __name__)
+bp = Blueprint('cart', __name__)
 
 
 @bp.route('/cart/')
@@ -21,5 +21,7 @@ def index():
     # else:
     #     purchases = None
     # render the page by adding information to the index.html file
-    return render_template('index.html',
+    print(carts)
+    print(carts[0].pid)
+    return render_template('carts.html',
                            cart_items=carts)
