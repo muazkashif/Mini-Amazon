@@ -2,7 +2,7 @@ from flask import render_template
 from flask_login import current_user
 import datetime
 
-from .models.product import Product
+from .models.products import Product
 from .models.purchase import Purchase
 from .models.cart import Cart
 from .models.rating import Rating
