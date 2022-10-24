@@ -27,7 +27,7 @@ def seller_search():
             return redirect(url_for('seller_form.seller_search'))
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('seller.show_seller_uid', uid = info)
+            next_page = url_for('seller.show_seller_uid', sid = info)
 
         return redirect(next_page)
     return render_template('seller_form.html', form=form)

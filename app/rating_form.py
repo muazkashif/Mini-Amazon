@@ -27,7 +27,7 @@ def rating_search():
             return redirect(url_for('rating_form.rating_search'))
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('rating.show_rating_uid', sid = info)
+            next_page = url_for('rating.show_rating_uid', uid = info)
 
         return redirect(next_page)
     return render_template('rating_form.html', form=form)
