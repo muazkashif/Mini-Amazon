@@ -11,7 +11,7 @@ from flask import Blueprint
 bp = Blueprint('product_form', __name__)
 
 class product_form(FlaskForm):
-    k = IntegerField('Integer', validators=[DataRequired()])
+    k = IntegerField('How Many Products?', validators=[DataRequired()])
     submit = SubmitField('Search')
 
 #Need limit on max k?
