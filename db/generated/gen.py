@@ -4,14 +4,15 @@ from faker import Faker
 import random
 import datetime
 
-num_users = 200
+num_users = 15
 num_products = 2000
 num_purchases = 2500
-num_sellers = 20
+num_sellers = 5
 num_cart_items = 100
-num_forsale_items = 300
+num_forsale_items = 50
 num_product_ratings = 400
 num_seller_ratings = 5
+num_ratings = 100
 
 file_path = "../data/"
 
@@ -185,6 +186,30 @@ def gen_seller_ratings(num_seller_ratings, s_uids, uids):
         print(f'{num_seller_ratings} generated')
     return
 
+def gen_ratings(num_ratings, s_uids, uids, available_pids):
+    already_done_keys = [[]]
+    with open(file_path + 'Ratings.csv', 'w') as f:
+        writer = get_csv_writer(f)
+        print('Ratings...', end=' ', flush=True)
+        for i in range(num_ratings):
+            if i % 5 == 0:
+                print(f'{i}', end=' ', flush=True)
+            s_uid = fake.random_element(elements=s_uids)
+            pid = fake.random_element(elements=available_pids)
+            uid = fake.random_element(elements=uids)
+            key = (uid,s_uid, pid)
+            while key in already_done_keys:
+                pid = fake.random_element(elements=available_pids)
+                s_uid = fake.random_element(elements=s_uids)
+                uid = fake.random_element(elements=uids)
+            rating = fake.random_int(min=1, max=5)
+            review = fake.sentence(nb_words=10)
+            time = fake.date_time_between(start_date = datetime.datetime(2000, 1, 1))
+            writer.writerow([uid, s_uid, pid, rating,review,time])
+            already_done_keys.append(key)
+        print(f'{num_ratings} generated')
+    return
+
 if __name__ == "__main__":
     uids = gen_users(num_users)
     available_pids = gen_products(num_products)
@@ -192,6 +217,7 @@ if __name__ == "__main__":
     s_uids = gen_sellers(num_sellers, uids)
     gen_carts(num_cart_items, uids, s_uids, available_pids)
     gen_transactions(num_purchases, available_pids, uids,s_uids)
-    gen_prod_ratings(num_product_ratings, available_pids, uids)
-    gen_seller_ratings(num_seller_ratings, s_uids, uids)
+    #gen_prod_ratings(num_product_ratings, available_pids, uids)
+    #gen_seller_ratings(num_seller_ratings, s_uids, uids)
     gen_forsales(num_forsale_items, s_uids, available_pids)
+    gen_ratings(num_ratings, s_uids, uids, available_pids)
