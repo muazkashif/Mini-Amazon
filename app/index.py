@@ -2,14 +2,14 @@ from flask import render_template
 from flask_login import current_user
 import datetime
 
-from .models.product import Product
+from .models.products import Product
 from .models.purchase import Purchase
 
 from flask import Blueprint
 bp = Blueprint('index', __name__)
 
 
-@bp.route('/')
+@bp.route('/index')
 def index():
     # get all available products for sale:
     products = Product.get_all(True)
