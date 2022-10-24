@@ -1,4 +1,4 @@
-from tkinter.simpledialog import SimpleDialog
+# from tkinter.simpledialog import SimpleDialog
 from flask import current_app as app
 
 

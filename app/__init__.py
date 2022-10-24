@@ -38,5 +38,11 @@ def create_app():
 
     from .rating_view import bp as rating_view_bp
     app.register_blueprint(rating_view_bp)
+    
+    from .seller_view import bp as seller_view_bp
+    app.register_blueprint(seller_view_bp)
+    
+    from .seller_form import bp as seller_form_bp
+    app.register_blueprint(seller_form_bp)
 
     return app

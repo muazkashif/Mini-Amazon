@@ -18,16 +18,16 @@ class seller_form(FlaskForm):
 @bp.route('/seller_form', methods=['GET', 'POST'])
 def seller_search():
     form = seller_form()
-    seller = None
+    sell = None
     if form.validate_on_submit():
         info = form.id.data
-        seller = Seller.get(form.id.data)
+        seller = Seller.get_inventory_by_sid(form.id.data)
         if seller is None:
             flash('Invalid id')
             return redirect(url_for('seller_form.seller_search'))
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('seller.show_seller_uid', sid = info)
+            next_page = url_for('seller.show_seller_sid', sid = info)
 
         return redirect(next_page)
     return render_template('seller_form.html', form=form)
