@@ -18,6 +18,9 @@ def create_app():
     from .index import bp as index_bp
     app.register_blueprint(index_bp)
 
+    from .HW4 import bp as HW_bp
+    app.register_blueprint(HW_bp)
+
     from .users import bp as user_bp
     app.register_blueprint(user_bp)
 
@@ -44,5 +47,11 @@ def create_app():
     
     from .seller_form import bp as seller_form_bp
     app.register_blueprint(seller_form_bp)
+
+    from .products import bp as product_bp
+    app.register_blueprint(product_bp)
+
+    from .product_form import bp as product_form_bp
+    app.register_blueprint(product_form_bp)
 
     return app
