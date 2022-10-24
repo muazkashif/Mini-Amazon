@@ -9,6 +9,19 @@ class Product:
         self.available = available
 
     @staticmethod
+    def get_top_k_products(k):
+        rows = app.db.execute('''
+SELECT id, name, price, available
+FROM Products
+ORDER BY price DESC
+LIMIT :k
+''',
+                              k=k)
+        return Product(*(rows[0])) if rows is not None else None
+
+
+
+    @staticmethod
     def get(id):
         rows = app.db.execute('''
 SELECT id, name, price, available

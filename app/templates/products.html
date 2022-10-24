@@ -1,0 +1,32 @@
+{% extends "base.hmtl" %}
+
+{% block content %}
+
+<br><br>
+
+<h2>Cart Items:</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product ID</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Available</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in prod_items%}
+      <tr>
+        <th scope="row">{{product.id}}</th>
+        <td>{{product.name}}</td>
+        <td>{{product.price}}</td>
+        <td>{{product.available}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<br><br>
+
+
+{% endblock %}

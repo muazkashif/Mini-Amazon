@@ -27,4 +27,10 @@ def create_app():
     from .cart_form import bp as cart_form_bp
     app.register_blueprint(cart_form_bp)
 
+    from .products import bp as product_bp
+    app.register_blueprint(product_bp)
+
+    from .product_form import bp as product_form_bp
+    app.register_blueprint(product_form_bp)
+
     return app
