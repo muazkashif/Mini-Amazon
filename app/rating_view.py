@@ -15,11 +15,11 @@ bp = Blueprint('rating', __name__)
 def index():
     # get all available products for sale:
     ratings = Rating.get_all()
-    return render_template('rating.html',
+    return render_template('rating_view.html',
                            ratings=ratings)
 
 @bp.route('/rating/<uid>')
 def show_rating_uid(uid):
     ratings = Rating.get(uid)
-    return render_template('carts.html',
+    return render_template('rating_view.html',
                            ratings=ratings)
