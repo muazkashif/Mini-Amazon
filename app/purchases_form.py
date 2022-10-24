@@ -5,29 +5,29 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
-from .models.cart import Cart
+from .models.purchase import Purchase
 
 
 from flask import Blueprint
-bp = Blueprint('cart_form', __name__)
+bp = Blueprint('purchases_form', __name__)
 
-class cart_form(FlaskForm):
+class purchases_form(FlaskForm):
     id = IntegerField('User ID', validators=[DataRequired()])
     submit = SubmitField('Search')
 
-@bp.route('/cart_form', methods=['GET', 'POST'])
-def cart_search():
-    form = cart_form()
-    cart = None
+@bp.route('/purchases_form', methods=['GET', 'POST'])
+def purchases_search():
+    form = purchases_form()
+    purchases = None
     if form.validate_on_submit():
         info = form.id.data
-        cart = Cart.get(form.id.data)
-        if cart is None:
+        purchases = Purchase.get_all_purchases_by_uid(form.id.data)
+        if purchases is None:
             flash('Invalid id')
-            return redirect(url_for('cart_form.cart_search'))
+            return redirect(url_for('purchases_form.purchases_search'))
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('cart.show_cart_uid', uid = info)
+            next_page = url_for('purchases.show_purchases_given_uid', uid = info)
 
         return redirect(next_page)
-    return render_template('cart_form.html', form=form)
+    return render_template('purchases_form.html', form=form)
