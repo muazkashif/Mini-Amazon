@@ -33,4 +33,10 @@ def create_app():
     from .purchases_form import bp as purchases_form_bp
     app.register_blueprint(purchases_form_bp)
 
+    from .rating_form import bp as rating_form_bp
+    app.register_blueprint(rating_form_bp)
+
+    from .rating_view import bp as rating_view_bp
+    app.register_blueprint(rating_view_bp)
+
     return app
