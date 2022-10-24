@@ -21,8 +21,8 @@ def index():
     # else:
     #     purchases = None
     # render the page by adding information to the index.html file
-    print(carts)
-    print(carts[0].pid)
+    #print(carts)
+    #print(carts[0].pid)
     return render_template('carts.html',
                            cart_items=carts)
 

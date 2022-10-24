@@ -43,3 +43,12 @@ ORDER BY time_purchased DESC
 ''',
                               uid=uid)
         return [Purchase(*row) for row in rows]
+
+    @staticmethod
+    def get_all():
+        rows = app.db.execute('''
+SELECT uid, sid, pid, quantity, time_purchased, order_status
+FROM Transactions
+ORDER BY time_purchased DESC
+''')
+        return [Purchase(*row) for row in rows]

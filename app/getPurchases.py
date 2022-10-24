@@ -8,7 +8,14 @@ from .models.purchase import Purchase
 from flask import Blueprint
 bp = Blueprint('purchases', __name__)
 
+@bp.route('/purchases/')
+def index():
+    purchases = Purchase.get_all()
+    return render_template('purchases.html',
+                           purchase_history=purchases)
+
 @bp.route('/purchases/<uid>')
 def show_purchases_given_uid(uid):
     purchases = Purchase.get_all_purchases_by_uid(uid)
-    return render_template('purchases.html', purchase_history=purchases)
+    return render_template('purchases.html', 
+                            purchase_history=purchases)
