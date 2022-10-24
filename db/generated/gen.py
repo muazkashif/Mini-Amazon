@@ -13,7 +13,7 @@ num_forsale_items = 300
 num_product_ratings = 400
 num_seller_ratings = 5
 
-file_path = "../data/"
+file_path = "../generated/"
 
 Faker.seed(0)
 fake = Faker()
@@ -107,7 +107,8 @@ def gen_forsales(num_forsale_items, s_uids, available_pids):
         writer = get_csv_writer(f)
         print('ForSales...', end=' ', flush=True)
         for i in range(num_forsale_items):
-            print(f'{i}', end=' ', flush=True)
+            if i % 10 == 0:
+                print(f'{i}', end=' ', flush=True)
             pid = fake.random_element(elements=available_pids)
             s_uid = fake.random_element(elements=s_uids)
             key = (pid,s_uid)
@@ -188,7 +189,6 @@ def gen_seller_ratings(num_seller_ratings, s_uids, uids):
 if __name__ == "__main__":
     uids = gen_users(num_users)
     available_pids = gen_products(num_products)
-    # gen_transactions(num_purchases, available_pids, uids)
     s_uids = gen_sellers(num_sellers, uids)
     gen_carts(num_cart_items, uids, s_uids, available_pids)
     gen_transactions(num_purchases, available_pids, uids,s_uids)
