@@ -16,7 +16,7 @@ FROM Carts
 WHERE uid = :uid
 ''',
                               uid=uid)
-        return Cart(*(rows[0])) if rows is not None else None
+        return [Cart(*row) for row in rows]
 
     @staticmethod
     def get_all():

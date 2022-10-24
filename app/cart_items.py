@@ -25,3 +25,9 @@ def index():
     print(carts[0].pid)
     return render_template('carts.html',
                            cart_items=carts)
+
+@bp.route('/cart/<uid>')
+def show_cart_uid(uid):
+    carts = Cart.get(uid)
+    return render_template('carts.html',
+                           cart_items=carts)
