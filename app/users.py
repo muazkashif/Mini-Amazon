@@ -12,12 +12,17 @@ from flask import Blueprint
 bp = Blueprint('users', __name__)
 
 
+
+
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
+@bp.route('/')
+def opener_page():
+    return render_template('opener_page.html')
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
