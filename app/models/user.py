@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from flask import current_app as app
 from werkzeug.security import generate_password_hash, check_password_hash
+import traceback
 
 from .. import login
 
@@ -43,29 +44,31 @@ WHERE email = :email
         return len(rows) > 0
 
     @staticmethod
-    def register(email, password, firstname, lastname):
+    def register(email, password, firstname, lastname, address, balance, date):
         try:
             rows = app.db.execute("""
-INSERT INTO Users(email, password, firstname, lastname)
-VALUES(:email, :password, :firstname, :lastname)
+INSERT INTO Users(email, password, firstname, lastname, address, balance, date)
+VALUES(:email, :password, :firstname, :lastname, :address, :balance, :date)
 RETURNING id
 """,
                                   email=email,
                                   password=generate_password_hash(password),
-                                  firstname=firstname, lastname=lastname)
+                                  firstname=firstname, lastname=lastname, address=address,
+                                  balance=balance, date=date)
             id = rows[0][0]
             return User.get(id)
         except Exception as e:
             # likely email already in use; better error checking and reporting needed;
             # the following simply prints the error to the console:
             print(str(e))
+            print(traceback.format_exc())
             return None
 
     @staticmethod
     @login.user_loader
     def get(id):
         rows = app.db.execute("""
-SELECT id, email, firstname, lastname
+SELECT id, email, password, firstname, lastname, address, balance, date
 FROM Users
 WHERE id = :id
 """,
