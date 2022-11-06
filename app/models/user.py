@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from flask import current_app as app
 from werkzeug.security import generate_password_hash, check_password_hash
+import traceback
 
 from .. import login
 
@@ -19,18 +20,18 @@ class User(UserMixin):
     @staticmethod
     def get_by_auth(email, password):
         rows = app.db.execute("""
-SELECT password, id, email, firstname, lastname
+SELECT id, email, password, firstname, lastname, address, balance, date
 FROM Users
 WHERE email = :email
 """,
                               email=email)
         if not rows:  # email not found
             return None
-        elif not check_password_hash(rows[0][0], password):
+        elif not check_password_hash(rows[0][2], password):
             # incorrect password
             return None
         else:
-            return User(*(rows[0][1:]))
+            return User(*(rows[0])) if rows else None
 
     @staticmethod
     def email_exists(email):
@@ -43,16 +44,17 @@ WHERE email = :email
         return len(rows) > 0
 
     @staticmethod
-    def register(email, password, firstname, lastname):
+    def register(email, password, firstname, lastname, address, balance, date):
         try:
             rows = app.db.execute("""
-INSERT INTO Users(email, password, firstname, lastname)
-VALUES(:email, :password, :firstname, :lastname)
+INSERT INTO Users(email, password, firstname, lastname, address, balance, date)
+VALUES(:email, :password, :firstname, :lastname, :address, :balance, :date)
 RETURNING id
 """,
                                   email=email,
                                   password=generate_password_hash(password),
-                                  firstname=firstname, lastname=lastname)
+                                  firstname=firstname, lastname=lastname, address=address,
+                                  balance=balance, date=date)
             id = rows[0][0]
             return User.get(id)
         except Exception as e:
@@ -65,7 +67,7 @@ RETURNING id
     @login.user_loader
     def get(id):
         rows = app.db.execute("""
-SELECT id, email, firstname, lastname
+SELECT id, email, password, firstname, lastname, address, balance, date
 FROM Users
 WHERE id = :id
 """,

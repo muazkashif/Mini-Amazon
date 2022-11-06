@@ -6,6 +6,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from .models.user import User
+from datetime import datetime
 
 
 from flask import Blueprint
@@ -19,10 +20,6 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
-
-@bp.route('/')
-def opener_page():
-    return render_template('opener_page.html')
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -51,6 +48,7 @@ class RegistrationForm(FlaskForm):
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(),
                                        EqualTo('password')])
+    address = StringField('Address', validators=[DataRequired()])
     submit = SubmitField('Register')
 
     def validate_email(self, email):
@@ -67,7 +65,10 @@ def register():
         if User.register(form.email.data,
                          form.password.data,
                          form.firstname.data,
-                         form.lastname.data):
+                         form.lastname.data, 
+                         form.address.data,
+                         0,
+                         datetime.today().strftime('%Y-%m-%d')):
             flash('Congratulations, you are now a registered user!')
             return redirect(url_for('users.login'))
     return render_template('register.html', title='Register', form=form)
@@ -76,4 +77,4 @@ def register():
 @bp.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index.index'))
+    return redirect(url_for('index.opener_page'))
