@@ -70,18 +70,21 @@
       <div class="login-main-text">
         Amazon The SQL2
       </div>
-      <div class="cart-button">
-        <form action="/cart">
-          <button>My Cart</button>
-        </form>
-      </div>
-      <div class="logout-button">
-        <form action="/logout">
-          <button>Logout</button>
-        </form>
-      </div>
-      <div style="color: aliceblue; text-align: right">
-      </div>
+
+      {% if current_user.is_authenticated %}
+        <div class="cart-button">
+          <form action="/cart">
+            <button>My Cart</button>
+          </form>
+        </div>
+        <div class="logout-button">
+          <form action="/logout">
+            <button>Logout</button>
+          </form>
+        </div>
+        <div style="color: aliceblue; text-align: right">
+        </div>
+      {% endif %}
 
 
     {% endblock %}
