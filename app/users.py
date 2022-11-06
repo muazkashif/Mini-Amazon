@@ -21,10 +21,6 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
-@bp.route('/')
-def opener_page():
-    return render_template('opener_page.html')
-
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -81,4 +77,4 @@ def register():
 @bp.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index.index'))
+    return redirect(url_for('index.opener_page'))
