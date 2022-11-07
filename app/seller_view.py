@@ -2,7 +2,11 @@ from flask import render_template
 from flask_login import current_user
 import datetime
 
+<<<<<<< HEAD
 from .models.product import Product
+=======
+from .models.products import Product
+>>>>>>> main
 from .models.purchase import Purchase
 from .models.cart import Cart
 from .models.seller import Seller

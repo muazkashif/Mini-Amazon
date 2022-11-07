@@ -9,6 +9,6 @@ from flask import Blueprint
 bp = Blueprint('HW4', __name__)
 
 
-@bp.route('/')
+@bp.route('/hw4')
 def HW4():
     return render_template('HW4.html')
