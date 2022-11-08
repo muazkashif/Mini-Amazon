@@ -13,9 +13,10 @@ bp = Blueprint('cart', __name__)
 @bp.route('/cart/', methods=['GET','POST'])
 def index():
     if request.method == 'POST':
-        print()
         if current_user.is_authenticated:
-            for pid in request.form.getlist("mycheckbox"):
+            for pid in request.form.getlist("removefromcart"):
+                Cart.remove(current_user.id, pid)
+            for pid in request.form.getlist("addtocart"):
                 Cart.add(current_user.id, pid, 2, 1)        
     # get all available products for sale:
     carts = Cart.get_all()
