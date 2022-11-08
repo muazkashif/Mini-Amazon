@@ -2,13 +2,19 @@
 
 {% block content %}
 
+{% if logged_in %}
+  <div class="add-to-cart-button">
+    <form action="/products">
+      <button>Add to Cart</button>
+    </form>
+  </div>
+{% endif %}
 <br><br>
 
 <h2>Cart Items:</h2>
 <table class='table table-hover table-bordered container'>
   <thead class="thead-dark">
     <tr>
-      <th scope="col">User ID</th>
       <th scope="col">Product ID</th>
       <th scope="col">Seller ID</th>
       <th scope="col">Quantity</th>
@@ -17,8 +23,7 @@
   <tbody>
     {% for cart in cart_items%}
       <tr>
-        <th scope="row">{{cart.uid}}</th>
-        <td>{{cart.pid}}</td>
+        <th scope="row">{{cart.pid}}</th>
         <td>{{cart.sid}}</td>
         <td>{{cart.quantity}}</td>
       </tr>

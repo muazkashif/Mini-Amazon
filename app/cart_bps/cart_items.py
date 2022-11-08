@@ -2,9 +2,9 @@ from flask import render_template
 from flask_login import current_user
 import datetime
 
-from .models.products import Product
-from .models.purchase import Purchase
-from .models.cart import Cart
+from ..models.products import Product
+from ..models.purchase import Purchase
+from ..models.cart import Cart
 
 from flask import Blueprint
 bp = Blueprint('cart', __name__)
@@ -17,7 +17,7 @@ def index():
     if current_user.is_authenticated:
         carts = Cart.get(current_user.id)
         return render_template('carts.html',
-                            cart_items=carts)
+                            cart_items=carts, logged_in=True)
     return render_template('carts.html',
                             cart_items=carts)
     

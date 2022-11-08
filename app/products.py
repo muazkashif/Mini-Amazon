@@ -7,7 +7,7 @@ bp = Blueprint('product', __name__)
 
 
 @bp.route('/products/')
-def index():
+def index(for_cart=True):
     # get all available products for sale:
     products = Product.get_all(True)
     # # find the products current user has bought:
@@ -20,10 +20,11 @@ def index():
     print(products)
     print(products[0].id)
     return render_template('products.html',
-                           prod_items=products)
+                           prod_items=products, for_cart=for_cart)
 
 @bp.route('/products/<k>')
 def show_product_top(k):
     prod = Product.get_top_k_products(k)
     return render_template('products.html',
                            prod_items=prod)
+
