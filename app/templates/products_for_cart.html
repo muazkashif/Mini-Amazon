@@ -4,27 +4,30 @@
 
 <br><br>
 
-<h2>Product Items:</h2>
-<table class='table table-hover table-bordered container'>
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Product ID</th>
-      <th scope="col">Product Name</th>
-      <th scope="col">Price</th>
-      <th scope="col">Available</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for p in prod_items%}
+<h2>Available Products:</h2>
+<form method="POST" action="/cart/">
+  <input type="submit">
+  <table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
       <tr>
-        <th scope="row">{{p.id}}</th>
-        <td>{{p.name}}</td>
-        <td>{{p.price}}</td>
-        <td>{{p.available}}</td>
+        <th scope="col">Product ID</th>
+        <th scope="col">Product Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Select</th>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {% for p in prod_items%}
+        <tr>
+          <th scope="row">{{p.id}}</th>
+          <td>{{p.name}}</td>
+          <td>{{p.price}}</td>
+          <th scope="col"><input type="checkbox" value={{p.id}} name="mycheckbox"></th>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</form>
 
 <form>
   <input type="button" value="Back" onclick="history.back()">

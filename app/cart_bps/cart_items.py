@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, request
 from flask_login import current_user
 import datetime
 
@@ -10,8 +10,13 @@ from flask import Blueprint
 bp = Blueprint('cart', __name__)
 
 
-@bp.route('/cart/')
+@bp.route('/cart/', methods=['GET','POST'])
 def index():
+    if request.method == 'POST':
+        print()
+        if current_user.is_authenticated:
+            for pid in request.form.getlist("mycheckbox"):
+                Cart.add(current_user.id, pid, 2, 1)        
     # get all available products for sale:
     carts = Cart.get_all()
     if current_user.is_authenticated:

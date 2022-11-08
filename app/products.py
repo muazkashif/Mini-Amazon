@@ -1,13 +1,14 @@
 from flask import render_template
 
 from .models.products import Product
+from flask_login import current_user
 
 from flask import Blueprint
 bp = Blueprint('product', __name__)
 
 
 @bp.route('/products/')
-def index(for_cart=True):
+def index():
     # get all available products for sale:
     products = Product.get_all(True)
     # # find the products current user has bought:
@@ -19,8 +20,11 @@ def index(for_cart=True):
     # render the page by adding information to the index.html file
     print(products)
     print(products[0].id)
+    if current_user.is_authenticated:
+        return render_template('products_for_cart.html',
+                           prod_items=products)
     return render_template('products.html',
-                           prod_items=products, for_cart=for_cart)
+                           prod_items=products)
 
 @bp.route('/products/<k>')
 def show_product_top(k):
