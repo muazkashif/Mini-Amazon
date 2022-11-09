@@ -20,7 +20,8 @@
   width: 35%;
   position: absolute;
   right: 250px; 
-  top:150px; 
+  top:200px; 
+  text-align: center;
   
 }
 
@@ -38,31 +39,7 @@
   right:250px; 
   
 }
-.product-description span {
-  font-size: 12px;
-  color: #358ED7;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-.product-description h1 {
-  font-weight: 300;
-  font-size: 52px;
-  color: #43484D;
-  letter-spacing: -2px;
-}
-.product-description p {
-  font-size: 16px;
-  font-weight: 300;
-  color: #86939E;
-  line-height: 24px;
-}
 
-/* Product Price */
-.product-price {
-  display: flex;
-  align-items: center;
-}
  
 .cart-btn {
   display: inline-block;
@@ -81,11 +58,9 @@
   background-color: #64af3d;
 }
 .price-rating{
-	position: absolute;
-	top: 420px;
-	left: 0%;  
-	right: 100px;
-
+	position: relative;
+	top: 280px;
+	right:280px;
 }
 
 .wrap{
@@ -93,11 +68,37 @@
 	top: 650px;
 }
 
+.sidebar{
+      position: absolute;
+      width: 220px;
+      height:60%;
+      background: #000000;
+      padding: 30px 0px; 
+      text-align: center;
+      float:left;
+      color:rgb(255, 255, 255);
+      top:100px;
+    }
 
-
+	.wrap_all{
+		position: relative;
+		bottom: 100px; 
+		left: 80px; 
+	}
 </style>
 
 <body>
+
+	<div class = "sidebar">
+        <h2><u>Sellers</u></h2>
+        <u1>
+        <li><a href="#"><i class = "fas fa-home"></i>Category</a></li>
+        <li><a href="#"><i class = "fas fa-home"></i>Price</a></li>
+        <li><a href="#"><i class = "fas fa-home"></i>Rating</a></li>
+        </u1>
+    </div>
+
+	<div class = "wrap_all">
  
 	<!-- Left Column / Headphones Image -->
 	<div class="left-column">
@@ -109,14 +110,11 @@
 	<div class="right-column">
    
 	  <!-- Product Description -->
-	  <div class="product-description">
+	  <div class="product-info">
 		<h1>{{prod_items.name}}</h1>
+		<p1>{{prod_items.description}}</p1>
 	  </div>
 
-	  <div class = "more-info">
-		<h1>{{prod_items.description}}</h1>
-	  </div>
-   
 
 	  <!-- Final Header -->
 	<div class = "price-rating">
@@ -129,6 +127,7 @@
 		<a href="#" class="cart-btn">Add to cart</a>
 	  </div>
 	</div>
+</div>
 
 <div class = "wrap">
 <table class='table table-hover table-bordered container'>
