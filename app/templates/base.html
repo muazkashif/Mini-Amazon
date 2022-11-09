@@ -2,11 +2,12 @@
 <html lang="en">
 
 <head>
-  <title>Mini Amazon</title>
+  <title>Amazon The SQL</title>
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/example.css') }}">
+
   <style>
     body {
         font-family: "Lato", sans-serif;
@@ -21,7 +22,7 @@
         height: 100%;
         background-color: #000;
         overflow-x: hidden;
-        padding-top: 20px;
+        padding-top: 30px;
     }
 
     .main {
@@ -29,9 +30,40 @@
     }
 
     .login-main-text {
-        margin-top: 20%;
-        padding: 60px;
-        color: #fff;
+      float: left;
+      color:aliceblue;
+      font-size: 30px;
+    }
+
+    .cart-button {
+      position:absolute;
+      left:90%;
+      color: aliceblue; 
+      text-align: right;
+      float: left;
+      font-size: 20px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .add-to-cart-button {
+      position:absolute;
+      color: aliceblue; 
+      text-align: right;
+      float: left;
+      font-size: 20px;
+      padding-top: 10px;
+      padding-left: 30px;
+    }
+
+    .logout-button {
+      position:absolute;
+      left:80%;
+      padding-right: 60px;
+      color: aliceblue; 
+      text-align: right;
+      float: left;
+      font-size: 20px;
     }
 
     .login-main-text h2 {
@@ -46,16 +78,29 @@
 </head>
 
 <body>
+
   <div class="sidenav">
     {% block msg %}
-      <h1 style="color:aliceblue">Welcome to CompSci 316 Mini Amazon!</h1>
-      <div style="color: aliceblue; text-align: right; margin-bottom: 25px">
-        {% if current_user.is_authenticated %}
-          Hello {{current_user.firstname}}! <a href="{{ url_for('users.logout') }}" type="button" class="btn btn-light">Log out</a>
-        {% else %}
-          <a href="{{ url_for('users.login') }}" type="button" class="btn btn-light">Log in</a>
-        {% endif %}
+      <div class="login-main-text">
+        Amazon The SQL2
       </div>
+
+      {% if current_user.is_authenticated %}
+        <div class="cart-button">
+          <form action="/cart">
+            <button>My Cart</button>
+          </form>
+        </div>
+        <div class="logout-button">
+          <form action="/logout">
+            <button>Logout</button>
+          </form>
+        </div>
+        <div style="color: aliceblue; text-align: right">
+        </div>
+      {% endif %}
+
+
     {% endblock %}
   </div>
   <div class="main">

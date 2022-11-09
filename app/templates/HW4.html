@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Which Project Guru?</h1>
+
+<form action="/product_form">
+    <button name = "B1" button style = "height:50px;width:100px;margin:5px;" type = "submit" value = "Product">Product</button>
+</form>
+
+<form action="/cart_form">
+    <button name = "B2" button style = "height:50px;width:100px;margin:5px;" type="submit" value = "Cart">Cart</button>
+</form>
+
+<form action="/purchases_form">
+    <button name = "B3" button style = "height:50px;width:100px;margin:5px;" type="submit" value = "User">User</button>
+</form>
+
+<form action="/rating_form">
+    <button name = "B4" button style = "height:50px;width:100px;margin:5px;" type="submit" value = "Product">Social</button>
+</form>
+
+<form action="/seller_form">
+    <button name = "B5" button style = "height:50px;width:100px;margin:5px;" type="submit" value = "Product">Seller</button>
+</form>
+
+
+
+{% endblock %}

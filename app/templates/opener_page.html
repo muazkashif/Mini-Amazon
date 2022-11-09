@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 style = "font-size:80px;text-align:center;margin-top:140pt">Welcome to Amazon The SQL!</h1>
+
+<style>
+    .button{
+        font-family: 'Times New Roman', Times, serif;
+        font-size:30px;
+    }
+</style>
+
+<form action="/login">
+    <button name = "B1" 
+            button style = "position:absolute;top:55%;left:34%;height:100px;width:230px;margin:5px;" 
+            type = "submit" 
+            class = "button"
+            value = "Sign In">Sign In</button>
+</form>
+
+<form action="/register">
+    <button name = "B2" 
+            button style = "position:absolute;top:55%;left:51%;height:100px;width:230px;margin:5px;" 
+            type="submit" 
+            class = "button"
+            value = "Sign Up">Sign Up</button>
+</form>
+
+<form action="/products">
+    <button name = "B3" 
+            button style = "position:absolute;top:70%;left:41%;height:105px;width:280px;margin:5px;" 
+            type="submit" 
+            class = "button"
+            value = "Continue As Guest">Continue As Guest</button>
+</form>
+
+{% endblock %}

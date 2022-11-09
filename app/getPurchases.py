@@ -1,19 +1,21 @@
-#!/usr/bin/env python3
-import psycopg2
+from flask import render_template
+from flask_login import current_user
+import datetime
 
-def getPurchases(user_id):
-    conn = psycopg2.connect(
-        dbname='/home/vcm/cs316_proj/mini-amazon-skeleton/db/generated/Purchases.csv')
-    conn.set_session(autocommit=True)
-    cur = conn.cursor()
-    try:
-        cur.execute('''
-        SELECT *
-        FROM Purchases
-        WHERE uid = %s''', (user_id))
-    except Exception as e:
-        print(e)
-    for uid, sid, pid, number_of_items, total_amount, time_purchased, order_status in cur:
-        print('{} {} {} {} {:,.2f} {} {}'.format(uid, sid, pid, number_of_items, total_amount, time_purchased, order_status))
-    
-getPurchases(30)
+from .models.products import Product
+from .models.purchase import Purchase
+
+from flask import Blueprint
+bp = Blueprint('purchases', __name__)
+
+@bp.route('/purchases/')
+def index():
+    purchases = Purchase.get_all()
+    return render_template('purchases.html',
+                           purchase_history=purchases)
+
+@bp.route('/purchases/<uid>')
+def show_purchases_given_uid(uid):
+    purchases = Purchase.get_all_purchases_by_uid(uid)
+    return render_template('purchases.html', 
+                            purchase_history=purchases)
