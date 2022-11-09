@@ -13,7 +13,7 @@
         <th scope="col">Product ID</th>
         <th scope="col">Product Name</th>
         <th scope="col">Price</th>
-        <th scope="col">Select</th>
+        <th scope="col">Quantity</th>
       </tr>
     </thead>
     <tbody>
@@ -22,7 +22,7 @@
           <th scope="row">{{p.id}}</th>
           <td>{{p.name}}</td>
           <td>{{p.price}}</td>
-          <th scope="col"><input type="checkbox" value={{p.id}} name="addtocart"></th>
+          <th scope="col"><input type="integer" value=0 name="addtocart2"></th>
         </tr>
       {% endfor %}
     </tbody>
