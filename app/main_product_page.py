@@ -8,11 +8,11 @@ from .models.purchase import Purchase
 from flask import Blueprint
 bp = Blueprint('main_product_page', __name__)
 
-@bp.route('/c')
+@bp.route('/')
 def opener_page():
     return render_template('opener_page.html')
 
-@bp.route('/test')
+@bp.route('/index')
 def index():
     # get all available products for sale:
     products = Product.get_all(True)
