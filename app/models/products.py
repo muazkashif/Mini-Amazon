@@ -26,7 +26,7 @@ LIMIT :k
     @staticmethod
     def get(id):
         rows = app.db.execute('''
-SELECT id, name, price, available
+SELECT id, name, descriptions, rating, price, available
 FROM Products
 WHERE id = :id
 ''',

@@ -18,8 +18,6 @@ def index():
     # else:
     #     purchases = None
     # render the page by adding information to the index.html file
-    print(products)
-    print(products[0].id)
     if current_user.is_authenticated:
         return render_template('products_for_cart.html',
                            prod_items=products)
