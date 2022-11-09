@@ -4,55 +4,154 @@
 {% block content %}
 
 
+<style>
+	.left-column {
+  width: 65%;
+  position: absolute;
+  top: 170px;
+  right: 450px; 
+}
+
+.left-column img{
+	border:solid #000000;
+}
+ 
+.right-column {
+  width: 35%;
+  position: absolute;
+  right: 250px; 
+  top:150px; 
+  
+}
+
+.more-info{
+	position: absolute; 
+	top: 100px; 
+	text-align: center;
+}
+
+/* Product Description */
+.product-description {
+  border-bottom: 3px solid #000000;
+  text-align: center;
+  position: absolute; 
+  right:250px; 
+  
+}
+.product-description span {
+  font-size: 12px;
+  color: #358ED7;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.product-description h1 {
+  font-weight: 300;
+  font-size: 52px;
+  color: #43484D;
+  letter-spacing: -2px;
+}
+.product-description p {
+  font-size: 16px;
+  font-weight: 300;
+  color: #86939E;
+  line-height: 24px;
+}
+
+/* Product Price */
+.product-price {
+  display: flex;
+  align-items: center;
+}
+ 
+.cart-btn {
+  display: inline-block;
+  position: absolute;
+  background-color: #7DC855;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 12px 30px;
+  transition: all .5s;
+  top: 470px;
+  right: 200px;  
+}
+.cart-btn:hover {
+  background-color: #64af3d;
+}
+.price-rating{
+	position: absolute;
+	top: 420px;
+	left: 0%;  
+	right: 100px;
+
+}
+
+.wrap{
+	position: relative; 
+	top: 650px;
+}
+
+
+
+</style>
+
 <body>
-	<input class="commonInput" type="submit" value= "$_POST['prod']">
-	<div class="container">
-		<div class="card">
-			<div class="container-fliud">
-				<div class="wrapper row">
-					<div class="preview col-md-6">
-						
-						<div class="preview-pic tab-content">
-						  <div class="tab-pane active" id="pic-1"><img src="http://placekitten.com/400/252" /></div>
-						</div>
-						
-						
-					</div>
-					<div class="details col-md-6">
-						<h3 class="product-title">{{prod_items.name}}</h3>
-						<div class="rating">
-							<div class="stars">
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star"></span>
-								<span class="fa fa-star"></span>
-							</div>
-							<span class="review-no">41 reviews</span>
-						</div>
-						<p class="product-description">idek</p>
-						<h4 class="price">current price: <span>2</span></h4>
-						<p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
-						<h5 class="sizes">sizes:
-							<span class="size" data-toggle="tooltip" title="small">s</span>
-							<span class="size" data-toggle="tooltip" title="medium">m</span>
-							<span class="size" data-toggle="tooltip" title="large">l</span>
-							<span class="size" data-toggle="tooltip" title="xtra large">xl</span>
-						</h5>
-						<h5 class="colors">colors:
-							<span class="color orange not-available" data-toggle="tooltip" title="Not In store"></span>
-							<span class="color green"></span>
-							<span class="color blue"></span>
-						</h5>
-						<div class="action">
-							<button class="add-to-cart btn btn-default" type="button">add to cart</button>
-							<button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+ 
+	<!-- Left Column / Headphones Image -->
+	<div class="left-column">
+	  <img data-image="black" src="https://i.imgur.com/A8eQsll.jpg" alt="">
 	</div>
-  </body>
+   
+   
+	<!-- Right Column -->
+	<div class="right-column">
+   
+	  <!-- Product Description -->
+	  <div class="product-description">
+		<h1>{{prod_items.name}}</h1>
+	  </div>
+
+	  <div class = "more-info">
+		<h1>{{prod_items.description}}</h1>
+	  </div>
+   
+
+	  <!-- Final Header -->
+	<div class = "price-rating">
+	  <h1>Price: ${{prod_items.price}}</h1>
+		<h1>Rating: {{prod_items.rating}}/5</h1>
+	</div>
+   
+	  <!-- Product Pricing -->
+	  <div class="product-price">
+		<a href="#" class="cart-btn">Add to cart</a>
+	  </div>
+	</div>
+
+<div class = "wrap">
+<table class='table table-hover table-bordered container'>
+	<h1>Ratings</h1>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Rating</th>
+      <th scope="col">Review</th>
+      <th scope="col">Time Reviewed</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rating in ratings%}
+      <tr>
+        <th scope="row">{{rating.rating}}</th>
+        <td>{{rating.review}}</td>
+        <td>{{rating.time_reviewed}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+</body>
 
   {% endblock %}

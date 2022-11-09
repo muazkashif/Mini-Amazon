@@ -2,6 +2,7 @@ from flask import render_template
 
 from .models.products import Product
 from flask_login import current_user
+from .models.rating import Rating
 
 from flask import Blueprint
 bp = Blueprint('ind_prod', __name__)
@@ -27,8 +28,10 @@ def index():
     #                        prod_items=products)
 
 @bp.route('/ind_prod/<k>', methods = ["POST", "GET"])
-def show_product_top(k):
+def show_product(k):
     prod = Product.get(k)
+    ratings = Rating.get_prod_reviews(k)
     return render_template('ind_product.html',
-                           prod_items=prod)
+                           prod_items=prod,
+                           ratings = ratings)
 
