@@ -22,7 +22,27 @@ WHERE uid = :uid
         return [Rating(*row) for row in rows]
 
     @staticmethod
-    def get_recent(uid, k):
+    def get_all():
+        rows = app.db.execute('''
+SELECT uid, sid, pid, rating, review, time_reviewed
+FROM Ratings
+''')
+        return [Rating(*row) for row in rows]
+
+
+    @staticmethod
+    def get_recent_pid(pid, k):
+        rows = app.db.execute('''
+SELECT uid, sid, pid, rating, review, time_reviewed
+FROM Ratings
+WHERE pid = :pid
+ORDER BY time_reviewed DESC
+''',
+                              pid=pid)
+        return [Rating(*row) for row in rows[:k]]
+    
+    @staticmethod
+    def get_recent_uid(uid, k):
         rows = app.db.execute('''
 SELECT uid, sid, pid, rating, review, time_reviewed
 FROM Ratings
@@ -31,11 +51,14 @@ ORDER BY time_reviewed DESC
 ''',
                               uid=uid)
         return [Rating(*row) for row in rows[:k]]
-
+    
     @staticmethod
-    def get_all():
+    def get_recent_sid(sid, k):
         rows = app.db.execute('''
 SELECT uid, sid, pid, rating, review, time_reviewed
 FROM Ratings
-''')
-        return [Rating(*row) for row in rows]
+WHERE sid = :sid
+ORDER BY time_reviewed DESC
+''',
+                              sid=sid)
+        return [Rating(*row) for row in rows[:k]]

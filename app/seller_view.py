@@ -14,11 +14,11 @@ bp = Blueprint('seller', __name__)
 @bp.route('/seller/')
 def index():
     sell = Seller.get_all()
-    return render_template('seller.html',
+    return render_template('seller_rating_view.html',
                            seller_items=sell)
 
 @bp.route('/seller/<sid>')
 def show_seller_sid(sid):
     sellers = Seller.get_inventory_by_sid(sid)
-    return render_template('seller.html',
+    return render_template('seller_rating_view.html',
                            seller_items=sellers)

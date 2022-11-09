@@ -8,18 +8,18 @@ from .models.cart import Cart
 from .models.rating import Rating
 
 from flask import Blueprint
-bp = Blueprint('rating', __name__)
+bp = Blueprint('product_rating_view', __name__)
 
 
-@bp.route('/rating/')
+@bp.route('/product_reviews/')
 def index():
     # get all available products for sale:
     ratings = Rating.get_all()
     return render_template('rating_view.html',
                            ratings=ratings)
 
-@bp.route('/rating/<uid>')
-def show_rating_uid(uid):
-    ratings = Rating.get_recent(uid, k=5)
-    return render_template('rating_view.html',
+@bp.route('/product_reviews/<pid>')
+def show_rating_uid(pid):
+    ratings = Rating.get_recent_pid(pid, k=5)
+    return render_template('product_rating_view.html',
                            ratings=ratings)
