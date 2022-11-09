@@ -8,6 +8,13 @@
       <button>Add to Cart</button>
     </form>
   </div>
+
+  <div class="check-out-button">
+    <form action="/purchase/">
+      <button>Check Out</button>
+    </form>
+  </div>
+
 {% endif %}
 <br><br>
 
@@ -15,8 +22,9 @@
 <form action="/carte/">
   <button>Clear Cart</button>
 </form>
+
 <form method="POST" action="/cart/">
-  <input type="submit">
+  <input type="submit" value="Remove Selected Items">
   <table class='table table-hover table-bordered container'>
     <thead class="thead-dark">
       <tr>
