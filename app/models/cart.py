@@ -43,6 +43,20 @@ FROM Carts
             return None
 
     @staticmethod
+    def clear(uid):
+        try:
+            query_string = "DELETE FROM Carts WHERE uid = " + str(uid)
+            app.db.execute(query_string,
+                                  uid=uid)
+            return None
+        except Exception as e:
+            # likely email already in use; better error checking and reporting needed;
+            # the following simply prints the error to the console:
+            print(str(e))
+            return None
+
+
+    @staticmethod
     def add(uid, pid, sid, quantity):
         try:
             rows = app.db.execute("""
