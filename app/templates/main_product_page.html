@@ -114,7 +114,8 @@
           <p class="card-text">{{product.description}}</p>
           <p class = "price">${{product.price}}</p>
           <p class = "rating">Rating: {{product.rating}}</p>
-          <form action="/ind_product" method = "POST" value = product name = "prod">
+          var temp = {{product.name}}
+          <form action="/ind_product" method = "POST" value = "temp" name = "prod">
             <input type="submit"/>  
           <!-- <button name = "card-button" type = "submit" class="button" value = "product">See Product</a> -->
         </form>

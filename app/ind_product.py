@@ -1,6 +1,7 @@
-from flask import render_template
+from flask import render_template, request
 from flask_login import current_user
 import datetime
+import cgi
 
 from .models.products import Product
 from .models.purchase import Purchase
@@ -10,8 +11,8 @@ bp = Blueprint('ind_product', __name__)
 
 @bp.route('/ind_product',  methods=['GET', 'POST'])
 def ind_product():
-
-    return render_template('ind_product.html')
+    prod = cgi.FieldStorage()
+    return render_template('ind_product.html', prod = prod)
 
 # @bp.route('/index')
 # def index():
