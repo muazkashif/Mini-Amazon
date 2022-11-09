@@ -24,10 +24,10 @@ def create_app():
     from .users import bp as user_bp
     app.register_blueprint(user_bp)
 
-    from .cart_items import bp as cart_bp
+    from .cart_bps.cart_items import bp as cart_bp
     app.register_blueprint(cart_bp)
 
-    from .cart_form import bp as cart_form_bp
+    from .cart_bps.cart_form import bp as cart_form_bp
     app.register_blueprint(cart_form_bp)
 
     from .getPurchases import bp as purchases_bp
