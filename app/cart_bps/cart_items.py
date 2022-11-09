@@ -44,7 +44,7 @@ def show_emptycart():
         Cart.clear(current_user.id)
         carts = Cart.get(current_user.id)
         return render_template('carts.html',
-                            cart_items=carts, logged_in=True)
+                            cart_items=carts, cart_len=len(carts), prices=[], logged_in=True)
     return render_template('carts.html',
                             cart_items=carts)
 
