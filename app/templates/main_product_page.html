@@ -114,7 +114,10 @@
           <p class="card-text">{{product.description}}</p>
           <p class = "price">${{product.price}}</p>
           <p class = "rating">Rating: {{product.rating}}</p>
-          <a class = "card-button" href="#" class="btn btn-primary float left">See Product</a>
+          <form action="/ind_product" method = "POST" value = product name = "prod">
+            <input type="submit"/>  
+          <!-- <button name = "card-button" type = "submit" class="button" value = "product">See Product</a> -->
+        </form>
         </div>
       </div>
     </div>
