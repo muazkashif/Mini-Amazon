@@ -2,11 +2,13 @@ from flask import current_app as app
 
 
 class Product:
-    def __init__(self, id, name, price, available):
+    def __init__(self, id, name, description, rating, price, available):
         self.id = id
         self.name = name
         self.price = price
         self.available = available
+        self.rating = rating
+        self.description = description
 
     @staticmethod
     def get_top_k_products(k):
@@ -34,7 +36,7 @@ WHERE id = :id
     @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
-SELECT id, name, price, available
+SELECT id, name, descriptions, rating, price, available
 FROM Products
 WHERE available = :available
 ''',
