@@ -15,6 +15,9 @@ def create_app():
     app.db = DB(app)
     login.init_app(app)
 
+    # from .ind_product import bp as ind_product
+    # app.register_blueprint(ind_product)
+
     from .index import bp as index_bp
     app.register_blueprint(index_bp)
 
@@ -26,6 +29,9 @@ def create_app():
 
     from .users import bp as user_bp
     app.register_blueprint(user_bp)
+
+    from .order import bp as order_bp
+    app.register_blueprint(order_bp)
 
     from .cart_bps.cart_items import bp as cart_bp
     app.register_blueprint(cart_bp)
@@ -56,5 +62,8 @@ def create_app():
 
     from .seller_form import bp as seller_form_bp
     app.register_blueprint(seller_form_bp)
+    
+    from .ind_prod import bp as ind_prod_bp
+    app.register_blueprint(ind_prod_bp)
 
     return app

@@ -14,19 +14,40 @@ bp = Blueprint('cart', __name__)
 def index():
     if request.method == 'POST':
         if current_user.is_authenticated:
-            for pid in request.form.getlist("removefromcart"):
-                Cart.remove(current_user.id, pid)
-            for pid in request.form.getlist("addtocart"):
-                Cart.add(current_user.id, pid, 2, 1)        
-    # get all available products for sale:
+            if request.form.get("trash"):
+                Cart.remove(current_user.id, request.form.get("trash"))
+            form = request.form.getlist("addtocart2")
+            products = Product.get_all()
+            for i in range(len(form)):
+                if int(form[i]) != 0:
+                    Cart.add(current_user.id, products[i].id, 2, int(form[i]))
+            if request.form.getlist("selectfromcart"):
+                for pid in request.form.getlist("selectfromcart"):
+                    #CHANGE THIS TO TRANSACTION BEHAVIOR
+                    Purchase.add(current_user.id, pid, )
+
     carts = Cart.get_all()
     if current_user.is_authenticated:
         carts = Cart.get(current_user.id)
+        prices = []
+        for i in range(len(carts)):
+            item = carts[i]
+            prices.append(item.quantity * Product.get(item.pid).price)
         return render_template('carts.html',
-                            cart_items=carts, logged_in=True)
+                            cart_items=carts, cart_len=len(carts), prices=prices, logged_in=True)
     return render_template('carts.html',
                             cart_items=carts)
-    
+
+@bp.route('/carte/')
+def show_emptycart():
+    carts = Cart.get_all()
+    if current_user.is_authenticated:
+        Cart.clear(current_user.id)
+        carts = Cart.get(current_user.id)
+        return render_template('carts.html',
+                            cart_items=carts, cart_len=len(carts), prices=[], logged_in=True)
+    return render_template('carts.html',
+                            cart_items=carts)
 
 @bp.route('/cart/<uid>')
 def show_cart_uid(uid):
