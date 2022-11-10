@@ -14,17 +14,18 @@ bp = Blueprint('cart', __name__)
 def index():
     if request.method == 'POST':
         if current_user.is_authenticated:
+            if request.form.get("trash"):
+                Cart.remove(current_user.id, request.form.get("trash"))
             form = request.form.getlist("addtocart2")
             products = Product.get_all()
             for i in range(len(form)):
                 if int(form[i]) != 0:
                     Cart.add(current_user.id, products[i].id, 2, int(form[i]))
-        
-            for pid in request.form.getlist("removefromcart"):
-                Cart.remove(current_user.id, pid)
-            # for pid in request.form.getlist("addtocart"):
-            #     Cart.add(current_user.id, pid, 2, 1)        
-    # get all available products for sale:
+            if request.form.getlist("selectfromcart"):
+                for pid in request.form.getlist("selectfromcart"):
+                    #CHANGE THIS TO TRANSACTION BEHAVIOR
+                    Purchase.add(current_user.id, pid, )
+
     carts = Cart.get_all()
     if current_user.is_authenticated:
         carts = Cart.get(current_user.id)

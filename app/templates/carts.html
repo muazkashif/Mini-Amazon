@@ -18,26 +18,32 @@
 <form action="/purchase/">
   <button>Check Out</button>
 </form>
-<form method="POST" action="/cart/">
-  <input type="submit" value="Remove Selected Items">
+<form method="POST" action="/order/">
+  <input type="submit" value="Checkout Selected Items">
   <table class='table table-hover table-bordered container'>
     <thead class="thead-dark">
       <tr>
+        <th scope="col"></th>
         <th scope="col">Product ID</th>
         <th scope="col">Seller ID</th>
         <th scope="col">Quantity</th>
         <th scope="col">Item Price</th>
-        <th scope="col">Remove From Cart</th>
+        <th scope="col">Select From Cart</th>
       </tr>
     </thead>
     <tbody>
       {% for i in range(cart_len)%}
         <tr>
-          <th scope="row">{{cart_items[i].pid}}</th>
+          <td>
+            <form method="POST" action="/cart/">
+              <button value={{cart_items[i].pid}} name="trash">remove</button>
+            </form>
+          </td>
+          <td>{{cart_items[i].pid}}</td>
           <td>{{cart_items[i].sid}}</td>
           <td>{{cart_items[i].quantity}}</td>
           <td>{{prices[i]}}</td>
-          <th scope="col"><input type="checkbox" value={{cart_items[i].pid}} name="removefromcart"></th>
+          <th scope="col"><input type="checkbox" value={{cart_items[i].pid}} name="selectfromcart"></th>
         </tr>
       {% endfor %}
     </tbody>

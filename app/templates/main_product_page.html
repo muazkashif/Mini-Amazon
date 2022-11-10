@@ -25,7 +25,7 @@
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     flex: 0 0 100%;
-    left: 220px;
+    left: 230px;
   }
 
   .card-text{
@@ -35,6 +35,10 @@
     .price {
     font-size: 20px;
     text-align: center;
+  }
+
+  .Category{
+    text-align: center; 
   }
 
   .card-title{
@@ -82,12 +86,20 @@
         left:235px;
     }
 
+
+    .sidebar:Rating{
+      position: absolute;
+      left:0;
+    width:100%;
+    }
+
 </style>
 
 
 <br><br>
 
 <body>
+
 
     
     <div class = "header">
@@ -96,12 +108,52 @@
 
     <div class = "sidebar">
         <h2><u>Sort</u></h2>
-        <u1>
-        <li><a href="#"><i class = "fas fa-home"></i>Category</a></li>
-        <li><a href="#"><i class = "fas fa-home"></i>Price</a></li>
-        <li><a href="#"><i class = "fas fa-home"></i>Rating</a></li>
-        </u1>
-    </div>
+        &nbsp
+        <form name="Rating:">
+          <h5>Ratings</h5>
+          <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
+              <option selected="selected"></option>
+              <option value="/index">No Sort</option>
+              <option value="/index/rate/ASC">Worst Rated Items</option>
+              <option value="/index/rate/DESC">Top Rated Items</option>
+          </select>
+      </form>
+
+      &nbsp
+      
+      <form name="Price:">
+        <h5>Price</h5>
+        <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
+            <option selected="selected"></option>
+            <option value="/index">No Sort</option>
+            <option value="/index/price/ASC">Least Expensive</option>
+            <option value="/index/price/DESC">Most Expensive</option>
+        </select>
+    </form>
+
+    &nbsp
+
+    <form name="Category:">
+      <h5>Category</h5>
+      <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
+          <option selected="selected"></option>
+          <option value="/index">No Sort</option>
+          <option value="/index/category/Books">Books</option>
+          <option value="/index/category/Clothing">Clothing</option>
+          <option value="/index/category/Electronics">Electronics</option>
+          <option value="/index/category/Furniture">Furniture</option>
+          <option value="/index/category/Kitchenware">Kitchenware</option>
+          <option value="/index/category/Personal_Care">Personal Care</option>
+          <option value="/index/category/School">School</option>
+          <option value="/index/category/Sports">Sports</option>
+          <option value="/index/category/Toiletries">Toiletries</option>
+          <option value="/index/category/Travel">Travel</option>
+      </select>
+  </form>
+</div>
+  </div>
+
+  
 
     {% for product in avail_products %}
     <div class = "v_align">
@@ -113,8 +165,11 @@
           <h5 class="card-title">{{product.name}}</h5>
           <p class="card-text">{{product.description}}</p>
           <p class = "price">${{product.price}}</p>
-          <p class = "rating">Rating: {{product.rating}}</p>
-          <a class = "card-button" href="#" class="btn btn-primary float left">See Product</a>
+          <p class = "rating">Rating: {{product.rating}}/5</p>
+          <p class = "Category">Category: {{product.category}}</p>
+          <form action="/ind_prod/{{product.id}}" method = "POST" value = product name = "prod">
+            <input type="submit" value = "See more"/>  
+        </form>
         </div>
       </div>
     </div>
