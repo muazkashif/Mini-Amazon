@@ -8,6 +8,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from .models.user import User
 from .models.purchase import Purchase
 from datetime import datetime
+from decimal import Decimal
 
 
 from flask import Blueprint
@@ -90,20 +91,20 @@ def user_profile():
 
 @bp.route('/update_Balance', methods = ['POST'])
 def update_balance():
-    value = User.get(current_user.id).balance + request.form['addBalance']
+    value = User.get(current_user.id).balance + Decimal(request.form.get('addBalance'))
     User.updateBalance(current_user.id, value)
     return redirect(url_for('users.user_profile'))
 
-@bp.route('/user_update_form', methods = ['POST'])
+@bp.route('/user_update_form')
 def user_form():
     return render_template('user_update_form.html')
 
 @bp.route('/update_user_info', methods = ['POST'])
 def update_info():
-    email = request.form['new_email']
-    password = request.form['new_password']
-    firstname = request.form['new_firstname']
-    lastname = request.form['new_lastname']
-    address = request.form['new_address']
+    email = request.form.get('new_email')
+    password = request.form.get('new_password')
+    firstname = request.form.get('new_firstname')
+    lastname = request.form.get('new_lastname')
+    address = request.form.get('new_address')
     User.updateUser(current_user.id, email, password, firstname, lastname, address)
     return redirect(url_for('users.user_profile'))

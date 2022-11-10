@@ -13,9 +13,6 @@
                                     </h5>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <input type="submit" class="profile-edit-btn" action="/user_update_form" value="Edit Profile"/>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-8">
@@ -70,16 +67,19 @@
                                             </div>
                                         </div>
                             </div>
-                            <h5>Add Funds:</h5>
-<form method="POST" action="/update_Balance">
-  <input type="text" value=0 name="addBalance">
-  <input type="submit" value="Top Up">
-</form>
                         </div>
                     </div>
                 </div>
             </form>           
         </div>
+        <h5>Add Funds:</h5>
+        <form method="POST" action="/update_Balance">
+            <input type="text" value=0 name="addBalance">
+            <input type="submit" value="Top Up">
+        </form>
+        <form action="/user_update_form">
+            <button>Update Info</button>
+          </form>
 
 {% block content %}
 
@@ -103,9 +103,9 @@
         <th scope="row">{{purchase.uid}}</th>
         <td>{{purchase.sid}}</td>
         <td>{{purchase.pid}}</td>
-        <td>{{purchase.quant}}</td>
+        <td>{{purchase.quantity}}</td>
         <td>{{purchase.time_purchased}}</td>
-        <td>{{purchase.status}}</td>
+        <td>{{purchase.order_status}}</td>
       </tr>
     {% endfor %}
   </tbody>

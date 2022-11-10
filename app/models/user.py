@@ -82,18 +82,14 @@ SET balance = :value
 WHERE id = :id
 """,
                               id=id, value=value)
-        return User(*(rows[0])) if rows else None
+        #return User(*(rows[0])) if rows else None
 
     @staticmethod
     def updateUser(id, email, password, firstname, lastname, address):
         rows = app.db.execute("""
 UPDATE Users
-SET email = :email
-SET password = :password
-SET firstname = :firstname
-SET lastname = :lastname
-SET address = :address
+SET email = :email, password = :password, firstname = :firstname, lastname = :lastname, address = :address
 WHERE id = :id
 """,
                               id=id, email=email, password=password, firstname=firstname, lastname=lastname, address=address)
-        return User(*(rows[0])) if rows else None
+        #return User(*(rows[0])) if rows else None

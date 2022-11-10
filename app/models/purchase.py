@@ -2,13 +2,13 @@ from flask import current_app as app
 
 
 class Purchase:
-    def __init__(self, uid, sid, pid, quant, time_purchased, status):
+    def __init__(self, uid, sid, pid, quantity, time_purchased, order_status):
         self.uid = uid
         self.sid = sid
         self.pid = pid
-        self.quant = quant
+        self.quantity = quantity
         self.time_purchased = time_purchased
-        self.status = status
+        self.order_status = order_status
 
     @staticmethod
     def get(id):
