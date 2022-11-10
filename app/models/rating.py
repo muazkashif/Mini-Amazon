@@ -32,6 +32,17 @@ ORDER BY time_reviewed DESC
                               uid=uid)
         return [Rating(*row) for row in rows[:k]]
 
+
+    @staticmethod
+    def get_prod_reviews(pid): 
+        rows = app.db.execute('''
+SELECT uid, sid, pid, rating, review, time_reviewed
+FROM Ratings
+WHERE pid = :pid
+''',
+                                pid = pid)
+        return [Rating(*row) for row in rows]
+
     @staticmethod
     def get_all():
         rows = app.db.execute('''
@@ -39,3 +50,5 @@ SELECT uid, sid, pid, rating, review, time_reviewed
 FROM Ratings
 ''')
         return [Rating(*row) for row in rows]
+
+    
