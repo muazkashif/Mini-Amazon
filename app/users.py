@@ -14,8 +14,6 @@ from flask import Blueprint
 bp = Blueprint('users', __name__)
 
 
-
-
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -80,9 +78,9 @@ def logout():
     logout_user()
     return redirect(url_for('index.opener_page'))
 
+@bp.route('/user_profile')
 @bp.route('/user_profile/')
-def index():  
-    #carts = Cart.get_all()
+def user_profile():
     if current_user.is_authenticated:
         user_info = User.get(current_user.id)
         purchases = Purchase.get_all_purchases_by_uid(current_user.id)
@@ -90,7 +88,22 @@ def index():
                             info=user_info, purchase_history=purchases, logged_in=True)
     return render_template('main_product_page.html')
 
-@bp.route('/update_Balance/<value>')
-def update(value):
+@bp.route('/update_Balance', methods = ['POST'])
+def update_balance():
+    value = User.get(current_user.id).balance + request.form['addBalance']
     User.updateBalance(current_user.id, value)
-    return redirect(url_for('user_profile'))
+    return redirect(url_for('users.user_profile'))
+
+@bp.route('/user_update_form', methods = ['POST'])
+def user_form():
+    return render_template('user_update_form.html')
+
+@bp.route('/update_user_info', methods = ['POST'])
+def update_info():
+    email = request.form['new_email']
+    password = request.form['new_password']
+    firstname = request.form['new_firstname']
+    lastname = request.form['new_lastname']
+    address = request.form['new_address']
+    User.updateUser(current_user.id, email, password, firstname, lastname, address)
+    return redirect(url_for('users.user_profile'))
