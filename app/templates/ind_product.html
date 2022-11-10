@@ -1,0 +1,156 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<style>
+	.left-column {
+  width: 65%;
+  position: absolute;
+  top: 170px;
+  right: 450px; 
+}
+
+.left-column img{
+	border:solid #000000;
+}
+ 
+.right-column {
+  width: 35%;
+  position: absolute;
+  right: 250px; 
+  top:200px; 
+  text-align: center;
+  
+}
+
+.more-info{
+	position: absolute; 
+	top: 100px; 
+	text-align: center;
+}
+
+/* Product Description */
+.product-description {
+  border-bottom: 3px solid #000000;
+  text-align: center;
+  position: absolute; 
+  right:250px; 
+  
+}
+
+ 
+.cart-btn {
+  display: inline-block;
+  position: absolute;
+  background-color: #7DC855;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 12px 30px;
+  transition: all .5s;
+  top: 470px;
+  right: 200px;  
+}
+.cart-btn:hover {
+  background-color: #64af3d;
+}
+.price-rating{
+	position: relative;
+	top: 280px;
+	right:280px;
+}
+
+.wrap{
+	position: relative; 
+	top: 650px;
+}
+
+.sidebar{
+      position: absolute;
+      width: 220px;
+      height:60%;
+      background: #000000;
+      padding: 30px 0px; 
+      text-align: center;
+      float:left;
+      color:rgb(255, 255, 255);
+      top:100px;
+    }
+
+	.wrap_all{
+		position: relative;
+		bottom: 100px; 
+		left: 80px; 
+	}
+</style>
+
+<body>
+
+	<div class = "sidebar">
+        <h2><u>Sellers</u></h2>
+        <u1>
+        <li><a href="#"><i class = "fas fa-home"></i>Category</a></li>
+        <li><a href="#"><i class = "fas fa-home"></i>Price</a></li>
+        <li><a href="#"><i class = "fas fa-home"></i>Rating</a></li>
+        </u1>
+    </div>
+
+	<div class = "wrap_all">
+ 
+	<!-- Left Column / Headphones Image -->
+	<div class="left-column">
+	  <img data-image="black" src="https://i.imgur.com/A8eQsll.jpg" alt="">
+	</div>
+   
+   
+	<!-- Right Column -->
+	<div class="right-column">
+   
+	  <!-- Product Description -->
+	  <div class="product-info">
+		<h1>{{prod_items.name}}</h1>
+		<p1>{{prod_items.description}}</p1>
+	  </div>
+
+
+	  <!-- Final Header -->
+	<div class = "price-rating">
+	  <h1>Price: ${{prod_items.price}}</h1>
+		<h1>Rating: {{prod_items.rating}}/5</h1>
+	</div>
+   
+	  <!-- Product Pricing -->
+	  <div class="product-price">
+		<a href="#" class="cart-btn">Add to cart</a>
+	  </div>
+	</div>
+</div>
+
+<div class = "wrap">
+<table class='table table-hover table-bordered container'>
+	<h1>Ratings</h1>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Rating</th>
+      <th scope="col">Review</th>
+      <th scope="col">Time Reviewed</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rating in ratings%}
+      <tr>
+        <th scope="row">{{rating.rating}}</th>
+        <td>{{rating.review}}</td>
+        <td>{{rating.time_reviewed}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+</body>
+
+  {% endblock %}

@@ -35,9 +35,20 @@
       font-size: 30px;
     }
 
+    .user-profile-button {
+      position:absolute;
+      left:70%;
+      color: aliceblue; 
+      text-align: right;
+      float: left;
+      font-size: 20px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
     .cart-button {
       position:absolute;
-      left:90%;
+      left:80%;
       color: aliceblue; 
       text-align: right;
       float: left;
@@ -56,9 +67,19 @@
       padding-left: 30px;
     }
 
+    .check-out-button {
+      position:absolute;
+      color: aliceblue; 
+      text-align: right;
+      float: left;
+      font-size: 20px;
+      padding-top: 10px;
+      padding-left: 180px;
+    }
+
     .logout-button {
       position:absolute;
-      left:80%;
+      left:90%;
       padding-right: 60px;
       color: aliceblue; 
       text-align: right;
@@ -86,6 +107,11 @@
       </div>
 
       {% if current_user.is_authenticated %}
+        <div class="user-profile-button">
+          <form action="/user_profile">
+            <button>My Profile</button>
+          </form>
+        </div>
         <div class="cart-button">
           <form action="/cart">
             <button>My Cart</button>

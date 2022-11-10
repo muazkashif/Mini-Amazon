@@ -82,6 +82,7 @@
         left:235px;
     }
 
+
 </style>
 
 
@@ -113,8 +114,10 @@
           <h5 class="card-title">{{product.name}}</h5>
           <p class="card-text">{{product.description}}</p>
           <p class = "price">${{product.price}}</p>
-          <p class = "rating">Rating: {{product.rating}}</p>
-          <a class = "card-button" href="#" class="btn btn-primary float left">See Product</a>
+          <p class = "rating">Rating: {{product.rating}}/5</p>
+          <form action="/ind_prod/{{product.id}}" method = "POST" value = product name = "prod">
+            <input type="submit" value = "See more"/>  
+        </form>
         </div>
       </div>
     </div>

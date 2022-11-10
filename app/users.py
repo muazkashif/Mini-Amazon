@@ -6,6 +6,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from .models.user import User
+from .models.purchase import Purchase
 from datetime import datetime
 
 
@@ -78,3 +79,18 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('index.opener_page'))
+
+@bp.route('/user_profile/')
+def index():  
+    #carts = Cart.get_all()
+    if current_user.is_authenticated:
+        user_info = User.get(current_user.id)
+        purchases = Purchase.get_all_purchases_by_uid(current_user.id)
+        return render_template('user_profile.html',
+                            info=user_info, purchase_history=purchases, logged_in=True)
+    return render_template('main_product_page.html')
+
+@bp.route('/update_Balance/<value>')
+def update(value):
+    User.updateBalance(current_user.id, value)
+    return redirect(url_for('user_profile'))
