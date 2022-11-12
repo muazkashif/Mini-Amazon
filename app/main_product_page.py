@@ -27,7 +27,7 @@ def index():
     # render the page by adding information to the index.html file
     return render_template('main_product_page.html',
                            avail_products=products,
-                           purchase_history=purchases, logged_in=logged_in)
+                           purchase_history=purchases, logged_in=logged_in,purchase_history_len=len(purchases))
 
 @bp.route('/index/rate/DESC')
 def sort_rate_best():

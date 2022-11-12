@@ -14,7 +14,7 @@ num_forsale_items = 4000
 #num_seller_ratings = 3000
 num_ratings = 4000
 
-file_path = "../data/"
+file_path = "../generated/"
 
 categories = ["Travel", "Personal_Care", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
@@ -232,7 +232,6 @@ def gen_ratings(num_ratings, s_uids, uids, available_pids):
 if __name__ == "__main__":
     uids = gen_users(num_users)
     available_pids = gen_products(num_products)
-    # gen_transactions(num_purchases, available_pids, uids)
     s_uids = gen_sellers(num_sellers, uids)
     gen_carts(num_cart_items, uids, s_uids, available_pids)
     gen_transactions(num_purchases, available_pids, uids,s_uids)
