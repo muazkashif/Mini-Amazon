@@ -9,12 +9,14 @@ num_products = 2000
 num_purchases = 2500
 num_sellers = 5
 num_cart_items = 100
-num_forsale_items = 50
+num_forsale_items = 33
 num_product_ratings = 400
 num_seller_ratings = 5
 num_ratings = 100
 
 file_path = "../generated/"
+
+categories = ["Travel", "Personal_Care", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
 Faker.seed(0)
 fake = Faker()
@@ -78,7 +80,7 @@ def gen_products(num_products):
             available = fake.random_element(elements=('true', 'false'))
             rating = round(random.uniform(0.0,5.0),2)
             descriptions = fake.sentence() 
-            category = fake.sentence(nb_words = 2)[:-1]
+            category = categories[fake.random_int(min = 0, max = len(categories) - 1)]
             images = fake.binary(length = 64) #Might be better generated some other way
             if available == 'true':
                 available_pids.append(pid)

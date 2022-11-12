@@ -28,3 +28,33 @@ def index():
     return render_template('main_product_page.html',
                            avail_products=products,
                            purchase_history=purchases, logged_in=logged_in)
+
+@bp.route('/index/rate/DESC')
+def sort_rate_best():
+    products = Product.sort_ratings_desc()
+    return render_template('main_product_page.html',
+                           avail_products = products)
+
+@bp.route('/index/rate/ASC')
+def sort_rate_worst():
+    products = Product.sort_ratings_asc()
+    return render_template('main_product_page.html',
+                           avail_products = products)
+
+@bp.route('/index/price/DESC')
+def sort_product_expensive():
+    products = Product.sort_price_desc()
+    return render_template('main_product_page.html',
+                           avail_products = products)
+
+@bp.route('/index/price/ASC')
+def sort_rate_cheap():
+    products = Product.sort_price_asc()
+    return render_template('main_product_page.html',
+                           avail_products = products)
+
+@bp.route('/index/category/<cat>')
+def sort_category(cat):
+    products = Product.get_prod_category(cat)
+    return render_template('main_product_page.html',
+                           avail_products = products)
