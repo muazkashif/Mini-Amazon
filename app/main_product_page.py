@@ -22,12 +22,15 @@ def index():
         purchases = Purchase.get_all_by_uid_since(
             current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
         logged_in = True
+        return render_template('main_product_page.html',
+                           avail_products=products,
+                           purchase_history=purchases, logged_in=logged_in,purchase_history_len=len(purchases))
     else:
         purchases = None
     # render the page by adding information to the index.html file
-    return render_template('main_product_page.html',
+        return render_template('main_product_page.html',
                            avail_products=products,
-                           purchase_history=purchases, logged_in=logged_in,purchase_history_len=len(purchases))
+                            purchase_history=purchases, logged_in=logged_in,purchase_history_len=0)
 
 @bp.route('/index/rate/DESC')
 def sort_rate_best():
