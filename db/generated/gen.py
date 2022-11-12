@@ -14,6 +14,7 @@ num_product_ratings = 400
 num_seller_ratings = 5
 num_ratings = 5000
 
+
 file_path = "../generated/"
 
 categories = ["Travel", "Personal_Care", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
@@ -117,8 +118,7 @@ def gen_forsales(num_forsale_items, s_uids, available_pids):
         writer = get_csv_writer(f)
         print('ForSales...', end=' ', flush=True)
         for i in range(num_forsale_items):
-            if i % 10 == 0:
-                print(f'{i}', end=' ', flush=True)
+            print(f'{i}', end=' ', flush=True)
             pid = fake.random_element(elements=available_pids)
             s_uid = fake.random_element(elements=s_uids)
             key = (pid,s_uid)
@@ -130,6 +130,21 @@ def gen_forsales(num_forsale_items, s_uids, available_pids):
             already_done_keys.append(key)
         print(f'{num_forsale_items} generated')
     return 
+
+
+        # for i in range(num_forsale_items):
+        #     print(f'{i}', end=' ', flush=True)
+        #     pid = fake.random_element(elements=available_pids)
+        #     s_uid = fake.random_element(elements=s_uids)
+        #     key = (pid,s_uid)
+        #     while key in already_done_keys:
+        #         pid = fake.random_element(elements=available_pids)
+        #         s_uid = fake.random_element(elements=s_uids)
+        #     quantity = fake.random_int(min=1, max=10)
+        #     writer.writerow([pid, s_uid, quantity])
+        #     already_done_keys.append(key)
+        # print(f'{num_forsale_items} generated')
+    #return 
 
 
 def gen_transactions(num_purchases, available_pids, uids,sids):
@@ -150,51 +165,51 @@ def gen_transactions(num_purchases, available_pids, uids,sids):
         print(f'{num_purchases} generated')
     return
 
-def gen_prod_ratings(num_product_ratings, available_pids, uids):
-    # already_done_keys = [()]
-    with open(file_path + 'ProductRatings.csv', 'w') as f:
-        writer = get_csv_writer(f)
-        print('Product Ratings...', end=' ', flush=True)
-        for i in range(num_product_ratings):
-            if i % 10 == 0:
-                print(f'{i}', end=' ', flush=True)
-            pid = fake.random_element(elements=available_pids)
-            uid = fake.random_element(elements=uids)
-            key = (uid,pid)
-            # if i == 230:
-            #     print("start debugging")
-            # while key in already_done_keys:
-            #     pid = fake.random_element(elements=available_pids)
-            #     uid = fake.random_element(elements=uids)
-            rating = fake.random_int(min=1, max=5)
-            review = fake.sentence(nb_words=10)
-            time = fake.date_time_between(start_date = datetime.datetime(2000, 1, 1))
-            writer.writerow([uid, pid, rating,review,time])
-            # already_done_keys.append(key)
-        print(f'{num_product_ratings} generated')
-    return
+# def gen_prod_ratings(num_product_ratings, available_pids, uids):
+#     # already_done_keys = [()]
+#     with open(file_path + 'ProductRatings.csv', 'w') as f:
+#         writer = get_csv_writer(f)
+#         print('Product Ratings...', end=' ', flush=True)
+#         for i in range(num_product_ratings):
+#             if i % 10 == 0:
+#                 print(f'{i}', end=' ', flush=True)
+#             pid = fake.random_element(elements=available_pids)
+#             uid = fake.random_element(elements=uids)
+#             key = (uid,pid)
+#             # if i == 230:
+#             #     print("start debugging")
+#             # while key in already_done_keys:
+#             #     pid = fake.random_element(elements=available_pids)
+#             #     uid = fake.random_element(elements=uids)
+#             rating = fake.random_int(min=1, max=5)
+#             review = fake.sentence(nb_words=10)
+#             time = fake.date_time_between(start_date = datetime.datetime(2000, 1, 1))
+#             writer.writerow([uid, pid, rating,review,time])
+#             # already_done_keys.append(key)
+#         print(f'{num_product_ratings} generated')
+#     return
 
-def gen_seller_ratings(num_seller_ratings, s_uids, uids):
-    already_done_keys = [[]]
-    with open(file_path + 'SellerRatings.csv', 'w') as f:
-        writer = get_csv_writer(f)
-        print('Seller Ratings...', end=' ', flush=True)
-        for i in range(num_seller_ratings):
-            if i % 10 == 0:
-                print(f'{i}', end=' ', flush=True)
-            s_uid = fake.random_element(elements=s_uids)
-            uid = fake.random_element(elements=uids)
-            key = (uid,s_uid)
-            while key in already_done_keys:
-                s_uid = fake.random_element(elements=s_uids)
-                uid = fake.random_element(elements=uids)
-            rating = fake.random_int(min=1, max=5)
-            review = fake.sentence(nb_words=10)
-            time = fake.date_time_between(start_date = datetime.datetime(2000, 1, 1))
-            writer.writerow([uid, s_uid, rating,review,time])
-            already_done_keys.append(key)
-        print(f'{num_seller_ratings} generated')
-    return
+# def gen_seller_ratings(num_seller_ratings, s_uids, uids):
+#     already_done_keys = [[]]
+#     with open(file_path + 'SellerRatings.csv', 'w') as f:
+#         writer = get_csv_writer(f)
+#         print('Seller Ratings...', end=' ', flush=True)
+#         for i in range(num_seller_ratings):
+#             if i % 10 == 0:
+#                 print(f'{i}', end=' ', flush=True)
+#             s_uid = fake.random_element(elements=s_uids)
+#             uid = fake.random_element(elements=uids)
+#             key = (uid,s_uid)
+#             while key in already_done_keys:
+#                 s_uid = fake.random_element(elements=s_uids)
+#                 uid = fake.random_element(elements=uids)
+#             rating = fake.random_int(min=1, max=5)
+#             review = fake.sentence(nb_words=10)
+#             time = fake.date_time_between(start_date = datetime.datetime(2000, 1, 1))
+#             writer.writerow([uid, s_uid, rating,review,time])
+#             already_done_keys.append(key)
+#         print(f'{num_seller_ratings} generated')
+#     return
 
 def gen_ratings(num_ratings):
     already_done_keys = []
