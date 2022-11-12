@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br><br>
+
+<h2>Changeing Review of User: {{ratings[0].uid}} for Product: {{ratings[0].pid}}</h2>
+<form method="POST" action="/update_review/{{ratings[0].uid}}break{{ratings[0].pid}}">
+    <input type="text" value="{{ratings[0].review}}" name="reviewText" size= "50">
+    <input type="text" value="{{ratings[0].rating}}" name="ratingText">
+    <input type="submit" value="Submit">
+</form>
+
+
+
+<br><br>
+
+
+{% endblock %}

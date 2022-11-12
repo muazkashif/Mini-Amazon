@@ -65,5 +65,8 @@ def create_app():
     
     from .ind_prod import bp as ind_prod_bp
     app.register_blueprint(ind_prod_bp)
+    
+    from .product_rating_view import bp as product_rating_view
+    app.register_blueprint(product_rating_view)
 
     return app
