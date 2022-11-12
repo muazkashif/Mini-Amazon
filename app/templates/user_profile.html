@@ -3,6 +3,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
+
 <div class="container emp-profile">
             <form method="post">
                 <div class="row">
@@ -80,6 +81,21 @@
         <form action="/user_update_form">
             <button>Update Info</button>
           </form>
+
+
+        &nbsp
+
+        <form method="POST" action="/add_seller">
+        <input type="submit" value="Become Seller?">
+        </form>
+
+        <form method="POST" action="/seller_page">
+            <input type="submit" value="Seller Information">
+            </form>
+
+        <form action="/index">
+            <input type="submit" value="Back to Products">
+            </form>
 
 {% block content %}
 

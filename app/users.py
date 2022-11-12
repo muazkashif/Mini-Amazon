@@ -9,6 +9,8 @@ from .models.user import User
 from .models.purchase import Purchase
 from datetime import datetime
 from decimal import Decimal
+from .models.seller import Seller
+from .models.transactions import Transaction
 
 
 from flask import Blueprint
@@ -108,3 +110,14 @@ def update_info():
     address = request.form.get('new_address')
     User.updateUser(current_user.id, email, password, firstname, lastname, address)
     return redirect(url_for('users.user_profile'))
+
+@bp.route('/add_seller', methods = ['POST', 'GET'])
+def add_seller():
+    Seller.add_seller_relation(current_user.id)
+    return redirect(url_for('users.user_profile'))
+
+
+@bp.route('/seller_page', methods = ['POST', 'GET'])
+def see_seller_page():
+    prod = Transaction.get_transactions(current_user.id)
+    return render_template('seller_pers_page.html', prod=prod)

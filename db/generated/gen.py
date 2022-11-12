@@ -10,8 +10,8 @@ num_purchases = 2500
 num_sellers = 5
 num_cart_items = 100
 num_forsale_items = 33
-num_product_ratings = 400
-num_seller_ratings = 5
+# num_product_ratings = 400
+# num_seller_ratings = 5
 num_ratings = 100
 
 
