@@ -82,7 +82,7 @@ ORDER BY T.time_purchased DESC
     @staticmethod
     def get_all():
         rows = app.db.execute('''
-SELECT uid, sid, pid, quantity, time_purchased, order_status
+SELECT uid, sid, pid, quantity, time_purchased, order_status, NULL, NULL
 FROM Transactions
 ORDER BY time_purchased DESC
 ''')

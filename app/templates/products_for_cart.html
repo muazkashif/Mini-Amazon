@@ -12,16 +12,20 @@
       <tr>
         <th scope="col">Product ID</th>
         <th scope="col">Product Name</th>
+        <th scope="col">Seller ID</th>
         <th scope="col">Price</th>
-        <th scope="col">Quantity</th>
+        <th scope="col">Units Available</th>
+        <th scope="col">Quantity Added</th>
       </tr>
     </thead>
     <tbody>
-      {% for p in prod_items%}
+      {% for i in range(product_len)%}
         <tr>
-          <th scope="row">{{p.id}}</th>
-          <td>{{p.name}}</td>
-          <td>{{p.price}}</td>
+          <th scope="row">{{prod_items[i].pid}}</th>
+          <td>{{names[i]}}</td>
+          <td>{{prod_items[i].sid}}</td>
+          <td>{{prices[i]}}</td>
+          <td>{{prod_items[i].quantity}}</td>
           <th scope="col"><input type="integer" value=0 name="addtocart2"></th>
         </tr>
       {% endfor %}
