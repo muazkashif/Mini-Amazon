@@ -32,15 +32,23 @@ def index():
 def show_product(k):
     prod = Product.get(k)
     ratings = Rating.get_prod_reviews(k)
-    if (current_user.is_authenticated & len(Purchase.get_quantity_purchased(current_user.id,k))>0):
+    if (current_user.is_authenticated and len(Purchase.get_quantity_purchased(current_user.id,k))>0):
         review_button="enabled"
-    else:
-        review_button="disabled"
-        
-        
-    return render_template('ind_product.html',
+        return render_template('ind_product.html',
                            prod_items=prod,
                            ratings=ratings,
                            review_button=review_button,
                            current_uid=current_user.id)
+    else:
+        if (current_user.is_authenticated):
+            curr_uid = current_user.id
+        else:
+            curr_uid = -1
+        review_button="disabled"
+        return render_template('ind_product.html',
+                           prod_items=prod,
+                           ratings=ratings,
+                           review_button=review_button,
+                           current_uid=curr_uid)
+        
 
