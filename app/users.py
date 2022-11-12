@@ -7,6 +7,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from .models.user import User
 from .models.purchase import Purchase
+from .models.seller import Seller
 from datetime import datetime
 
 
@@ -86,6 +87,7 @@ def index():
     if current_user.is_authenticated:
         user_info = User.get(current_user.id)
         purchases = Purchase.get_all_purchases_by_uid(current_user.id)
+        #sellerItems = Seller.get_inventory_by_sid(current_user.id)items = sellerItems
         return render_template('user_profile.html',
                             info=user_info, purchase_history=purchases, logged_in=True)
     return render_template('main_product_page.html')
