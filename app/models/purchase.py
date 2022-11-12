@@ -87,3 +87,13 @@ FROM Transactions
 ORDER BY time_purchased DESC
 ''')
         return [Purchase(*row) for row in rows]
+    
+    @staticmethod
+    def get_quantity_purchased(uid,pid):
+        rows = app.db.execute('''
+SELECT uid, sid, pid, quantity, time_purchased, order_status, NULL, NULL
+FROM Transactions
+WHERE uid = :uid and pid=:pid
+''',
+                            uid=uid,pid=pid)
+        return [Purchase(*row) for row in rows]

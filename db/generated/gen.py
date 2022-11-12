@@ -4,15 +4,16 @@ from faker import Faker
 import random
 import datetime
 
-num_users = 1000
-num_products = 5000
-num_purchases = 4000
-num_sellers = 500
-num_cart_items = 4000
-num_forsale_items = 4000
-#num_product_ratings = 3000
-#num_seller_ratings = 3000
-num_ratings = 4000
+num_users = 5000
+num_products = 10000
+num_purchases = 5000
+num_sellers = 2000
+num_cart_items = 100
+num_forsale_items = 33
+num_product_ratings = 400
+num_seller_ratings = 5
+num_ratings = 5000
+
 
 file_path = "../generated/"
 
@@ -24,6 +25,9 @@ fake = Faker()
 
 def get_csv_writer(f):
     return csv.writer(f, dialect='unix')
+
+def get_csv_reader(r):
+    return csv.reader(r, dialect='unix')
 
 
 def gen_users(num_users):
@@ -50,21 +54,25 @@ def gen_users(num_users):
     return uids
 
 
-def gen_sellers(num_sellers, User_IDs):
+def gen_sellers(num_sellers):
     s_uids = []
+    uids = []
+    for i in range(num_users):
+        uids.append(i)
+    print("DONE READING")
     with open(file_path + 'Sellers.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Sellers...', end=' ', flush=True)
         for i in range(num_sellers):
             if i % 10 == 0:
                 print(f'{i}', end=' ', flush=True)
-            uid = fake.random_element(elements=User_IDs)
+            uid = fake.random_element(elements=uids)
             while uid in s_uids:
-                uid = fake.random_element(elements=User_IDs)
+                uid = fake.random_element(elements=uids)
             writer.writerow([uid])
             s_uids.append(uid)
         print(f'{num_sellers} generated')
-    return s_uids
+    return s_uids,uids
 
 
 def gen_products(num_products):
@@ -105,26 +113,24 @@ def gen_carts(num_cart_items, uids, s_uids, available_pids):
     return 
 
 def gen_forsales(num_forsale_items, s_uids, available_pids):
+    already_done_keys = [()]
     with open(file_path + 'ForSaleItems.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('ForSales...', end=' ', flush=True)
-        check = 0
-        for i in range(len(available_pids)):
-            if check == num_forsale_items:
-                    return
-            for j in range(len(s_uids)):
-                if check == num_forsale_items:
-                    return
+        for i in range(num_forsale_items):
+            print(f'{i}', end=' ', flush=True)
+            pid = fake.random_element(elements=available_pids)
+            s_uid = fake.random_element(elements=s_uids)
+            key = (pid,s_uid)
+            while key in already_done_keys:
+                pid = fake.random_element(elements=available_pids)
+                s_uid = fake.random_element(elements=s_uids)
+            quantity = fake.random_int(min=1, max=10)
+            writer.writerow([pid, s_uid, quantity])
+            already_done_keys.append(key)
+        print(f'{num_forsale_items} generated')
+    return 
 
-                pid = available_pids[i]
-                sid = s_uids[j]
-                check += 1
-                if check % 10 == 0: 
-                    print(f'{check}', end=' ', flush=True)
-                quantity = fake.random_int(min = 0, max = 10)
-                writer.writerow([pid, sid, quantity])
-            print(f'{num_forsale_items} generated')
-    return
 
         # for i in range(num_forsale_items):
         #     print(f'{i}', end=' ', flush=True)
@@ -147,7 +153,7 @@ def gen_transactions(num_purchases, available_pids, uids,sids):
         writer = get_csv_writer(f)
         print('Purchases...', end=' ', flush=True)
         for id in range(num_purchases):
-            if id % 100 == 0:
+            if id % 10 == 0:
                 print(f'{id}', end=' ', flush=True)
             uid = fake.random_element(elements=uids)
             sid = fake.random_element(elements=sids)
@@ -205,37 +211,51 @@ def gen_transactions(num_purchases, available_pids, uids,sids):
 #         print(f'{num_seller_ratings} generated')
 #     return
 
-def gen_ratings(num_ratings, s_uids, uids, available_pids):
-    already_done_keys = [[]]
+def gen_ratings(num_ratings):
+    already_done_keys = []
+    transactions = []
+    with open(file_path + 'Transactions.csv', 'r') as r:
+        reader = get_csv_reader(r)
+        for row in reader:
+            transactions.append(row)
+            
     with open(file_path + 'Ratings.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Ratings...', end=' ', flush=True)
         for i in range(num_ratings):
             if i % 5 == 0:
                 print(f'{i}', end=' ', flush=True)
-            s_uid = fake.random_element(elements=s_uids)
-            pid = fake.random_element(elements=available_pids)
-            uid = fake.random_element(elements=uids)
-            key = (uid,s_uid, pid)
-            while key in already_done_keys:
-                pid = fake.random_element(elements=available_pids)
-                s_uid = fake.random_element(elements=s_uids)
-                uid = fake.random_element(elements=uids)
+            
+            transaction = fake.random_element(elements=transactions)
+            uid = transaction[0]
+            sid = transaction[1]
+            pid = transaction[2]
             rating = fake.random_int(min=1, max=5)
             review = fake.sentence(nb_words=10)
             time = fake.date_time_between(start_date = datetime.datetime(2000, 1, 1))
-            writer.writerow([uid, s_uid, pid, rating,review,time])
-            already_done_keys.append(key)
+            writer.writerow([uid, sid, pid, rating,review,time])
+            already_done_keys.append(transaction)
+            # s_uid = fake.random_element(elements=s_uids)
+            # pid = fake.random_element(elements=available_pids)
+            # uid = fake.random_element(elements=uids)
+            # key = (uid,s_uid, pid)
+            # while key in already_done_keys:
+            #     pid = fake.random_element(elements=available_pids)
+            #     s_uid = fake.random_element(elements=s_uids)
+            #     uid = fake.random_element(elements=uids)
+            # rating = fake.random_int(min=1, max=5)
+            # review = fake.sentence(nb_words=10)
+            # time = fake.date_time_between(start_date = datetime.datetime(2000, 1, 1))
         print(f'{num_ratings} generated')
     return
 
 if __name__ == "__main__":
-    uids = gen_users(num_users)
+    # uids = gen_users(num_users)
     available_pids = gen_products(num_products)
-    s_uids = gen_sellers(num_sellers, uids)
+    s_uids,uids = gen_sellers(num_sellers)
     gen_carts(num_cart_items, uids, s_uids, available_pids)
     gen_transactions(num_purchases, available_pids, uids,s_uids)
-    #gen_prod_ratings(num_product_ratings, available_pids, uids)
-    #gen_seller_ratings(num_seller_ratings, s_uids, uids)
-    gen_forsales(num_forsale_items, s_uids, available_pids)
-    gen_ratings(num_ratings, s_uids, uids, available_pids)
+    # #gen_prod_ratings(num_product_ratings, available_pids, uids)
+    # #gen_seller_ratings(num_seller_ratings, s_uids, uids)
+    # gen_forsales(num_forsale_items, s_uids, available_pids)
+    gen_ratings(num_ratings)

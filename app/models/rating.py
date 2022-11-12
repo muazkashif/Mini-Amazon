@@ -85,13 +85,23 @@ ORDER BY time_reviewed DESC
         return [Rating(*row) for row in rows]
     
     @staticmethod
-    def updateReview(uid, pid,reviewvalue,ratingvalue):
+    def updateReview(uid, pid,reviewvalue,ratingvalue,time):
         rows = app.db.execute("""
 UPDATE Ratings
-SET review = :reviewvalue, rating=:ratingvalue
+SET review = :reviewvalue, rating=:ratingvalue, time_reviewed=:time
 WHERE uid = :uid and pid = :pid
 """,
-                              uid=uid, pid=pid,ratingvalue=ratingvalue,reviewvalue=reviewvalue)
+                              uid=uid, pid=pid,ratingvalue=ratingvalue,reviewvalue=reviewvalue,time=time)
+        # return [Rating(*row) for row in rows]
+        
+    @staticmethod
+    def addReview(uid, sid, pid,reviewvalue,ratingvalue,time):
+        rows = app.db.execute("""
+INSERT INTO Ratings(uid, sid, pid, rating,review,time_reviewed)
+VALUES(:uid, :sid, :pid, :ratingvalue, :reviewvalue, :time)
+RETURNING uid
+""",
+                              uid=uid, sid=sid, pid=pid,ratingvalue=ratingvalue,reviewvalue=reviewvalue,time=time)
         # return [Rating(*row) for row in rows]
 
     

@@ -3,6 +3,7 @@ from flask import render_template
 from .models.products import Product
 from flask_login import current_user
 from .models.rating import Rating
+from .models.purchase import Purchase
 
 from flask import Blueprint
 bp = Blueprint('ind_prod', __name__)
@@ -31,7 +32,23 @@ def index():
 def show_product(k):
     prod = Product.get(k)
     ratings = Rating.get_prod_reviews(k)
-    return render_template('ind_product.html',
+    if (current_user.is_authenticated and len(Purchase.get_quantity_purchased(current_user.id,k))>0):
+        review_button="enabled"
+        return render_template('ind_product.html',
                            prod_items=prod,
-                           ratings = ratings)
+                           ratings=ratings,
+                           review_button=review_button,
+                           current_uid=current_user.id)
+    else:
+        if (current_user.is_authenticated):
+            curr_uid = current_user.id
+        else:
+            curr_uid = -1
+        review_button="disabled"
+        return render_template('ind_product.html',
+                           prod_items=prod,
+                           ratings=ratings,
+                           review_button=review_button,
+                           current_uid=curr_uid)
+        
 
