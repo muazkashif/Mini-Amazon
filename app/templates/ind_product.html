@@ -57,6 +57,27 @@
 .cart-btn:hover {
   background-color: #64af3d;
 }
+
+.review-btn {
+  display: inline-block;
+  position: absolute;
+  background-color: #7DC855;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 12px 30px;
+  transition: all .5s;
+  top: 470px;
+  right: 45px;  
+}
+.review-btn:hover {
+  background-color: #64af3d;
+}
+.review-btn:disabled {
+  background-color: #808080;
+}
+
 .price-rating{
 	position: relative;
 	top: 280px;
@@ -124,7 +145,13 @@
    
 	  <!-- Product Pricing -->
 	  <div class="product-price">
-		<a href="#" class="cart-btn">Add to cart</a>
+      <form method="POST" action="##">
+      <input type="submit" class ="cart-btn" value="Add To Cart">
+      </form>
+
+      <form method="POST" action="/write_review/{{current_uid}}break{{prod_items.id}}">
+        <input type="submit" class ="review-btn" {{review_button}} value="Review Item">
+      </form>
 	  </div>
 	</div>
 </div>
@@ -134,6 +161,7 @@
 	<h1>Ratings</h1>
   <thead class="thead-dark">
     <tr>
+      <th scope="col">User</th>
       <th scope="col">Rating</th>
       <th scope="col">Review</th>
       <th scope="col">Time Reviewed</th>
@@ -142,7 +170,10 @@
   <tbody>
     {% for rating in ratings%}
       <tr>
-        <th scope="row">{{rating.rating}}</th>
+        <td>
+            <a href="/view_all_reviews/{{rating.uid}}">{{rating.uid}}</a>
+        </td>
+        <td>{{rating.rating}}</td>
         <td>{{rating.review}}</td>
         <td>{{rating.time_reviewed}}</td>
       </tr>
