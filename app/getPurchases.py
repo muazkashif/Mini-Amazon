@@ -12,10 +12,10 @@ bp = Blueprint('purchases', __name__)
 def index():
     purchases = Purchase.get_all()
     return render_template('purchases.html',
-                           purchase_history=purchases)
+                           purchase_history=purchases, purchase_history_len=len(purchases))
 
 @bp.route('/purchases/<uid>')
 def show_purchases_given_uid(uid):
     purchases = Purchase.get_all_purchases_by_uid(uid)
     return render_template('purchases.html', 
-                            purchase_history=purchases)
+                            purchase_history=purchases,purchase_history_len=len(purchases))
