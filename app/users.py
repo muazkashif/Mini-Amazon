@@ -6,13 +6,13 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from .models.user import User
+from .models.purchase import Purchase
 from datetime import datetime
+from decimal import Decimal
 
 
 from flask import Blueprint
 bp = Blueprint('users', __name__)
-
-
 
 
 class LoginForm(FlaskForm):
@@ -24,7 +24,7 @@ class LoginForm(FlaskForm):
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index.index'))
+        return redirect(url_for('main_product_page.index'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.get_by_auth(form.email.data, form.password.data)
@@ -34,7 +34,7 @@ def login():
         login_user(user)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index.index')
+            next_page = url_for('main_product_page.index')
 
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
@@ -78,3 +78,33 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('index.opener_page'))
+
+@bp.route('/user_profile')
+@bp.route('/user_profile/')
+def user_profile():
+    if current_user.is_authenticated:
+        user_info = User.get(current_user.id)
+        purchases = Purchase.get_all_purchases_by_uid(current_user.id)
+        return render_template('user_profile.html',
+                            info=user_info, purchase_history=purchases, logged_in=True)
+    return render_template('main_product_page.html')
+
+@bp.route('/update_Balance', methods = ['POST'])
+def update_balance():
+    value = User.get(current_user.id).balance + Decimal(request.form.get('addBalance'))
+    User.updateBalance(current_user.id, value)
+    return redirect(url_for('users.user_profile'))
+
+@bp.route('/user_update_form')
+def user_form():
+    return render_template('user_update_form.html')
+
+@bp.route('/update_user_info', methods = ['POST'])
+def update_info():
+    email = request.form.get('new_email')
+    password = request.form.get('new_password')
+    firstname = request.form.get('new_firstname')
+    lastname = request.form.get('new_lastname')
+    address = request.form.get('new_address')
+    User.updateUser(current_user.id, email, password, firstname, lastname, address)
+    return redirect(url_for('users.user_profile'))

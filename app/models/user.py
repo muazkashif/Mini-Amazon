@@ -7,7 +7,7 @@ from .. import login
 
 
 class User(UserMixin):
-    def __init__(self, id, email, firstname, lastname, password, address, balance, date):
+    def __init__(self, id, email, password, firstname, lastname, address, balance, date):
         self.id = id
         self.email = email
         self.firstname = firstname
@@ -73,3 +73,23 @@ WHERE id = :id
 """,
                               id=id)
         return User(*(rows[0])) if rows else None
+    
+    @staticmethod
+    def updateBalance(id, value):
+        rows = app.db.execute("""
+UPDATE Users
+SET balance = :value
+WHERE id = :id
+""",
+                              id=id, value=value)
+        #return User(*(rows[0])) if rows else None
+
+    @staticmethod
+    def updateUser(id, email, password, firstname, lastname, address):
+        rows = app.db.execute("""
+UPDATE Users
+SET email = :email, password = :password, firstname = :firstname, lastname = :lastname, address = :address
+WHERE id = :id
+""",
+                              id=id, email=email, password=password, firstname=firstname, lastname=lastname, address=address)
+        #return User(*(rows[0])) if rows else None
