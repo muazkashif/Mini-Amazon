@@ -21,10 +21,6 @@ def index():
             for i in range(len(form)):
                 if int(form[i]) != 0:
                     Cart.add(current_user.id, products[i].id, 2, int(form[i]))
-            if request.form.getlist("selectfromcart"):
-                for pid in request.form.getlist("selectfromcart"):
-                    #CHANGE THIS TO TRANSACTION BEHAVIOR
-                    Purchase.add(current_user.id, pid, )
 
     carts = Cart.get_all()
     if current_user.is_authenticated:
