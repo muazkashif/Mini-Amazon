@@ -8,10 +8,8 @@ num_users = 5000
 num_products = 10000
 num_purchases = 5000
 num_sellers = 2000
-num_cart_items = 100
-num_forsale_items = 33
-num_product_ratings = 400
-num_seller_ratings = 5
+num_cart_items = 2000
+num_forsale_items = 2000
 num_ratings = 5000
 
 
@@ -255,7 +253,5 @@ if __name__ == "__main__":
     s_uids,uids = gen_sellers(num_sellers)
     gen_carts(num_cart_items, uids, s_uids, available_pids)
     gen_transactions(num_purchases, available_pids, uids,s_uids)
-    # #gen_prod_ratings(num_product_ratings, available_pids, uids)
-    # #gen_seller_ratings(num_seller_ratings, s_uids, uids)
-    # gen_forsales(num_forsale_items, s_uids, available_pids)
+    gen_forsales(num_forsale_items, s_uids, available_pids)
     gen_ratings(num_ratings)
