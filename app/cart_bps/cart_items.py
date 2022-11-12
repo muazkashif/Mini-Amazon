@@ -15,6 +15,7 @@ def index():
     if request.method == 'POST':
         if current_user.is_authenticated:
             if request.form.get("trash"):
+                print("hi")
                 Cart.remove(current_user.id, request.form.get("trash"))
             form = request.form.getlist("addtocart2")
             products = Product.get_all()
