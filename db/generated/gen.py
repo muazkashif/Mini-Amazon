@@ -8,8 +8,8 @@ num_users = 5000
 num_products = 10000
 num_purchases = 5000
 num_sellers = 2000
-num_cart_items = 2000
-num_forsale_items = 2000
+num_cart_items = 3000
+num_forsale_items = 1500
 num_ratings = 5000
 
 
@@ -30,6 +30,7 @@ def get_csv_reader(r):
 
 def gen_users(num_users):
     uids = []
+    emails = []
     with open(file_path + 'Users.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Users...', end=' ', flush=True)
@@ -37,7 +38,9 @@ def gen_users(num_users):
             if uid % 10 == 0:
                 print(f'{uid}', end=' ', flush=True)
             profile = fake.profile()
-            email = fake.email()
+            email = str(uid) + "@exmaple.com"
+            # while email in emails:
+            #     email = fake.email()
             plain_password = f'pass{uid}'
             password = generate_password_hash(plain_password)
             name_components = profile['name'].split(' ')
@@ -48,6 +51,7 @@ def gen_users(num_users):
             date = fake.date_between(datetime.datetime(2000, 1, 1))
             writer.writerow([uid, email, password, firstname, lastname, address, balance, date])
             uids.append(uid)
+            emails.append(email)
         print(f'{num_users} generated')
     return uids
 
@@ -75,6 +79,7 @@ def gen_sellers(num_sellers):
 
 def gen_products(num_products):
     available_pids = []
+    names = []
     with open(file_path + 'Products.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Products...', end=' ', flush=True)
@@ -82,12 +87,15 @@ def gen_products(num_products):
             if pid % 100 == 0:
                 print(f'{pid}', end=' ', flush=True)
             pname = fake.sentence(nb_words=4)[:-1]
+            while pname in names:
+                pname = fake.sentence(nb_words=4)[:-1]
             price = f'{str(fake.random_int(max=500))}.{fake.random_int(max=99):02}'
             available = fake.random_element(elements=('true', 'false'))
             rating = round(random.uniform(0.0,5.0),2)
             descriptions = fake.sentence() 
             category = categories[fake.random_int(min = 0, max = len(categories) - 1)]
             images = fake.binary(length = 64) #Might be better generated some other way
+            names.append(pname)
             if available == 'true':
                 available_pids.append(pid)
             writer.writerow([pid, pname, category, descriptions, images, price, rating, available])
@@ -225,6 +233,8 @@ def gen_ratings(num_ratings):
                 print(f'{i}', end=' ', flush=True)
             
             transaction = fake.random_element(elements=transactions)
+            while transaction in already_done_keys:
+                transaction = fake.random_element(elements=transactions)
             uid = transaction[0]
             sid = transaction[1]
             pid = transaction[2]
@@ -250,8 +260,10 @@ def gen_ratings(num_ratings):
 if __name__ == "__main__":
     # uids = gen_users(num_users)
     available_pids = gen_products(num_products)
-    s_uids,uids = gen_sellers(num_sellers)
+    s_uids, uids = gen_sellers(num_sellers)
     gen_carts(num_cart_items, uids, s_uids, available_pids)
     gen_transactions(num_purchases, available_pids, uids,s_uids)
-    gen_forsales(num_forsale_items, s_uids, available_pids)
+    # #gen_prod_ratings(num_product_ratings, available_pids, uids)
+    # #gen_seller_ratings(num_seller_ratings, s_uids, uids)
+    # gen_forsales(num_forsale_items, s_uids, available_pids)
     gen_ratings(num_ratings)
