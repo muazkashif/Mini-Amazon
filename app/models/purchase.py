@@ -34,7 +34,7 @@ INSERT INTO Transactions(uid, pid, sid, quantity, time_purchased, order_status)
 VALUES(:uid, :pid, :sid, :quantity, :time_purchased, :order_status)
 RETURNING uid
 """,
-                                  uid=uid, pid=pid, sid=sid, quantity=quantity, time_purchased=datetime.today().strftime('%Y-%m-%d %H:%M:%S'), order_status="no")
+                                  uid=uid, pid=pid, sid=sid, quantity=quantity, time_purchased=datetime.today().strftime('%Y-%m-%d %H:%M:%S'), order_status="Processing")
             return None
         except Exception as e:
             # likely email already in use; better error checking and reporting needed;
@@ -82,7 +82,7 @@ ORDER BY T.time_purchased DESC
     @staticmethod
     def get_all():
         rows = app.db.execute('''
-SELECT uid, sid, pid, quantity, time_purchased, order_status
+SELECT uid, sid, pid, quantity, time_purchased, order_status, NULL, NULL
 FROM Transactions
 ORDER BY time_purchased DESC
 ''')

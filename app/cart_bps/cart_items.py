@@ -4,6 +4,7 @@ import datetime
 
 from ..models.products import Product
 from ..models.purchase import Purchase
+from ..models.for_sale import ForSaleItems
 from ..models.cart import Cart
 
 from flask import Blueprint
@@ -17,14 +18,10 @@ def index():
             if request.form.get("trash"):
                 Cart.remove(current_user.id, request.form.get("trash"))
             form = request.form.getlist("addtocart2")
-            products = Product.get_all()
+            items = ForSaleItems.get_all()
             for i in range(len(form)):
                 if int(form[i]) != 0:
-                    Cart.add(current_user.id, products[i].id, 2, int(form[i]))
-            if request.form.getlist("selectfromcart"):
-                for pid in request.form.getlist("selectfromcart"):
-                    #CHANGE THIS TO TRANSACTION BEHAVIOR
-                    Purchase.add(current_user.id, pid, )
+                    Cart.add(current_user.id, items[i].pid, items[i].sid, int(form[i]))
 
     carts = Cart.get_all()
     if current_user.is_authenticated:

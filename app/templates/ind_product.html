@@ -145,9 +145,11 @@
    
 	  <!-- Product Pricing -->
 	  <div class="product-price">
-      <form method="POST" action="##">
-      <input type="submit" class ="cart-btn" value="Add To Cart">
-      </form>
+      <div class="product-price">
+        <a href="#" class="cart-btn">Add to cart</a>
+        <a href="/cart" class="cart-btn">Add to cart</a>
+        </div>
+    
 
       <form method="POST" action="/write_review/{{current_uid}}break{{prod_items.id}}">
         <input type="submit" class ="review-btn" {{review_button}} value="Review Item">

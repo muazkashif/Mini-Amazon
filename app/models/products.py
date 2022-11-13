@@ -22,6 +22,27 @@ LIMIT :k
                             k = k)
         return [Product(*row) for row in rows]
 
+    @staticmethod
+    def get_name(id):
+        name = app.db.execute('''
+SELECT name
+FROM Products
+WHERE id = :id
+''',
+                            id = id)
+        return name
+
+
+    @staticmethod
+    def get_price(id):
+        name = app.db.execute('''
+SELECT price
+FROM Products
+WHERE id = :id
+''',
+                            id = id)
+        return name
+
 
     @staticmethod
     def sort_ratings_desc():
