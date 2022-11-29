@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user
 import datetime
 
@@ -12,7 +12,16 @@ bp = Blueprint('main_product_page', __name__)
 def opener_page():
     return render_template('opener_page.html')
 
-@bp.route('/index')
+@bp.route('/page_jump', methods = ["POST", "GET"])
+def jump():
+    page = request.form.get('Go To Page')
+    total_length = len(Product.get_all()) // 20 + 1
+    if int(page) < 1 or int(page) > total_length:
+        flash('Invalid Page Number')
+        return redirect(url_for('main_product_page.index', k = 1))
+    return redirect(url_for('main_product_page.index', k = page))
+
+@bp.route('/index', methods = ["POST", "GET"])
 def fix_index():
     return redirect(url_for('main_product_page.index', k = 1))
 
