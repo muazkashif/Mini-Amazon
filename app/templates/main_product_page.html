@@ -30,6 +30,10 @@
 
   .card-text{
     text-align: center;
+    width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
     .price {
@@ -99,8 +103,6 @@
 <br><br>
 
 <body>
-
-
     
     <div class = "header">
         <h1>Products</h1>
@@ -160,7 +162,7 @@
     <div class = "container">
     <div class = "card-wrap">
     <div class="card " style="width: 21rem;height: 33rem;">
-        <img class="card-img-top" src="https://i.imgur.com/A8eQsll.jpg" alt="Card image cap">
+        <img class="card-img-top" src={{product.images}} onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'" style='width: 320px; height: 200px; object-fit: scale-down;'>
         <div class="card-body">
           <h5 class="card-title">{{product.name}}</h5>
           <p class="card-text">{{product.description}}</p>
@@ -176,6 +178,28 @@
 </div>
 </div>
       {% endfor %}
+
+      <h3>Current Page: {{curr_page}}</h3>
+
+     <form action="/index/{{next_page}}">
+    <button name = "Next" 
+            button style = "position:relative;align-self:center;height:70px;width:200px;margin:5px;" 
+            type = "submit" 
+            class = "button"
+            value = "Next Page">Next Page</button>
+      </form>
+      
+  {% if check %}
+      <form action="/index/{{prev_page}}">
+        <button name = "Prev" 
+                button style = "position:relative;align-self:center;height:70px;width:200px;margin:5px;" 
+                type = "submit" 
+                class = "button"
+                value = "Previous Page">Previous Page</button>
+        </form>
+    {% endif %}
+
+      
     </body>
 
 <br><br>
