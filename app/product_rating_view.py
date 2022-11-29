@@ -40,7 +40,7 @@ def update_review(uid,pid):
     reviewvalue = request.form.get('reviewText')
     ratingvalue = Decimal(request.form.get('ratingText'))
     now = datetime.now()
-    time = now.strftime("%d/%m/%Y %H:%M:%S")
+    time = now.strftime("%m-%d-%Y %H:%M:%S")
     Rating.updateReview(uid,pid,reviewvalue,ratingvalue,time)
     return redirect(url_for('ind_prod.show_product', k = pid))
 
@@ -49,7 +49,7 @@ def add_review(uid,sid,pid):
     reviewvalue = request.form.get('reviewText')
     ratingvalue = Decimal(request.form.get('ratingText'))
     now = datetime.now()
-    time = now.strftime("%d/%m/%Y %H:%M:%S")
+    time = now.strftime("%m-%d-%Y %H:%M:%S")
     Rating.addReview(uid,sid,pid,reviewvalue,ratingvalue,time)
     return redirect(url_for('ind_prod.show_product', k = pid))
 

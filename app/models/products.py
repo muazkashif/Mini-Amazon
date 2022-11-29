@@ -95,7 +95,7 @@ WHERE id = :id
     @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating,images, price, available, category
+SELECT id, name, descriptions, rating, images, price, available, category
 FROM Products
 WHERE available = :available
 ''',

@@ -103,5 +103,4 @@ RETURNING uid
 """,
                               uid=uid, sid=sid, pid=pid,ratingvalue=ratingvalue,reviewvalue=reviewvalue,time=time)
         # return [Rating(*row) for row in rows]
-
     
