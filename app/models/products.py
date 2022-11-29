@@ -2,7 +2,7 @@ from flask import current_app as app
 
 
 class Product:
-    def __init__(self, id, name, description, rating, price, available, category):
+    def __init__(self, id, name, description, rating,images, price, available, category):
         self.id = id
         self.name = name
         self.price = price
@@ -10,6 +10,7 @@ class Product:
         self.rating = rating
         self.description = description
         self.category = category
+        self.images = images
 
     @staticmethod
     def get_top_k_products(k):
@@ -84,7 +85,7 @@ ORDER BY price ASC
     @staticmethod
     def get(id):
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, price, available, category
+SELECT id, name, descriptions, rating,images, price, available, category
 FROM Products
 WHERE id = :id
 ''',
@@ -94,7 +95,7 @@ WHERE id = :id
     @staticmethod
     def get_all(available=True):
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, price, available, category
+SELECT id, name, descriptions, rating,images, price, available, category
 FROM Products
 WHERE available = :available
 ''',

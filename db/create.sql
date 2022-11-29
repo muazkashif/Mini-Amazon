@@ -22,7 +22,7 @@ CREATE TABLE Products (
     name VARCHAR(255) UNIQUE NOT NULL,
     category VARCHAR(255) NOT NULL,
     descriptions VARCHAR(255) UNIQUE NOT NULL,
-    images VARCHAR(255) UNIQUE NOT NULL,
+    images VARCHAR(255) NOT NULL,
     price DECIMAL(12,2) NOT NULL,
     rating DECIMAL(3,2),
     available BOOLEAN DEFAULT TRUE

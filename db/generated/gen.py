@@ -4,16 +4,16 @@ from faker import Faker
 import random
 import datetime
 
-num_users = 10000
+num_users = 1000
 num_products = 10000
 num_purchases = 5000
-num_sellers = 2000
+num_sellers = 1000
 num_cart_items = 4000
 num_forsale_items = 4000
 num_ratings = 5000
 
 
-file_path = "../generated/"
+file_path = "../data/"
 
 categories = ["Travel", "Personal_Care", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
@@ -79,30 +79,30 @@ def gen_sellers(num_sellers):
     return s_uids,uids
 
 
-def gen_products(num_products):
-    available_pids = []
-    names = []
-    with open(file_path + 'Products.csv', 'w') as f:
-        writer = get_csv_writer(f)
-        print('Products...', end=' ', flush=True)
-        for pid in range(num_products):
-            if pid % 100 == 0:
-                print(f'{pid}', end=' ', flush=True)
-            pname = fake.sentence(nb_words=4)[:-1]
-            while pname in names:
-                pname = fake.sentence(nb_words=4)[:-1]
-            price = f'{str(fake.random_int(max=500))}.{fake.random_int(max=99):02}'
-            available = fake.random_element(elements=('true', 'true', 'true', 'true', 'false'))
-            rating = round(random.uniform(0.0,5.0),2)
-            descriptions = fake.sentence() 
-            category = categories[fake.random_int(min = 0, max = len(categories) - 1)]
-            images = fake.binary(length = 64) #Might be better generated some other way
-            names.append(pname)
-            if available == 'true':
-                available_pids.append(pid)
-            writer.writerow([pid, pname, category, descriptions, images, price, rating, available])
-        print(f'{num_products} generated; {len(available_pids)} available')
-    return available_pids
+# def gen_products(num_products):
+#     available_pids = []
+#     names = []
+#     with open(file_path + 'Products.csv', 'w') as f:
+#         writer = get_csv_writer(f)
+#         print('Products...', end=' ', flush=True)
+#         for pid in range(num_products):
+#             if pid % 100 == 0:
+#                 print(f'{pid}', end=' ', flush=True)
+#             pname = fake.sentence(nb_words=4)[:-1]
+#             while pname in names:
+#                 pname = fake.sentence(nb_words=4)[:-1]
+#             price = f'{str(fake.random_int(max=500))}.{fake.random_int(max=99):02}'
+#             available = fake.random_element(elements=('true', 'true', 'true', 'true', 'false'))
+#             rating = round(random.uniform(0.0,5.0),2)
+#             descriptions = fake.sentence() 
+#             category = categories[fake.random_int(min = 0, max = len(categories) - 1)]
+#             images = fake.binary(length = 64) #Might be better generated some other way
+#             names.append(pname)
+#             if available == 'true':
+#                 available_pids.append(pid)
+#             writer.writerow([pid, pname, category, descriptions, images, price, rating, available])
+#         print(f'{num_products} generated; {len(available_pids)} available')
+#     return available_pids
 
 
 def gen_carts(num_cart_items, uids, s_uids, available_pids):
@@ -218,6 +218,71 @@ def gen_transactions(num_purchases, available_pids, uids,sids):
 #             already_done_keys.append(key)
 #         print(f'{num_seller_ratings} generated')
 #     return
+
+def gen_products(num_products):
+    prod_count = -1
+    available_pids = []
+    names = []
+    
+    with open(file_path + 'Products.csv', 'w') as f:
+        writer = get_csv_writer(f)
+        print('Products...', end=' ', flush=True)
+        with open("../outside_data/" + 'products_sample.csv', 'r') as r:
+            reader = get_csv_reader(r)
+            for row in reader:
+                prod_count+=1
+                if prod_count > 0:
+                    if prod_count %10 ==0:
+                        print(f'{prod_count}', end=' ', flush=True)
+                    if prod_count > num_products:
+                        break
+                    pname = row[3]
+                    if pname in names:
+                        prod_count-=1
+                        continue
+                    # price = row[6]
+                    if row[6] != '':
+                        price = int(row[6])/81
+                    else:
+                        price = 400/81
+                    available = fake.random_element(elements=('true', 'true', 'true', 'true', 'false'))
+                    rating = round(random.uniform(0.0,5.0),2)
+                    descriptions = row[10][0:250]
+                    category = row[4].split(">>")[0][2:].split("\"]")[0]
+                    if len(category)>39:
+                        category = "Other"
+                    images = row[8].split("\"\"")[0][2:].replace('\"','').split(",")[0]
+                    if len(images) != 0 and images[-1] == ']':
+                        images = images[:-1]
+                    if available == 'true':
+                        available_pids.append(prod_count-1)
+                    writer.writerow([prod_count-1, pname, category, descriptions, images, price, rating, available])
+                    names.append(pname)
+                    # if "Kennel Rubber Dumbell" in pname:
+                    #     print(images)
+            
+            
+    # with open(file_path + 'Products.csv', 'w') as f:
+    #     writer = get_csv_writer(f)
+    #     print('Products...', end=' ', flush=True)
+    #     for pid in range(num_products):
+    #         if pid % 100 == 0:
+    #             print(f'{pid}', end=' ', flush=True)
+    #         pname = fake.sentence(nb_words=4)[:-1]
+    #         while pname in names:
+    #             pname = fake.sentence(nb_words=4)[:-1]
+    #         price = f'{str(fake.random_int(max=500))}.{fake.random_int(max=99):02}'
+    #         available = fake.random_element(elements=('true', 'true', 'true', 'true', 'false'))
+    #         rating = round(random.uniform(0.0,5.0),2)
+    #         descriptions = fake.sentence() 
+    #         category = categories[fake.random_int(min = 0, max = len(categories) - 1)]
+    #         images = fake.binary(length = 64) #Might be better generated some other way
+    #         names.append(pname)
+    #         if available == 'true':
+    #             available_pids.append(pid)
+    #         writer.writerow([pid, pname, category, descriptions, images, price, rating, available])
+    #     print(f'{num_products} generated; {len(available_pids)} available')
+    return available_pids
 
 def gen_ratings(num_ratings):
     already_done_keys = []
