@@ -55,7 +55,6 @@
   }
 
     .card-button {
-    positon:absolute;
     border: none;
     outline: 0;
     padding: 12px;
@@ -104,8 +103,6 @@
 <br><br>
 
 <body>
-
-
     
     <div class = "header">
         <h1>Products</h1>
@@ -181,6 +178,28 @@
 </div>
 </div>
       {% endfor %}
+
+      <h3>Current Page: {{curr_page}}</h3>
+
+     <form action="/index/{{next_page}}">
+    <button name = "Next" 
+            button style = "position:relative;align-self:center;height:70px;width:200px;margin:5px;" 
+            type = "submit" 
+            class = "button"
+            value = "Next Page">Next Page</button>
+      </form>
+      
+  {% if check %}
+      <form action="/index/{{prev_page}}">
+        <button name = "Prev" 
+                button style = "position:relative;align-self:center;height:70px;width:200px;margin:5px;" 
+                type = "submit" 
+                class = "button"
+                value = "Previous Page">Previous Page</button>
+        </form>
+    {% endif %}
+
+      
     </body>
 
 <br><br>

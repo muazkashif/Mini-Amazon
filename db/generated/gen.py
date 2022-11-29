@@ -14,7 +14,7 @@ num_ratings = 5000
 
 
 
-file_path = "../data/"
+file_path = "../generated/"
 
 categories = ["Travel", "Personal_Care", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 

@@ -2,7 +2,7 @@ from flask import current_app as app
 
 
 class Product:
-    def __init__(self, id, name, description, rating,images, price, available, category):
+    def __init__(self, id, name, description, rating, images, price, available, category):
         self.id = id
         self.name = name
         self.price = price
@@ -48,7 +48,7 @@ WHERE id = :id
     @staticmethod
     def sort_ratings_desc():
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, price, available, category
+SELECT id, name, descriptions, rating, images, price, available, category
 FROM Products
 ORDER BY rating DESC
 ''')
@@ -57,7 +57,7 @@ ORDER BY rating DESC
     @staticmethod
     def sort_ratings_asc():
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, price, available, category
+SELECT id, name, descriptions, rating, images, price, available, category
 FROM Products
 ORDER BY rating ASC
 ''')
@@ -66,7 +66,7 @@ ORDER BY rating ASC
     @staticmethod
     def sort_price_desc():
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, price, available, category
+SELECT id, name, descriptions, rating, images, price, available, category
 FROM Products
 ORDER BY price DESC
 ''')
@@ -75,7 +75,7 @@ ORDER BY price DESC
     @staticmethod
     def sort_price_asc():
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, price, available, category
+SELECT id, name, descriptions, rating, images, price, available, category
 FROM Products
 ORDER BY price ASC
 ''')
@@ -85,7 +85,7 @@ ORDER BY price ASC
     @staticmethod
     def get(id):
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating,images, price, available, category
+SELECT id, name, descriptions, rating, images, price, available, category
 FROM Products
 WHERE id = :id
 ''',
@@ -93,7 +93,7 @@ WHERE id = :id
         return Product(*(rows[0])) if rows is not None else None
 
     @staticmethod
-    def get_all(available=True):
+    def get_all(available = True):
         rows = app.db.execute('''
 SELECT id, name, descriptions, rating, images, price, available, category
 FROM Products
@@ -103,9 +103,21 @@ WHERE available = :available
         return [Product(*row) for row in rows]
 
     @staticmethod
+    def get_all_offset(available, k):
+        rows = app.db.execute('''
+SELECT id, name, descriptions, rating, images, price, available, category
+FROM Products
+WHERE available = :available
+LIMIT 20
+OFFSET :k 
+''',
+                              available=available, k=k)
+        return [Product(*row) for row in rows]
+
+    @staticmethod
     def get_prod_category(cat):
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, price, available, category
+SELECT id, name, descriptions, rating, images, price, available, category
 FROM Products
 WHERE category = :cat
 ''',
