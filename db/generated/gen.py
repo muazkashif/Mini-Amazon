@@ -4,10 +4,10 @@ from faker import Faker
 import random
 import datetime
 
-num_users = 1000
+num_users = 10000
 num_products = 10000
 num_purchases = 5000
-num_sellers = 1000
+num_sellers = 2000
 num_cart_items = 4000
 num_forsale_items = 4000
 num_ratings = 5000
@@ -316,12 +316,10 @@ def gen_ratings(num_ratings):
     return
 
 if __name__ == "__main__":
-    # uids = gen_users(num_users)
+    uids = gen_users(num_users)
     available_pids = gen_products(num_products,{})
     s_uids, uids = gen_sellers(num_sellers)
     gen_carts(num_cart_items, uids, s_uids, available_pids)
     gen_transactions(num_purchases, available_pids, uids,s_uids)
-    # #gen_prod_ratings(num_product_ratings, available_pids, uids)
-    # #gen_seller_ratings(num_seller_ratings, s_uids, uids)
     gen_forsales(num_forsale_items, s_uids, available_pids)
     gen_ratings(num_ratings)
