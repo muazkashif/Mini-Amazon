@@ -4,17 +4,17 @@ from faker import Faker
 import random
 import datetime
 
-num_users = 1000
+num_users = 10000
 num_products = 10000
 num_purchases = 5000
-num_sellers = 1000
+num_sellers = 2000
 num_cart_items = 4000
 num_forsale_items = 4000
 num_ratings = 5000
 
 
 
-file_path = "../generated/"
+file_path = "../data/"
 
 categories = ["Travel", "Personal_Care", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
@@ -224,12 +224,13 @@ def gen_products(num_products, ratings_prods):
     pid = -1
     available_pids = []
     names = []
+    unique = []
     print(ratings_prods)
     
     with open(file_path + 'Products.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Products...', end=' ', flush=True)
-        with open("../outside_data/" + 'products_sample.csv', 'r') as r:
+        with open("../../outside_data/" + 'products_sample.csv', 'r') as r:
             reader = get_csv_reader(r)
             for row in reader:
                 pid+=1
@@ -269,6 +270,8 @@ def gen_products(num_products, ratings_prods):
                     names.append(pname)
                     # if "Kennel Rubber Dumbell" in pname:
                     # print(rating, end = ' ')
+                    unique.append(category)
+    # print(set(unique))
     return available_pids
 
 def gen_ratings(num_ratings):
@@ -286,7 +289,7 @@ def gen_ratings(num_ratings):
     #     review = reader[fake.random_int(min=1, max=20000)][3]
     #     print(review)
     with open(file_path + 'Ratings.csv', 'w') as f:
-        with open("../outside_data/" + 'fake_reviews.csv', 'r') as r:
+        with open("../../outside_data/" + 'fake_reviews.csv', 'r') as r:
             reader = get_csv_reader(r)
             reader = list(reader)
             writer = get_csv_writer(f)
@@ -316,8 +319,10 @@ def gen_ratings(num_ratings):
     return
 
 if __name__ == "__main__":
-    # uids = gen_users(num_users)
+    uids = gen_users(num_users)
     available_pids = gen_products(num_products,{})
+    # print("\n\n\n\n\n" + str(len(available_pids)))
+    
     s_uids, uids = gen_sellers(num_sellers)
     gen_carts(num_cart_items, uids, s_uids, available_pids)
     gen_transactions(num_purchases, available_pids, uids,s_uids)
@@ -325,3 +330,4 @@ if __name__ == "__main__":
     # #gen_seller_ratings(num_seller_ratings, s_uids, uids)
     gen_forsales(num_forsale_items, s_uids, available_pids)
     gen_ratings(num_ratings)
+    print("\n")
