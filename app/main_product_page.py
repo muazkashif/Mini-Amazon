@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, redirect, url_for, flash
 from flask_login import current_user
 import datetime
 
@@ -13,9 +13,22 @@ def opener_page():
     return render_template('opener_page.html')
 
 @bp.route('/index')
-def index():
+def fix_index():
+    return redirect(url_for('main_product_page.index', k = 1))
+
+@bp.route('/index/<k>', methods = ["POST", "GET"])
+def index(k):
     # get all available products for sale:
-    products = Product.get_all(True)
+    check = True
+    if k != "1":
+        offset = ((int(k) - 1) * 20) + 1
+    else:
+        offset = 0
+        check = False
+    products = Product.get_all_offset(True, offset) 
+    if products is None:
+        flash('Invalid id')
+        return redirect(url_for('main_product_page.index', k = 1))
     # find the products current user has bought:
     logged_in = False
     if current_user.is_authenticated:
@@ -24,13 +37,21 @@ def index():
         logged_in = True
         return render_template('main_product_page.html',
                            avail_products=products,
-                           purchase_history=purchases, logged_in=logged_in,purchase_history_len=len(purchases))
+                           curr_page = int(k),
+                           next_page = (int(k) + 1),
+                           prev_page = (int(k) - 1),
+                           purchase_history=purchases, logged_in=logged_in,purchase_history_len=len(purchases),
+                           check = check)
     else:
         purchases = None
     # render the page by adding information to the index.html file
         return render_template('main_product_page.html',
                            avail_products=products,
-                            purchase_history=purchases, logged_in=logged_in,purchase_history_len=0)
+                           curr_page = int(k),
+                           next_page = (int(k) + 1),
+                           prev_page = (int(k) - 1),
+                           purchase_history=purchases, logged_in=logged_in,purchase_history_len=0,
+                           check = check)
 
 @bp.route('/index/rate/DESC')
 def sort_rate_best():
