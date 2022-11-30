@@ -43,7 +43,7 @@
           <td>{{cart_items[i].sid}}</td>
           <td>{{cart_items[i].quantity}}</td>
           <td>{{prices[i]}}</td>
-          <th scope="col"><input type="checkbox" value={{cart_items[i].pid}} name="selectfromcart"></th>
+          <th scope="col"><input type="checkbox" value="{{cart_items[i].pid, cart_items[i].sid, cart_items[i].quantity}}" name="selectfromcart"></th>
         </tr>
       {% endfor %}
     </tbody>
