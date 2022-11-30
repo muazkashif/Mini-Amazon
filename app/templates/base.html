@@ -100,6 +100,12 @@
       margin: 10px;
     }
 
+    .seller-button{
+      display:inline-block;
+      margin: 10px;
+
+    }
+
     .sign-in-button{
       display:inline-block;
       margin: 10px;
@@ -112,7 +118,7 @@
       /* float: left; */
       font-size: 20px;
       padding-top: 10px;
-      right:100px;
+      right:120px;
       top:10px;
       
     }
@@ -138,11 +144,15 @@
 
       <div class = "wrapper_header">
 
+
       <div class="product-button">
         <form action="/index/1">
           <button>Products</button>
         </form>
         </div>
+
+    
+
 
         {% if not current_user.is_authenticated %}
         <div class="sign-in-button">
@@ -153,6 +163,8 @@
         {% endif %}
         
       {% if current_user.is_authenticated %}
+
+      
         <div class="user-profile-button">
           <form action="/user_profile">
             <button>My Profile</button>
@@ -167,6 +179,13 @@
           <form action="/logout">
             <button>Logout</button>
           </form>
+        </div>
+
+        <div class = "seller-button">
+            <form action="/seller_page">
+                <button >Seller Info</button>
+            </form>
+              </div>
         </div>
         <div style="color: aliceblue; text-align: right">
         </div>

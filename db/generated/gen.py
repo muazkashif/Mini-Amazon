@@ -4,10 +4,10 @@ from faker import Faker
 import random
 import datetime
 
-num_users = 1000
+num_users = 10000
 num_products = 10000
 num_purchases = 5000
-num_sellers = 1000
+num_sellers = 2000
 num_cart_items = 4000
 num_forsale_items = 4000
 num_ratings = 5000
