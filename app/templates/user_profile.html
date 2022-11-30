@@ -1,18 +1,43 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .container{
+        position: relative; 
+        top: 20px; 
+        border-style: groove;
+    }
+
+    .wrapper-funds{
+        position:relative;
+        left:40px;
+        bottom: 150px; 
+    }
 
 
+
+    .seller_button{
+        position:absolute;
+        height:100px;
+        width:230px
+    }
+
+    .title{
+        text-align: center;
+    }
+
+</style>
+
+<br><br>
+
+<body>
+    
+<h1 class = "title">Profile Information: <b>{{info.firstname}} {{info.lastname}}</b></h1>
 <div class="container emp-profile">
             <form method="post">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="profile-head">
-                                    <h5>
-                                        {{info.firstname}} {{info.lastname}}
-                                    </h5>
-                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -67,39 +92,42 @@
                                                 <p>{{info.date}}</p>
                                             </div>
                                         </div>
+                                        <div class = "row">
+                                                <form action="/user_update_form">
+                                                    <button button style="margin:10px;" name = update_info >Update Info</button>
+                                                  </form>
+                                        </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>           
         </div>
+
+        <div class = "wrapper-funds">
         <h5>Add Funds:</h5>
         <form method="POST" action="/update_Balance">
             <input type="text" value=0 name="addBalance">
             <input type="submit" value="Top Up">
         </form>
-        <form action="/user_update_form">
-            <button>Update Info</button>
-          </form>
+        </div>
+
+
+          {% if not sell %}
+          <form method="POST" action="/add_seller">
+            <input type="submit" value="Become Seller?">
+            </form>
+          {% endif %}
+
+          <!-- gonna move this up top to header -->
+
+
+    
 
 
         &nbsp
 
-        <form method="POST" action="/add_seller">
-        <input type="submit" value="Become Seller?">
-        </form>
 
-        <form method="POST" action="/seller_page">
-            <input type="submit" value="Seller Information">
-            </form>
-
-        <form action="/index">
-            <input type="submit" value="Back to Products">
-            </form>
-
-{% block content %}
-
-<br><br>
 
 <h2>Your Purchase History:</h2>
 <table class='table table-hover table-bordered container'>
@@ -136,6 +164,8 @@
     {% endfor %}
   </tbody>
 </table>
+
+</body>
 
 <br><br>
 

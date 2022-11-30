@@ -26,7 +26,7 @@ class LoginForm(FlaskForm):
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main_product_page.index/1'))
+        return redirect(url_for('main_product_page.index', k = 1))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.get_by_auth(form.email.data, form.password.data)
@@ -85,10 +85,15 @@ def logout():
 @bp.route('/user_profile/')
 def user_profile():
     if current_user.is_authenticated:
+        sellers = Seller.get_sellers()
+        check = False
+        print(sellers)
+        if current_user.id in sellers: ##Issue with checking membership
+            check = True
         user_info = User.get(current_user.id)
         purchases = Purchase.get_all_purchases_by_uid(current_user.id)
         return render_template('user_profile.html',
-                            info=user_info, purchase_history=purchases, purchase_history_len=len(purchases), logged_in=True)
+                            info=user_info, purchase_history=purchases, purchase_history_len=len(purchases), logged_in=True, sell = check)
     return render_template('main_product_page.html')
 
 @bp.route('/update_Balance', methods = ['POST'])
