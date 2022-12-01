@@ -13,15 +13,15 @@ class Rating:
         self.time_reviewed = time_reviewed
 
     @staticmethod
-    def get(uid):
+    def get_user_ratings(uid):
         rows = app.db.execute('''
-SELECT uid, sid, pid, rating, review, time_reviewed
-FROM Ratings
+SELECT uid, sid, pid, Ratings.rating, review, time_reviewed, name
+FROM Ratings JOIN Products ON Ratings.pid=Products.id
 WHERE uid = :uid
 ORDER BY time_reviewed DESC
 ''',
                               uid=uid)
-        return [Rating(*row) for row in rows]
+        return rows
 
     @staticmethod
     def get_all():
@@ -61,6 +61,7 @@ ORDER BY time_reviewed DESC
 SELECT uid, sid, pid, rating, review, time_reviewed
 FROM Ratings
 WHERE pid = :pid
+ORDER BY time_reviewed DESC
 ''',
                                 pid = pid)
         return [Rating(*row) for row in rows]

@@ -39,6 +39,8 @@ def write_review(uid,pid):
 @bp.route('/delete_review/<uid>break<pid>', methods = ['GET', 'POST'])
 def delete_review(uid,pid):
     Rating.delete_review(uid,pid)
+    avg = Rating.get_ratings_for_avg(pid)
+    Product.update_rating(pid,avg)
     return redirect(url_for('ind_prod.show_product', k = pid))
     
 @bp.route('/update_review/<uid>break<pid>', methods = ['GET', 'POST'])
@@ -63,6 +65,6 @@ def add_review(uid,sid,pid):
 
 @bp.route('/view_all_reviews/<uid>', methods = ['GET', 'POST'])
 def view_all(uid):
-    ratings = Rating.get(uid)
+    ratings = Rating.get_user_ratings(uid)
     return render_template('all_review_page.html',
                           ratings=ratings, ratings_len=len(ratings))
