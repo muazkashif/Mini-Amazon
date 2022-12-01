@@ -124,5 +124,24 @@ def add_seller():
 
 @bp.route('/seller_page', methods = ['POST', 'GET'])
 def see_seller_page():
-    prod = Transaction.get_transactions(current_user.id)
-    return render_template('seller_pers_page.html', prod=prod)
+    user_info = User.get(current_user.id)
+    return render_template('seller_pers_page.html', info = user_info)
+
+@bp.route('/seller_transaction', methods = ['POST', 'GET'])
+def see_seller_transactions():
+    check = False
+    transactions = Transaction.get_transactions(current_user.id)
+    if transactions is None:
+        check = True
+    return render_template('seller_transactions.html',prod = transactions, empty = check)
+
+@bp.route('/seller_products', methods = ['POST', 'GET'])
+def see_seller_products():
+    check = False
+    pers_products = Transaction.seller_prod(current_user.id)
+    if pers_products is None:
+        check = True
+    return render_template('seller_products.html', prod = pers_products, empty = check)
+
+        
+

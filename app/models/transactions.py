@@ -3,7 +3,7 @@ from flask import current_app as app
 
 class Transaction:
     def __init__(self, uid, sid, pid, quantity, time_purchased, order_status):
-        self.uid = pid
+        self.uid = uid
         self.sid = sid
         self.pid = pid
         self.quantity = quantity
@@ -15,9 +15,28 @@ class Transaction:
     @staticmethod
     def get_transactions(id):
         rows = app.db.execute('''
-SELECT uid, sid, pid, quantity, time_purchased, order_status
-FROM Transactions
-WHERE sid = :id
+SELECT *
+FROM Transactions, Products, Users
+WHERE sid = :id AND Products.id = Transactions.pid AND Transactions.uid = users.id
 ORDER BY time_purchased DESC
 ''',                                    id = id)
-        return [Transaction(*row) for row in rows]
+        return rows if rows else None
+
+    @staticmethod
+    def update_status(stat, sid, uid, pid, time):
+        rows = app.db.execute('''
+UPDATE Transactions
+SET order_status = :stat
+WHERE sid = :sid AND uid = :uid AND pid = :pid AND time_purchased = :time
+''',                                    stat = stat, sid = sid, uid = uid, pid = pid, time = time)
+        return
+
+    @staticmethod
+    def seller_prod(id):
+        rows = app.db.execute('''
+SELECT *
+FROM Sellers, (SELECT * FROM ForSaleItems, Products WHERE ForSaleItems.pid = Products.id) AS t
+WHERE Sellers.id = :id AND Sellers.id = t.sid
+ORDER BY t.name
+''',                                    id = id)
+        return rows if rows else None
