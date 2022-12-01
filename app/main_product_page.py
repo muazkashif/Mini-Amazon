@@ -8,6 +8,9 @@ from .models.purchase import Purchase
 from flask import Blueprint
 bp = Blueprint('main_product_page', __name__)
 
+order_prop= "No Simple"
+order_by = "No Simple"
+
 @bp.route('/')
 def opener_page():
     return render_template('opener_page.html')
@@ -34,7 +37,8 @@ def index(k):
     else:
         offset = 0
         check = False
-    products = Product.get_all_offset(True, offset) 
+    print ("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX prop = " + order_prop + " order_by = " + order_by +"END")
+    products = Product.get_all_offset(True, offset,order_prop,order_by) 
     if products is None:
         flash('Invalid id')
         return redirect(url_for('main_product_page.index', k = 1))
@@ -62,6 +66,18 @@ def index(k):
                            purchase_history=purchases, logged_in=logged_in,purchase_history_len=0,
                            check = check)
 
+@bp.route('/change_stat/<prop>_<by>', methods = ["POST", "GET"])
+def inc_page(prop,by):
+    global order_by
+    global order_prop
+    order_by = by
+    order_prop = prop
+    return redirect(url_for('main_product_page.index', k = 1))
+    return
+    
+    
+    
+    
 @bp.route('/index/rate/DESC')
 def sort_rate_best():
     products = Product.sort_ratings_desc()

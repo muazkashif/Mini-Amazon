@@ -11,17 +11,37 @@ from flask import Blueprint
 bp = Blueprint('cart', __name__)
 
 
+def translate(id):
+    p = ""
+    sid = ""
+    quantity = ""
+    count = 0
+    for i in range(1, len(id)-1):
+        if id[i] == ",":
+            count += 1
+        if id[i] != "," and id[i] != " ":
+            if count == 0:
+                p = p + id[i]
+            elif count == 1:
+                sid = sid + id[i]
+            else:
+                quantity = quantity + id[i]
+    return p, sid, quantity
+
 @bp.route('/cart/', methods=['GET','POST'])
 def index():
     if request.method == 'POST':
         if current_user.is_authenticated:
             if request.form.get("trash"):
-                Cart.remove(current_user.id, request.form.get("trash"))
+                pid, sid, quantity = translate(request.form.get("trash"))
+                Cart.remove(current_user.id, pid, sid)
             form = request.form.getlist("addtocart2")
             items = ForSaleItems.get_all()
             for i in range(len(form)):
                 if int(form[i]) != 0:
-                    Cart.add(current_user.id, items[i].pid, items[i].sid, int(form[i]))
+                    quantity_available = ForSaleItems.get_quantity(items[i].pid, items[i].sid)[0][0]
+                    if int(form[i]) <= quantity_available:
+                        Cart.add(current_user.id, items[i].pid, items[i].sid, int(form[i]))
 
     carts = Cart.get_all()
     if current_user.is_authenticated:
