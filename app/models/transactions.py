@@ -21,3 +21,12 @@ WHERE sid = :id
 ORDER BY time_purchased DESC
 ''',                                    id = id)
         return [Transaction(*row) for row in rows]
+    
+    @staticmethod
+    def getSeller(pid,uid):
+        rows = app.db.execute('''
+SELECT sid
+FROM Transactions
+WHERE pid = :pid AND uid = :uid
+''',                                    pid = pid, uid=uid)
+        return rows[0][0]

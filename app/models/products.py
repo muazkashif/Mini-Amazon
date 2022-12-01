@@ -123,3 +123,13 @@ WHERE category = :cat
 ''',
                               cat=cat)
         return [Product(*row) for row in rows]
+    
+    @staticmethod
+    def update_rating(pid,avg):
+        rows = app.db.execute('''
+UPDATE Products
+SET rating=:avg
+WHERE id = :pid
+''',
+                              pid=pid,avg=avg)
+        # return [Product(*row) for row in rows]
