@@ -20,7 +20,7 @@
         <tr>
           <td>
             <form method="POST" action="/order/">
-              <button value={{p.pid}} name="trash">remove</button>
+              <button value="{{p.pid, p.sid, p.time_purchased}}" name="trash">remove</button>
             </form>
           </td>
           <td>{{p.pid}}</td>
