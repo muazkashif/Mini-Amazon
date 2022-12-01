@@ -5,10 +5,26 @@
 
 <h2>Changeing Review of User: {{ratings[0].uid}} for Product: {{ratings[0].pid}}</h2>
 <form method="POST" action="/update_review/{{ratings[0].uid}}break{{ratings[0].pid}}">
-    <input type="text" value="{{ratings[0].review}}" name="reviewText" size= "50">
-    <input type="text" value="{{ratings[0].rating}}" name="ratingText">
+    <input type="text" value="{{ratings[0].review}}" name="reviewText" style= "width: 700px; height:200px; outline: solid;"><br>
+        <input type="radio" id="0" name="ratingText" value="0">
+        <label for="0">0</label>
+        <input type="radio" id="1" name="ratingText" value="1">
+        <label for="1">1</label>
+        <input type="radio" id="2" name="ratingText" value="2">
+        <label for="2">2</label>
+        <input type="radio" id="3" name="ratingText" value="3">
+        <label for="3">3</label>
+        <input type="radio" id="4" name="ratingText" value="4">
+        <label for="4">4</label>
+        <input type="radio" id="5" name="ratingText" value="5">
+        <label for="5">5</label><br>
     <input type="submit" value="Submit">
 </form>
+
+<form method="POST" action="/delete_review/{{ratings[0].uid}}break{{ratings[0].pid}}">
+    <input type="submit" value="Delete Review">
+</form>
+
 
 
 

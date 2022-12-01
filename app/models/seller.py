@@ -2,11 +2,15 @@
 from flask import current_app as app
 
 
-class Seller:
+class forSale:
     def __init__(self, pid, sid, quantity):
         self.pid = pid
         self.sid = sid
         self.quantity = quantity
+
+class Seller: 
+    def __init__(self, id):
+        self.id = id
 
 
     @staticmethod
@@ -17,7 +21,7 @@ FROM ForSaleItems
 WHERE sid = :sid
 ''',
                               sid=sid)
-        return [Seller(*row) for row in rows]
+        return [forSale(*row) for row in rows]
 
     @staticmethod
     def get_all():
@@ -25,7 +29,25 @@ WHERE sid = :sid
 SELECT pid, sid, quantity
 FROM ForSaleItems
 ''')
-        return [Seller(*row) for row in rows]
+        return [forSale(*row) for row in rows]
+
+    @staticmethod
+    def get_sellers():
+        rows = app.db.execute("""
+SELECT id
+FROM Sellers
+""")
+        return [Seller(*row).id for row in rows]
+
+    
+    @staticmethod
+    def update_status(pid, sid, time, uid):
+        rows = app.db.execute("""
+SELECT id
+FROM Sellers
+""")
+        return 
+
 
     @staticmethod
     def add_seller_relation(id):
