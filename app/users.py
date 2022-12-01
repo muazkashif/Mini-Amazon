@@ -26,7 +26,7 @@ class LoginForm(FlaskForm):
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main_product_page.index'))
+        return redirect(url_for('main_product_page.index', k = 1))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.get_by_auth(form.email.data, form.password.data)
@@ -36,7 +36,7 @@ def login():
         login_user(user)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('main_product_page.index')
+            next_page = url_for('main_product_page.index', k = 1)
 
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
@@ -61,7 +61,7 @@ class RegistrationForm(FlaskForm):
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index.index'))
+        return redirect(url_for('main_product_page.index', k = 1))
     form = RegistrationForm()
     if form.validate_on_submit():
         if User.register(form.email.data,
@@ -85,10 +85,15 @@ def logout():
 @bp.route('/user_profile/')
 def user_profile():
     if current_user.is_authenticated:
+        sellers = Seller.get_sellers()
+        check = False
+        print(sellers)
+        if current_user.id in sellers: ##Issue with checking membership
+            check = True
         user_info = User.get(current_user.id)
         purchases = Purchase.get_all_purchases_by_uid(current_user.id)
         return render_template('user_profile.html',
-                            info=user_info, purchase_history=purchases, purchase_history_len=len(purchases), logged_in=True)
+                            info=user_info, purchase_history=purchases, purchase_history_len=len(purchases), logged_in=True, sell = check)
     return render_template('main_product_page.html')
 
 @bp.route('/update_Balance', methods = ['POST'])
