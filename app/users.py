@@ -136,3 +136,16 @@ def add_seller():
 def see_seller_page():
     prod = Transaction.get_transactions(current_user.id)
     return render_template('seller_pers_page.html', prod=prod)
+
+@bp.route('/withdraw', methods = ['POST'])
+def withdraw():
+    toWithdraw = request.form.get('withdrawBalance')
+    balance = User.get(current_user.id).balance
+    if (User.is_float(toWithdraw) == False or Decimal(toWithdraw) < 0 or Decimal(toWithdraw) > balance):
+        flash('Invalid value. Please enter a valid positive integer or decimal that is less than current balance.')
+        return redirect(url_for('users.user_profile'))
+    else:
+        newBalance = balance - Decimal(toWithdraw)
+        flash('$' + str(toWithdraw) + ' are being transferred to your connected bank account.')
+        User.updateBalance(current_user.id, newBalance)
+        return redirect(url_for('users.user_profile'))

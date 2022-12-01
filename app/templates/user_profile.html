@@ -5,7 +5,7 @@
 <style>
     .container{
         position: relative; 
-        top: 20px; 
+        top: 20%; 
         border-style: groove;
     }
 
@@ -109,6 +109,14 @@
         <form method="POST" action="/update_Balance">
             <input type="text" value=0 name="addBalance">
             <input type="submit" value="Top Up">
+        </form>
+        </div>
+
+        <div class = "wrapper-funds">
+        <h5>Withdraw Funds:</h5>
+        <form method="POST" action="/withdraw">
+            <input type="text" value=0 name="withdrawBalance">
+            <input type="submit" value="Cash Out">
         </form>
         </div>
 
