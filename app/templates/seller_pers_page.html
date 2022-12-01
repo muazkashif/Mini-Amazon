@@ -3,37 +3,163 @@
 {% block content %}
 
 
+<style>
+  .container{
+      position: relative; 
+      top: 20%; 
+      border-style: groove;
+  }
+
+  .wrapper-funds{
+      position:relative;
+      left:40px;
+      bottom: 150px; 
+  }
+
+
+  .title{
+      text-align: center;
+  }
+
+  .active-products{
+    position:relative;
+    display:inline-block;
+    font-size: 20px;
+    padding-top: 10px;
+    height:200px;
+    left:38%
+
+  }
+
+  .transaction_B{
+    display:inline-block;
+    margin: 10px;
+
+  }
+
+  .product_B{
+    display:inline-block;
+    margin: 10px;
+  }
+
+
+
+</style>
+
 <br><br>
 
+<body>
+  
+<h1 class = "title">Seller Information: <b>{{info.firstname}} {{info.lastname}}</b></h1>
+<div class="container emp-profile">
+          <form method="post">
+              <div class="row">
+                  <div class="col-md-6">
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-8">
+                      <div class="tab-content profile-tab">
+                          <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <label>User ID</label>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <p>{{info.id}}</p>
+                                          </div>
+                                      </div>
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <label>Name</label>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <p>{{info.firstname}} {{info.lastname}}</p>
+                                          </div>
+                                      </div>
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <label>Total Transactions</label>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <p>{{info.email}}</p>
+                                          </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Seller Rating</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{info.email}}</p>
+                                        </div>
+                                    </div>
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <label>Total Sales</label>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <p>{{info.address}}</p>
+                                          </div>
+                                      </div>
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <label>Processing</label>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <p>${{info.balance}}</p>
+                                          </div>
+                                      </div>
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <label>Shipped</label>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <p>{{info.date}}</p>
+                                          </div>
+                                      </div>
+                                      <div class = "row">
+                                          <div class="col-md-6">
+                                              <label>Delivered</label>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <p>{{info.date}}</p>
+                                          </div>
+                                        </div>
+                                      <div class = "row">
+                                          <div class="col-md-6">
+                                              <label>Received</label>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <p>{{info.date}}</p>
+                                          </div>
+                                    </div>
+                                  </div>
+                                </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </form>           
+        </div>
+        
 
-<h2>Personal Transactions:</h2>
-  <table class='table table-hover table-bordered container'>
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">User ID</th>
-        <th scope="col">Seller ID</th>
-        <th scope="col">Product ID</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Time Purchased</th>
-        <th scope="col">Order Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for p in prod%}
-        <tr>
-          <th scope="row">{{p.uid}}</th>
-          <td>{{p.sid}}</td>
-          <td>{{p.pid}}</td>
-          <td>{{p.quantity}}</td>
-          <td>{{p.time_purchased}}</td>
-          <td>{{p.order_status}}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</form>
+        <div class="active-products">
+          <div class = "product_B">
+          <form action="/seller_products">
+            <button name = "product_B">See Your Products</button>
+          </form>
+        </div>
+          <div class = "transaction_B">
+          <form action="/seller_transaction">
+            <button>See Your Transactions</button>
+          </form>
+        </div>
+        </div>
 
 
+    
+    
+</body>
 
 <br><br>
 

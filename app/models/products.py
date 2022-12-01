@@ -16,7 +16,7 @@ class Product:
     def get_top_k_products(k):
         rows = app.db.execute('''
 SELECT id, name, price, available
-FROM Products
+FROM Products JOIN 
 ORDER BY price DESC
 LIMIT :k
 ''',
@@ -43,6 +43,16 @@ WHERE id = :id
 ''',
                             id = id)
         return name
+
+    @staticmethod
+    def delete_product_seller(id, sid):
+        name = app.db.execute('''
+DELETE
+FROM ForSaleItems
+WHERE pid = :id AND sid = :sid
+''',
+                            id = id, sid = sid)
+        return
 
 
     @staticmethod
