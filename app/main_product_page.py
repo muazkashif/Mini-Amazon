@@ -22,9 +22,42 @@ def index():
         purchases = Purchase.get_all_by_uid_since(
             current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
         logged_in = True
+        return render_template('main_product_page.html',
+                           avail_products=products,
+                           purchase_history=purchases, logged_in=logged_in,purchase_history_len=len(purchases))
     else:
         purchases = None
     # render the page by adding information to the index.html file
-    return render_template('main_product_page.html',
+        return render_template('main_product_page.html',
                            avail_products=products,
-                           purchase_history=purchases, logged_in=logged_in)
+                            purchase_history=purchases, logged_in=logged_in,purchase_history_len=0)
+
+@bp.route('/index/rate/DESC')
+def sort_rate_best():
+    products = Product.sort_ratings_desc()
+    return render_template('main_product_page.html',
+                           avail_products = products)
+
+@bp.route('/index/rate/ASC')
+def sort_rate_worst():
+    products = Product.sort_ratings_asc()
+    return render_template('main_product_page.html',
+                           avail_products = products)
+
+@bp.route('/index/price/DESC')
+def sort_product_expensive():
+    products = Product.sort_price_desc()
+    return render_template('main_product_page.html',
+                           avail_products = products)
+
+@bp.route('/index/price/ASC')
+def sort_rate_cheap():
+    products = Product.sort_price_asc()
+    return render_template('main_product_page.html',
+                           avail_products = products)
+
+@bp.route('/index/category/<cat>')
+def sort_category(cat):
+    products = Product.get_prod_category(cat)
+    return render_template('main_product_page.html',
+                           avail_products = products)

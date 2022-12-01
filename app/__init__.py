@@ -30,6 +30,9 @@ def create_app():
     from .users import bp as user_bp
     app.register_blueprint(user_bp)
 
+    from .order import bp as order_bp
+    app.register_blueprint(order_bp)
+
     from .cart_bps.cart_items import bp as cart_bp
     app.register_blueprint(cart_bp)
 
@@ -45,7 +48,7 @@ def create_app():
     from .rating_form import bp as rating_form_bp
     app.register_blueprint(rating_form_bp)
 
-    from .rating_view import bp as rating_view_bp
+    from .user_rating_view import bp as rating_view_bp
     app.register_blueprint(rating_view_bp)
     
     from .seller_view import bp as seller_view_bp
@@ -68,5 +71,8 @@ def create_app():
     
     from .ind_prod import bp as ind_prod_bp
     app.register_blueprint(ind_prod_bp)
+    
+    from .product_rating_view import bp as product_rating_view
+    app.register_blueprint(product_rating_view)
 
     return app

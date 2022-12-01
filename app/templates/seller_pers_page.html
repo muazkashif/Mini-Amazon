@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<br><br>
+
+
+<h2>Personal Transactions:</h2>
+  <table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">User ID</th>
+        <th scope="col">Seller ID</th>
+        <th scope="col">Product ID</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Time Purchased</th>
+        <th scope="col">Order Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in prod%}
+        <tr>
+          <th scope="row">{{p.uid}}</th>
+          <td>{{p.sid}}</td>
+          <td>{{p.pid}}</td>
+          <td>{{p.quantity}}</td>
+          <td>{{p.time_purchased}}</td>
+          <td>{{p.order_status}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</form>
+
+
+
+<br><br>
+
+
+{% endblock %}

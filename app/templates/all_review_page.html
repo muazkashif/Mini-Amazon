@@ -1,14 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <br><br>
 
-<h2>All ratings:</h2>
+<h2>Review History for: {{ratings[0].uid}}</h2>
 <table class='table table-hover table-bordered container'>
   <thead class="thead-dark">
     <tr>
-      <th scope="col">User ID</th>
+      <th scope="col">Index #</th>
       <th scope="col">Seller ID</th>
       <th scope="col">Product ID</th>
       <th scope="col">Rating</th>
@@ -17,18 +16,20 @@
     </tr>
   </thead>
   <tbody>
-    {% for rating in ratings%}
+    {% for i in range(ratings_len)%}
       <tr>
-        <th scope="row">{{rating.uid}}</th>
-        <td>{{rating.sid}}</td>
-        <td>{{rating.pid}}</td>
-        <td>{{rating.rating}}</td>
-        <td>{{rating.review}}</td>
-        <td>{{rating.time_reviewed}}</td>
+        <th scope="row">{{i+1}}</th>
+        <td>{{ratings[i].sid}}</td>
+        <td>{{ratings[i].pid}}</td>
+        <td>{{ratings[i].rating}}</td>
+        <td>{{ratings[i].review}}</td>
+        <td>{{ratings[i].time_reviewed}}</td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
+
+
 
 <br><br>
 

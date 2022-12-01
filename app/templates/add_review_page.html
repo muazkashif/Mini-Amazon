@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br><br>
+
+<h2>Adding Review of User: {{user}} for Product: {{product}}</h2>
+<form method="POST" action="/add_review/{{user}}break{{product}}break{{sid}}">
+    <input type="text" name="reviewText" size= "50">
+    <input type="text" name="ratingText">
+    <input type="submit" value="Submit">
+</form>
+
+
+
+<br><br>
+
+
+{% endblock %}

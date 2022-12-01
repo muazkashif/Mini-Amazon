@@ -1,6 +1,7 @@
 from flask import render_template
 
 from .models.products import Product
+from .models.for_sale import ForSaleItems
 from flask_login import current_user
 
 from flask import Blueprint
@@ -19,8 +20,14 @@ def index():
     #     purchases = None
     # render the page by adding information to the index.html file
     if current_user.is_authenticated:
+        items = ForSaleItems.get_all()
+        prices = []
+        names = []
+        for temp in items:
+            names.append(Product.get_name(temp.pid)[0][0])
+            prices.append(Product.get_price(temp.pid)[0][0])
         return render_template('products_for_cart.html',
-                           prod_items=products)
+                           prod_items=items, prices=prices, names=names, product_len=len(names))
     return render_template('products.html',
                            prod_items=products)
 
