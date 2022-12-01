@@ -38,7 +38,8 @@ def show_product(k):
                            prod_items=prod,
                            ratings=ratings,
                            review_button=review_button,
-                           current_uid=current_user.id)
+                           current_uid=current_user.id,
+                           ratingsNumber=Rating.get_number_of_ratings(k))
     else:
         if (current_user.is_authenticated):
             curr_uid = current_user.id
@@ -49,6 +50,7 @@ def show_product(k):
                            prod_items=prod,
                            ratings=ratings,
                            review_button=review_button,
-                           current_uid=curr_uid)
+                           current_uid=curr_uid,
+                           ratingsNumber=Rating.get_number_of_ratings(k))
         
 

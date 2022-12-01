@@ -51,7 +51,7 @@
   text-decoration: none;
   padding: 12px 30px;
   transition: all .5s;
-  top: 470px;
+  top: 520px;
   right: 200px;  
 }
 .cart-btn:hover {
@@ -68,7 +68,7 @@
   text-decoration: none;
   padding: 12px 30px;
   transition: all .5s;
-  top: 470px;
+  top: 520px;
   right: 45px;  
 }
 .review-btn:hover {
@@ -80,8 +80,6 @@
 
 .price-rating{
 	position: relative;
-	top: 280px;
-	right:280px;
 }
 
 .wrap{
@@ -132,8 +130,8 @@
    
 	  <!-- Product Description -->
 	  <div class="product-info">
-		<h1>{{prod_items.name}}</h1>
-		<p1>{{prod_items.description}}</p1>
+		<h1><div style="height:150px;width:600px;border:1px solid #ccc;Serif;overflow:auto;">{{prod_items.name}}</div></h1>
+		<p1><div style="height:300px;width:600px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">{{prod_items.description}}</div></p1>
 	  </div>
 
 
@@ -160,7 +158,8 @@
 
 <div class = "wrap">
 <table class='table table-hover table-bordered container'>
-	<h1>Ratings</h1>
+	<h1>Rating</h1>
+  <p1>Number of Ratings: {{ratingsNumber}} </p1>
   <thead class="thead-dark">
     <tr>
       <th scope="col">User</th>
