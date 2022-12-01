@@ -14,11 +14,11 @@ class Purchase:
 
 
     @staticmethod
-    def remove(uid, pid):
+    def remove(uid, pid, sid):
         try:
-            query_string = "DELETE FROM Transactions WHERE uid = " + str(uid) + "and pid = " + str(pid)
+            query_string = "DELETE FROM Transactions WHERE uid = " + str(uid) + "and pid = " + str(pid) + "and sid = " + str(sid)
             app.db.execute(query_string,
-                                  uid=uid, pid=pid)
+                                  uid=uid, pid=pid, sid=sid)
             return None
         except Exception as e:
             # likely email already in use; better error checking and reporting needed;
