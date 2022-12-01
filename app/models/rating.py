@@ -103,4 +103,38 @@ RETURNING uid
 """,
                               uid=uid, sid=sid, pid=pid,ratingvalue=ratingvalue,reviewvalue=reviewvalue,time=time)
         # return [Rating(*row) for row in rows]
+        
+    @staticmethod
+    def get_ratings_for_avg(pid):
+        rows = app.db.execute('''
+SELECT AVG(rating) AS avrg
+FROM Ratings
+WHERE pid = :pid
+''',
+                              pid=pid)
+        avg = rows[0][0]
+        return avg
+    
+    @staticmethod
+    def get_number_of_ratings(pid):
+        rows = app.db.execute('''
+SELECT COUNT(rating) AS cnt
+FROM Ratings
+WHERE pid = :pid
+''',
+                              pid=pid)
+        cnt = rows[0][0]
+        return cnt
+    
+    
+    
+    @staticmethod
+    def delete_review(uid,pid):
+        rows = app.db.execute('''
+DELETE FROM Ratings
+WHERE uid = :uid and pid = :pid
+''',
+                              uid=uid,pid=pid)
+        return
+
     
