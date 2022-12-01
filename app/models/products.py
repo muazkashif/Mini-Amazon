@@ -103,15 +103,59 @@ WHERE available = :available
         return [Product(*row) for row in rows]
 
     @staticmethod
-    def get_all_offset(available, k):
-        rows = app.db.execute('''
-SELECT id, name, descriptions, rating, images, price, available, category
-FROM Products
-WHERE available = :available
-LIMIT 20
-OFFSET :k 
-''',
-                              available=available, k=k)
+    def get_all_offset(available, k, order_prop,order_by):
+        if order_prop == "price":
+            print("in price")
+            if order_by == "ASC":
+                rows = app.db.execute('''
+        SELECT id, name, descriptions, rating, images, price, available, category
+        FROM Products
+        WHERE available = :available
+        ORDER BY price ASC
+        LIMIT 20
+        OFFSET :k 
+        ''',
+                                    available=available, k=k)
+            elif order_by == "DESC":
+                rows = app.db.execute('''
+        SELECT id, name, descriptions, rating, images, price, available, category
+        FROM Products
+        WHERE available = :available
+        ORDER BY price DESC
+        LIMIT 20
+        OFFSET :k 
+        ''',
+                                    available=available, k=k)
+        elif order_prop == "rate":
+            if order_by == "ASC":
+                rows = app.db.execute('''
+        SELECT id, name, descriptions, rating, images, price, available, category
+        FROM Products
+        WHERE available = :available
+        ORDER BY rating ASC
+        LIMIT 20
+        OFFSET :k 
+        ''',
+                                    available=available, k=k)
+            if order_by == "DESC":
+                rows = app.db.execute('''
+        SELECT id, name, descriptions, rating, images, price, available, category
+        FROM Products
+        WHERE available = :available
+        ORDER BY rating DESC
+        LIMIT 20
+        OFFSET :k 
+        ''',
+                                    available=available, k=k)
+        else:
+            rows = app.db.execute('''
+        SELECT id, name, descriptions, rating, images, price, available, category
+        FROM Products
+        WHERE available = :available
+        LIMIT 20
+        OFFSET :k 
+        ''',
+                                    available=available, k=k)
         return [Product(*row) for row in rows]
 
     @staticmethod
