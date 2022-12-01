@@ -93,9 +93,14 @@ def user_profile():
 
 @bp.route('/update_Balance', methods = ['POST'])
 def update_balance():
-    value = User.get(current_user.id).balance + Decimal(request.form.get('addBalance'))
-    User.updateBalance(current_user.id, value)
-    return redirect(url_for('users.user_profile'))
+    toAdd = request.form.get('addBalance')
+    if (User.is_float(toAdd) == False or Decimal(toAdd) < 0):
+        flash('Invalid value. Please enter a valid positive integer or decimal.')
+        return redirect(url_for('users.user_profile'))
+    else:
+        value = User.get(current_user.id).balance + Decimal(request.form.get('addBalance'))
+        User.updateBalance(current_user.id, value)
+        return redirect(url_for('users.user_profile'))
 
 @bp.route('/user_update_form')
 def user_form():
@@ -104,12 +109,17 @@ def user_form():
 @bp.route('/update_user_info', methods = ['POST'])
 def update_info():
     email = request.form.get('new_email')
+    print(email)
     password = request.form.get('new_password')
     firstname = request.form.get('new_firstname')
     lastname = request.form.get('new_lastname')
     address = request.form.get('new_address')
-    User.updateUser(current_user.id, email, password, firstname, lastname, address)
-    return redirect(url_for('users.user_profile'))
+    if (email == None or User.email_exists(email) or password == None or firstname == None or lastname == None or address == None):
+        flash('INVALID INPUTS!')
+        return redirect(url_for('users.user_form'))
+    else:
+        User.updateUser(current_user.id, email, password, firstname, lastname, address)
+        return redirect(url_for('users.user_profile'))
 
 @bp.route('/add_seller', methods = ['POST', 'GET'])
 def add_seller():

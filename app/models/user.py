@@ -44,6 +44,17 @@ WHERE email = :email
         return len(rows) > 0
 
     @staticmethod
+    def is_float(element: any) -> bool:
+    #If you expect None to be passed:
+        if element is None: 
+            return False
+        try:
+            float(element)
+            return True
+        except ValueError:
+            return False
+    
+    @staticmethod
     def register(email, password, firstname, lastname, address, balance, date):
         try:
             rows = app.db.execute("""
