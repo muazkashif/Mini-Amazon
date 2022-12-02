@@ -41,7 +41,7 @@ def index():
                     new_quantity = quantity_available - int(quantity)
                     if new_quantity >= 0:
                         Purchase.add(current_user.id, int(pid), int(sid), int(quantity))
-                        Cart.remove(current_user.id, int(pid), int(sid))
+                        Cart.delete_product_cart(current_user.id, int(pid), int(sid))
                         ForSaleItems.remove(pid, sid, quantity_available)
                         ForSaleItems.add(pid, sid, new_quantity)
     purchases = Purchase.get_all()

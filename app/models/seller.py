@@ -39,6 +39,7 @@ FROM Sellers
 """)
         return [Seller(*row).id for row in rows]
 
+
     
     @staticmethod
     def update_status(pid, sid, time, uid):
