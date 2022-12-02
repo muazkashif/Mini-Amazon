@@ -8,9 +8,44 @@
   .no_header_prod{
       text-align: center;
   }
+
+  .product_edit_new{
+    position:relative;
+    display:inline-block;
+    font-size: 20px;
+    padding-top: 10px;
+    left:38%
+
+  }
+
+  .new_product_button{
+    display:inline-block;
+    margin: 10px;
+  }
+
+  .add_seller_button{
+    display:inline-block;
+    margin: 10px;
+  }
+
+
 </style>
 
 <body>
+  <div class = product_edit_new>
+
+  <div class = "new_product_button">
+  <form action="/add_product">
+    <button type = "submit" value = "back seller">Add New Product</button>
+  </form>
+  </div>
+  <div class = "add_seller_button">
+  <form action="/sell_this_product">
+    <button type = "submit" value = "back seller">Sell Existing Product</button>
+  </form>
+</div>
+
+</div>
 
   {% if empty %}
   <div class = "no_header_prod">
@@ -41,7 +76,7 @@
               <td>{{p.quantity}}</td>
               <td>
                 <form method="POST" action="/product_edit/{{p.id}}">
-                    <input type="submit" value="Edit Product">
+                    <input type="submit" value="Edit Product Info">
                 </form>
             </td>
             <td>

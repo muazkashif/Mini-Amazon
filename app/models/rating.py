@@ -11,6 +11,7 @@ class Rating:
         self.rating = rating
         self.review = review
         self.time_reviewed = time_reviewed
+    
 
     @staticmethod
     def get_user_ratings(uid):
@@ -126,8 +127,17 @@ WHERE pid = :pid
                               pid=pid)
         cnt = rows[0][0]
         return cnt
-    
-    
+
+    @staticmethod
+    def get_seller_ratings(sid):
+        rows = app.db.execute('''
+SELECT *
+FROM Ratings, Products
+WHERE sid = :sid AND pid = id
+ORDER BY time_reviewed DESC
+''',
+                              sid=sid)
+        return rows if rows else None
     
     @staticmethod
     def delete_review(uid,pid):
@@ -138,4 +148,14 @@ WHERE uid = :uid and pid = :pid
                               uid=uid,pid=pid)
         return
 
+    @staticmethod
+    def get_ratings_seller_avg(sid):
+        rows = app.db.execute('''
+SELECT AVG(rating) AS avrg
+FROM Ratings
+WHERE sid = :sid
+''',
+                              sid = sid)
+        avg = rows[0][0]
+        return avg if rows else None
     

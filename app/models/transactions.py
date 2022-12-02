@@ -49,3 +49,15 @@ WHERE Sellers.id = :id AND Sellers.id = t.sid
 ORDER BY t.name
 ''',                                    id = id)
         return rows if rows else None
+
+    @staticmethod
+    def count_status(id):
+        rows = app.db.execute('''
+SELECT order_status, count(order_status)
+FROM Transactions, Products, Users
+WHERE sid = :id AND Products.id = Transactions.pid AND Transactions.uid = users.id
+GROUP BY order_status
+ORDER BY order_status
+''',                                    id = id)
+        return rows if rows else None
+

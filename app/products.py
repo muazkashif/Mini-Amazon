@@ -53,3 +53,7 @@ def delete_product(k):
 def change_status(stat, uid, pid, time):
     Transaction.update_status(stat, current_user.id, uid, pid, time)
     return redirect(url_for('users.see_seller_transactions'))
+
+@bp.route('/add_product', methods = ['POST', 'GET'])
+def add_product():
+    return render_template('new_products.html')
