@@ -2,16 +2,18 @@ from flask import current_app as app
 
 
 class ForSaleItems:
-    def __init__(self, pid, sid, quantity):
+    def __init__(self, pid, sid, quantity, price):
         self.pid = pid
         self.sid = sid
         self.quantity = quantity
+        self.price = price
+
 
 
     @staticmethod
     def get_all():
         rows = app.db.execute('''
-SELECT pid, sid, quantity
+SELECT *
 FROM ForSaleItems
 ''')
         return [ForSaleItems(*row) for row in rows]
@@ -19,31 +21,64 @@ FROM ForSaleItems
 
     @staticmethod
     def get_quantity(pid, sid):
-        query_string = "SELECT quantity FROM ForSaleItems WHERE pid = " + str(pid) + " and sid = " + str(sid)
-        rows = app.db.execute(query_string,
+        rows = app.db.execute('''
+SELECT * 
+FROM ForSaleItems 
+WHERE pid = :pid AND sid = :sid
+''',
                               pid=pid, sid=sid)
-        return rows
+        return rows[0][2]
 
 
     @staticmethod
-    def add(pid, sid, quantity):
+    def add(pid, sid, quantity, price):
         try:
             app.db.execute("""
-INSERT INTO ForSaleItems(pid, sid, quantity)
+INSERT INTO ForSaleItems(pid, sid, quantity, price)
 VALUES(:pid, :sid, :quantity)
 """,
-                                  pid=pid, sid=sid, quantity=quantity)
+                                  pid=pid, sid=sid, quantity=quantity, price = price)
         except Exception as e:
             print(str(e))
             return None
     
     @staticmethod
-    def remove(pid, sid, quantity):
+    def remove(pid, sid, quantity, price):
         try:
             query_string = "DELETE FROM ForSaleItems WHERE pid = " + str(pid) + "and sid = " + str(sid) + "and quantity = " + str(quantity)
             app.db.execute(query_string,
-                                  pid=pid, sid=sid, quantity=quantity)
+                                  pid=pid, sid=sid, quantity=quantity, price = price)
             return None
         except Exception as e:
             print(str(e))
             return None
+
+    @staticmethod
+    def average_price(pid):
+        rows = app.db.execute('''
+SELECT avg(price), pid
+FROM ForSaleItems
+WHERE pid = :pid
+''',
+                              pid=pid)
+        return [ForSaleItems(*row) for row in rows]
+
+    @staticmethod
+    def get_sellers_for_product(pid):
+        rows = app.db.execute("""
+SELECT *
+FROM ForSaleItems
+WHERE pid = :pid
+""", 
+                                    pid = pid)
+        return [ForSaleItems(*row) for row in rows]
+
+    @staticmethod
+    def get_prod_seller_info(pid, sid):
+        rows = app.db.execute("""
+SELECT *
+FROM ForSaleItems
+WHERE pid = :pid AND sid = :sid
+""", 
+                                    pid = pid, sid = sid)
+        return [ForSaleItems(*row) for row in rows][0]

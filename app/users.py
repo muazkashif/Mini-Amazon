@@ -6,6 +6,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from .models.user import User
+from .models.rating import Rating
 from .models.purchase import Purchase
 from .models.seller import Seller
 from datetime import datetime
@@ -82,8 +83,8 @@ def logout():
     logout_user()
     return redirect(url_for('index.opener_page'))
 
-@bp.route('/user_profile')
-@bp.route('/user_profile/')
+@bp.route('/user_profile', methods = ['GET', 'POST'])
+@bp.route('/user_profile/',methods = ['GET', 'POST'])
 def user_profile():
     if current_user.is_authenticated:
         sellers = Seller.get_sellers()
@@ -104,11 +105,11 @@ def update_balance():
     User.updateBalance(current_user.id, value)
     return redirect(url_for('users.user_profile'))
 
-@bp.route('/user_update_form')
+@bp.route('/user_update_form', methods = ['GET', 'POST'])
 def user_form():
     return render_template('user_update_form.html')
 
-@bp.route('/update_user_info', methods = ['POST'])
+@bp.route('/update_user_info', methods = ['GET', 'POST'])
 def update_info():
     email = request.form.get('new_email')
     password = request.form.get('new_password')
@@ -126,8 +127,31 @@ def add_seller():
 
 @bp.route('/seller_page', methods = ['POST', 'GET'])
 def see_seller_page():
+    no_ratings = False
     user_info = User.get(current_user.id)
-    return render_template('seller_pers_page.html', info = user_info)
+    transactions = Transaction.get_transactions(current_user.id)
+    if transactions is None:
+        total = 0
+    else:
+        total = len(transactions)
+    status_count = Transaction.count_status(current_user.id)
+    all_counts = [["Delivered", 0], ["Processing", 0], ["Received", 0], ["Shipped", 0]]
+    if status_count is not None:
+        for i in range(len(status_count)):
+            for j in range(4): 
+                if status_count[i][0] == all_counts[j][0]:
+                    all_counts[j][1] = status_count[i][1]
+    seller_ratings = Rating.get_seller_ratings(current_user.id)
+    if seller_ratings is None:
+        rating_count = 0
+        seller_rating = "N/A"
+        no_ratings = True; 
+    else:
+        rating_count = len(seller_ratings)
+        seller_rating = round(Rating.get_ratings_seller_avg(current_user.id), 2)
+
+    return render_template('seller_pers_page.html', info = user_info, length = total, counts = all_counts, num_ratings = rating_count, seller_rating = seller_rating,
+    seller_ratings = seller_ratings, no_ratings = no_ratings)
 
 @bp.route('/seller_transaction', methods = ['POST', 'GET'])
 def see_seller_transactions():
@@ -143,7 +167,6 @@ def see_seller_products():
     pers_products = Transaction.seller_prod(current_user.id)
     if pers_products is None:
         check = True
-    return render_template('seller_products.html', prod = pers_products, empty = check)
+    return render_template('seller_products.html', prod = pers_products, empty = check, )
 
-        
 

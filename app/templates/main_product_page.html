@@ -166,11 +166,11 @@
         <img class="card-img-top" src={{product.images}} onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'" style='width: 320px; height: 200px; object-fit: scale-down;'>
         <div class="card-body">
           <h5 class="card-title">{{product.name}}</h5>
-          <p class="card-text">{{product.description}}</p>
-          <p class = "price">${{product.price}}</p>
+          <p class="card-text">{{product.descriptions}}</p>
+          <p class = "price">Avg Price: ${{product.avg}}</p>
           <p class = "rating">Rating: {{product.rating}}/5</p>
           <p class = "Category">Category: {{product.category}}</p>
-          <form action="/ind_prod/{{product.id}}" method = "POST" value = product name = "prod">
+          <form action="/ind_prod/{{product.id}}/main" method = "POST" value = product name = "prod">
             <input type="submit" value = "See more"/>  
         </form>
         </div>

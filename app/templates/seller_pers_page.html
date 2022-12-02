@@ -82,23 +82,33 @@
                                               <label>Total Transactions</label>
                                           </div>
                                           <div class="col-md-6">
-                                              <p>{{info.email}}</p>
+                                              <p>{{length}}</p>
                                           </div>
                                       </div>
                                       <div class="row">
                                         <div class="col-md-6">
-                                            <label>Seller Rating</label>
+                                            <label>Seller Rating (Out of 5)</label>
                                         </div>
                                         <div class="col-md-6">
-                                            <p>{{info.email}}</p>
-                                        </div>
+                                            <p>{{seller_rating}}</p>
+                                        </div> 
                                     </div>
                                       <div class="row">
                                           <div class="col-md-6">
-                                              <label>Total Sales</label>
+                                              <label>Total Number Reviews</label>
                                           </div>
                                           <div class="col-md-6">
-                                              <p>{{info.address}}</p>
+                                              <p>{{num_ratings}}</p>
+                                          </div>
+                                      </div>
+                                      &nbsp;
+                                      <h5> <u>Order Status Counts</u> </h5>
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <label>Delivered</label>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <p>{{counts[0][1]}}</p>
                                           </div>
                                       </div>
                                       <div class="row">
@@ -106,31 +116,23 @@
                                               <label>Processing</label>
                                           </div>
                                           <div class="col-md-6">
-                                              <p>${{info.balance}}</p>
+                                              <p>{{counts[1][1]}}</p>
                                           </div>
                                       </div>
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <label>Shipped</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p>{{info.date}}</p>
-                                          </div>
-                                      </div>
-                                      <div class = "row">
-                                          <div class="col-md-6">
-                                              <label>Delivered</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p>{{info.date}}</p>
-                                          </div>
-                                        </div>
                                       <div class = "row">
                                           <div class="col-md-6">
                                               <label>Received</label>
                                           </div>
                                           <div class="col-md-6">
-                                              <p>{{info.date}}</p>
+                                              <p>{{counts[2][1]}}</p>
+                                          </div>
+                                        </div>
+                                      <div class = "row">
+                                          <div class="col-md-6">
+                                              <label>Shipped</label>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <p>{{counts[3][1]}}</p>
                                           </div>
                                     </div>
                                   </div>
@@ -155,8 +157,35 @@
           </form>
         </div>
         </div>
+        {% if no_ratings %}
+        <h1>Your Associated Seller Reviews: <b>No Current Reviews</b></h1>
+        {% endif %}
 
-
+        {% if not no_ratings %}
+        <div class = "wrap">
+            <table class='table table-hover table-bordered container'>
+                <h1>Your Associated Seller Reviews:</h1>
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Product</th>
+                  <th scope="col">Rating</th>
+                  <th scope="col">Review</th>
+                  <th scope="col">Time Reviewed</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for rating in seller_ratings %}
+                  <tr>
+                    <td><a href="/ind_prod/{{rating.pid}}">{{rating.name}}</a></td>
+                    <td>{{rating.rating}}</td>
+                    <td>{{rating.review}}</td>
+                    <td>{{rating.time_reviewed}}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            </div>
+            {% endif %}
     
     
 </body>
