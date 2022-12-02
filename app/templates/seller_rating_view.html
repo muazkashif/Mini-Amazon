@@ -3,31 +3,31 @@
 {% block content %}
 
 <br><br>
-{% for rating in ratings%}
 
-<h2>Ratings written for Seller: {{rating.sid}}</h2>
+<h2>Ratings written for Seller: {{sid}}</h2>
 <table class='table table-hover table-bordered container'>
   <thead class="thead-dark">
     <tr>
       <th scope="col">User ID</th>
-      <th scope="col">Product ID</th>
+      <th scope="col">Product Name</th>
       <th scope="col">Rating</th>
       <th scope="col">Review</th>
       <th scope="col">Time Reviewed</th>
     </tr>
   </thead>
   <tbody>
+    {% for ratingg in ratings%}
       <tr>
-        <th scope="row">{{rating.uid}}</th>
-        <td>{{rating.pid}}</td>
-        <td>{{rating.rating}}</td>
-        <td>{{rating.review}}</td>
-        <td>{{rating.time_reviewed}}</td>
+        <td><a href="/user_reviews/{{ratingg.uid}}">{{ratingg.uid}}</a></td>
+        <td><a href="/ind_prod/{{ratingg.pid}}/main">{{ratingg.name}}</a></td>
+        <td>{{ratingg.rating}}</td>
+        <td>{{ratingg.review}}</td>
+        <td>{{ratingg.time_reviewed}}</td>
       </tr>
+    {% endfor %}
   </tbody>
 </table>
 
-{% endfor %}
 <br><br>
 
 
