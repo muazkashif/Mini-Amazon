@@ -37,7 +37,7 @@ def index(k):
     else:
         offset = 0
         check = False
-    print ("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX prop = " + order_prop + " order_by = " + order_by +"END")
+    # print ("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX prop = " + order_prop + " order_by = " + order_by +"END")
     products = Product.get_all_offset(True, offset,order_prop,order_by) 
     if products is None:
         flash('Invalid id')
@@ -73,7 +73,6 @@ def inc_page(prop,by):
     order_by = by
     order_prop = prop
     return redirect(url_for('main_product_page.index', k = 1))
-    return
     
     
     
