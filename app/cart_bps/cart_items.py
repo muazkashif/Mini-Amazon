@@ -33,8 +33,8 @@ def index():
     if request.method == 'POST':
         if current_user.is_authenticated:
             if request.form.get("trash"):
-                pid, sid, quantity = translate(request.form.get("trash"))
-                Cart.remove(current_user.id, pid, sid)
+                pid, sid, uid = translate(request.form.get("trash"))
+                Cart.delete_product_cart(int(uid), int(pid), int(sid))
             form = request.form.getlist("addtocart2")
             items = ForSaleItems.get_all()
             for i in range(len(form)):
@@ -46,14 +46,11 @@ def index():
     carts = Cart.get_all()
     if current_user.is_authenticated:
         carts = Cart.get(current_user.id)
-        prices = []
-        for i in range(len(carts)):
-            item = carts[i]
-            prices.append(item.quantity * Product.get(item.pid).price)
         return render_template('carts.html',
-                            cart_items=carts, cart_len=len(carts), prices=prices, logged_in=True)
+                            cart_items=carts, cart_len=len(carts), logged_in=True)
     return render_template('carts.html',
                             cart_items=carts)
+
 
 @bp.route('/carte/')
 def show_emptycart():

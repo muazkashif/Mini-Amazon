@@ -2,21 +2,20 @@ from flask import current_app as app
 
 
 class Product:
-    def __init__(self, id, name, description, rating, images, price, available, category):
+    def __init__(self,  id, name, descriptions, rating, images, available, category):
         self.id = id
         self.name = name
-        self.price = price
-        self.available = available
-        self.rating = rating
-        self.description = description
         self.category = category
+        self.description = descriptions
         self.images = images
+        self.rating = rating
+        self.available = available
 
     @staticmethod
     def get_top_k_products(k):
         rows = app.db.execute('''
-SELECT id, name, price, available
-FROM Products
+SELECT id, name, available
+FROM Products JOIN 
 ORDER BY price DESC
 LIMIT :k
 ''',
@@ -34,21 +33,31 @@ WHERE id = :id
         return name
 
 
+#     @staticmethod
+#     def get_price(id):
+#         name = app.db.execute('''
+# SELECT price
+# FROM Products
+# WHERE id = :id
+# ''',
+#                             id = id)
+#         return name
+
     @staticmethod
-    def get_price(id):
+    def delete_product_seller(id, sid):
         name = app.db.execute('''
-SELECT price
-FROM Products
-WHERE id = :id
+DELETE
+FROM ForSaleItems
+WHERE pid = :id AND sid = :sid
 ''',
-                            id = id)
-        return name
+                            id = id, sid = sid)
+        return
 
 
     @staticmethod
     def sort_ratings_desc():
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, images, price, available, category
+SELECT id, name, descriptions, rating, images, available, category
 FROM Products
 ORDER BY rating DESC
 ''')
@@ -57,35 +66,35 @@ ORDER BY rating DESC
     @staticmethod
     def sort_ratings_asc():
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, images, price, available, category
+SELECT id, name, descriptions, rating, images, available, category
 FROM Products
 ORDER BY rating ASC
 ''')
         return [Product(*row) for row in rows]
 
-    @staticmethod
-    def sort_price_desc():
-        rows = app.db.execute('''
-SELECT id, name, descriptions, rating, images, price, available, category
-FROM Products
-ORDER BY price DESC
-''')
-        return [Product(*row) for row in rows]
+#     @staticmethod
+#     def sort_price_desc():
+#         rows = app.db.execute('''
+# SELECT id, name, descriptions, rating, images, available, category
+# FROM Products
+# ORDER BY price DESC
+# ''')
+#         return [Product(*row) for row in rows]
 
-    @staticmethod
-    def sort_price_asc():
-        rows = app.db.execute('''
-SELECT id, name, descriptions, rating, images, price, available, category
-FROM Products
-ORDER BY price ASC
-''')
-        return [Product(*row) for row in rows]
+#     @staticmethod
+#     def sort_price_asc():
+#         rows = app.db.execute('''
+# SELECT id, name, descriptions, rating, price, available, category
+# FROM Products
+# ORDER BY price ASC
+# ''')
+#         return [Product(*row) for row in rows]
 
 
     @staticmethod
     def get(id):
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, images, price, available, category
+SELECT id, name, descriptions, rating, images, available, category
 FROM Products
 WHERE id = :id
 ''',
@@ -95,7 +104,7 @@ WHERE id = :id
     @staticmethod
     def get_all(available = True):
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, images, price, available, category
+SELECT id, name, descriptions, rating, images, available, category
 FROM Products
 WHERE available = :available
 ''',
@@ -104,32 +113,32 @@ WHERE available = :available
 
     @staticmethod
     def get_all_offset(available, k, order_prop,order_by):
-        if order_prop == "price":
-            print("in price")
+        # if order_prop == "price":
+        #     print("in price")
+        #     if order_by == "ASC":
+        #         rows = app.db.execute('''
+        # SELECT id, name, descriptions, rating, images, available, category
+        # FROM Products
+        # WHERE available = :available
+        # ORDER BY price ASC
+        # LIMIT 20
+        # OFFSET :k 
+        # ''',
+        #                             available=available, k=k)
+        #     elif order_by == "DESC":
+        #         rows = app.db.execute('''
+        # SELECT id, name, descriptions, rating, images, available, category
+        # FROM Products
+        # WHERE available = :available
+        # ORDER BY price DESC
+        # LIMIT 20
+        # OFFSET :k 
+        # ''',
+        #                             available=available, k=k)
+        if order_prop == "rate":
             if order_by == "ASC":
                 rows = app.db.execute('''
-        SELECT id, name, descriptions, rating, images, price, available, category
-        FROM Products
-        WHERE available = :available
-        ORDER BY price ASC
-        LIMIT 20
-        OFFSET :k 
-        ''',
-                                    available=available, k=k)
-            elif order_by == "DESC":
-                rows = app.db.execute('''
-        SELECT id, name, descriptions, rating, images, price, available, category
-        FROM Products
-        WHERE available = :available
-        ORDER BY price DESC
-        LIMIT 20
-        OFFSET :k 
-        ''',
-                                    available=available, k=k)
-        elif order_prop == "rate":
-            if order_by == "ASC":
-                rows = app.db.execute('''
-        SELECT id, name, descriptions, rating, images, price, available, category
+        SELECT id, name, descriptions, rating, images, available, category
         FROM Products
         WHERE available = :available
         ORDER BY rating ASC
@@ -139,7 +148,7 @@ WHERE available = :available
                                     available=available, k=k)
             if order_by == "DESC":
                 rows = app.db.execute('''
-        SELECT id, name, descriptions, rating, images, price, available, category
+        SELECT id, name, descriptions, rating, images, available, category
         FROM Products
         WHERE available = :available
         ORDER BY rating DESC
@@ -149,19 +158,19 @@ WHERE available = :available
                                     available=available, k=k)
         else:
             rows = app.db.execute('''
-        SELECT id, name, descriptions, rating, images, price, available, category
-        FROM Products
-        WHERE available = :available
+        SELECT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+        FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+        WHERE available = :available AND Products.id = S.pid
         LIMIT 20
         OFFSET :k 
         ''',
                                     available=available, k=k)
-        return [Product(*row) for row in rows]
+        return rows
 
     @staticmethod
     def get_prod_category(cat):
         rows = app.db.execute('''
-SELECT id, name, descriptions, rating, images, price, available, category
+SELECT id, name, descriptions, rating, images, available, category
 FROM Products
 WHERE category = :cat
 ''',
@@ -177,3 +186,5 @@ WHERE id = :pid
 ''',
                               pid=pid,avg=avg)
         # return [Product(*row) for row in rows]
+    
+  

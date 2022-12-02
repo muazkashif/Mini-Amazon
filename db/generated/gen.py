@@ -14,7 +14,7 @@ num_ratings = 5000
 
 
 
-file_path = "../data/"
+file_path = "../generated/"
 
 categories = ["Travel", "Personal_Care", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
@@ -131,11 +131,12 @@ def gen_forsales(num_forsale_items, s_uids, available_pids):
             pid = fake.random_element(elements=available_pids)
             s_uid = fake.random_element(elements=s_uids)
             key = (pid,s_uid)
+            price = round(random.uniform(0, 500), 2)
             while key in already_done_keys:
                 pid = fake.random_element(elements=available_pids)
                 s_uid = fake.random_element(elements=s_uids)
             quantity = fake.random_int(min=1, max=10)
-            writer.writerow([pid, s_uid, quantity])
+            writer.writerow([pid, s_uid, quantity, price])
             already_done_keys.append(key)
         print(f'{num_forsale_items} generated')
     return 
@@ -244,10 +245,6 @@ def gen_products(num_products, ratings_prods):
                         pid-=1
                         continue
                     # price = row[6]
-                    if row[6] != '':
-                        price = int(row[6])/81
-                    else:
-                        price = 400/81
                     available = fake.random_element(elements=('true', 'true', 'true', 'true', 'false'))
                     if str(pid-1) in ratings_prods:
                         rating_array = ratings_prods[str(pid-1)]
@@ -266,7 +263,7 @@ def gen_products(num_products, ratings_prods):
                         images = images[:-1]
                     if available == 'true':
                         available_pids.append(pid-1)
-                    writer.writerow([pid-1, pname, category, descriptions, images, price, rating, available])
+                    writer.writerow([pid-1, pname, category, descriptions, images, rating, available])
                     names.append(pname)
                     # if "Kennel Rubber Dumbell" in pname:
                     # print(rating, end = ' ')

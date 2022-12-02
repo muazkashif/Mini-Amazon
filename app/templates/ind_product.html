@@ -87,6 +87,20 @@
 	top: 650px;
 }
 
+.wrap-table{
+  position:absolute;
+  margin:10px;
+  top:80%;
+  width:100%;
+  
+}
+
+.check-out{
+  position:relative;
+  left:75%;
+  top:20%;
+}
+
 .sidebar{
       position: absolute;
       width: 220px;
@@ -104,24 +118,45 @@
 		bottom: 100px; 
 		left: 80px; 
 	}
+
+  .check-out{
+    right:10%;
+    bottom:65px;
+  }
+
+  .price-rating{
+    position:relative;
+    right: 60%; 
+  }
+
+  .cart_butt{
+    position:relative;
+    top:20%;
+  }
 </style>
 
 <body>
 
 	<div class = "sidebar">
         <h2><u>Sellers</u></h2>
-        <u1>
-        <li><a href="#"><i class = "fas fa-home"></i>Category</a></li>
-        <li><a href="#"><i class = "fas fa-home"></i>Price</a></li>
-        <li><a href="#"><i class = "fas fa-home"></i>Rating</a></li>
-        </u1>
+        {% for seller in sellers %}
+        <form method="POST" action="/ind_prod/{{prod_items.id}}/{{seller.sid}}">
+        <div>
+          <input type="radio" onClick = "this.form.submit()" id="{{seller.sid}}">
+          <label for="{{seller.sid}}">Seller: {{seller.sid}}</label>
+          <p> <b> Quantity:</b> {{seller.quantity}}</p>
+          <p>Rating: Placeholder</p>
+        </div>
+      </form>
+        {% endfor %}
+  </form>
     </div>
 
 	<div class = "wrap_all">
  
 	<!-- Left Column / Headphones Image -->
 	<div class="left-column">
-	  <img data-image="black" src={{prod_items.images}} alt="" width="500" height="500" style='object-fit: scale-down;'>
+	  <img data-image="black" src={{prod_items.images}} onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'" style='width: 500px; height:500px; object-fit: scale-down;'>
 	</div>
    
    
@@ -130,33 +165,37 @@
    
 	  <!-- Product Description -->
 	  <div class="product-info">
-		<h1><div style="height:150px;width:600px;border:1px solid #ccc;Serif;overflow:auto;">{{prod_items.name}}</div></h1>
+		<h1><div style="height:150px;width:600px;overflow:auto;">{{prod_items.name}}</div></h1>
 		<p1><div style="height:300px;width:600px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">{{prod_items.description}}</div></p1>
 	  </div>
 
 
 	  <!-- Final Header -->
 	<div class = "price-rating">
-	  <h1>Price: ${{prod_items.price}}</h1>
+    {% if seller_info != "None" %}
+	  <h1>Price: ${{seller_info.price}}</h1> 
+    {% endif %}
 		<h1>Rating: {{prod_items.rating}}/5</h1>
+    {% if seller_info != "None" %}
+    <div class = "check-out">
+    <form method="POST" action="/ind_prod/{{prod_items.id}}/{{seller_info.sid}}/add_to_cart">
+      <input type="text" value=0 name="cart_quantity">
+      <input type="submit" value="Add To Cart">
+    </form>
+  </div>
+      {% endif %}
 	</div>
    
 	  <!-- Product Pricing -->
-	  <div class="product-price">
-      <div class="product-price">
-        <a href="#" class="cart-btn">Add to cart</a>
-        <a href="/cart" class="cart-btn">Add to cart</a>
-        </div>
-    
-
-      <form method="POST" action="/write_review/{{current_uid}}break{{prod_items.id}}">
-        <input type="submit" class ="review-btn" {{review_button}} value="Review Item">
-      </form>
 	  </div>
 	</div>
 </div>
 
-<div class = "wrap">
+<form method="POST" action="/write_review/{{current_uid}}break{{prod_items.id}}">
+  <input type="submit" class ="review-btn" {{review_button}} value="Review Item">
+</form>
+
+<div class = "wrap-table">
 <table class='table table-hover table-bordered container'>
 	<h1>Rating</h1>
   <p1>Number of Ratings: {{ratingsNumber}} </p1>
@@ -182,7 +221,6 @@
   </tbody>
 </table>
 </div>
-
 </body>
 
   {% endblock %}

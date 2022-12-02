@@ -43,6 +43,16 @@ FROM Carts
             return None
 
     @staticmethod
+    def delete_product_cart(uid, pid, sid):
+        name = app.db.execute('''
+DELETE
+FROM Carts
+WHERE pid = :pid AND uid = :uid AND sid = :sid
+''',
+                            pid = pid, uid = uid, sid = sid)
+        return
+
+    @staticmethod
     def remove(uid, pid, sid):
         try:
             query_string = "DELETE FROM Carts WHERE uid = " + str(uid) + "and pid = " + str(pid) + "and sid = " + str(sid)

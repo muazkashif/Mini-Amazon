@@ -37,7 +37,6 @@ def index(k):
     else:
         offset = 0
         check = False
-    # print ("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX prop = " + order_prop + " order_by = " + order_by +"END")
     products = Product.get_all_offset(True, offset,order_prop,order_by) 
     if products is None:
         flash('Invalid id')

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br><br>
+
+<style>
+  .no_header_prod{
+      text-align: center;
+  }
+
+  .product_edit_new{
+    position:relative;
+    display:inline-block;
+    font-size: 20px;
+    padding-top: 10px;
+    left:38%
+
+  }
+
+  .new_product_button{
+    display:inline-block;
+    margin: 10px;
+  }
+
+  .add_seller_button{
+    display:inline-block;
+    margin: 10px;
+  }
+
+
+</style>
+
+<body>
+  <div class = product_edit_new>
+
+  <div class = "new_product_button">
+  <form action="/add_product">
+    <button type = "submit" value = "back seller">Add New Product</button>
+  </form>
+  </div>
+  <div class = "add_seller_button">
+  <form action="/sell_this_product">
+    <button type = "submit" value = "back seller">Sell Existing Product</button>
+  </form>
+</div>
+
+</div>
+
+  {% if empty %}
+  <div class = "no_header_prod">
+  <h1><b>No Listed Products</b></h1>
+  </div>
+  {% endif %}
+
+  {% if not empty %}
+
+    <h1> Active Products: </h1>
+      <table class='table table-hover table-bordered container'>
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Product ID</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Product Rating</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in prod%}
+            <tr>
+              <td>{{p.id}}</td>
+              <td><a href="/ind_prod/{{p.pid}}">{{p.name}}</a></td>
+              <td>{{p.rating}}</td>
+              <td>{{p.quantity}}</td>
+              <td>
+                <form method="POST" action="/product_edit/{{p.id}}">
+                    <input type="submit" value="Edit Product Info">
+                </form>
+            </td>
+            <td>
+              <form method="POST" action="/product_delete/{{p.id}}">
+                  <input type="submit" value="Delete Product">
+              </form>
+          </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </form>
+    {% endif %}
+    <form action="/seller_page">
+      <button name = "B2" 
+              type="submit" 
+              class = "button"
+              value = "back seller">Back</button>
+      </form>
+</body>
+
+
+<br><br>
+
+
+{% endblock %}
