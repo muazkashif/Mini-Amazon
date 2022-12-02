@@ -2,15 +2,6 @@
 
 {% block content %}
 
-{% if logged_in %}
-  <div class="add-to-cart-button">
-    <form action="/products">
-      <button>Add to Cart</button>
-    </form>
-  </div>
-{% endif %}
-<br><br>
-
 <h2>Cart Items:</h2>
 <form action="/carte/">
   <button>Clear Cart</button>
@@ -27,7 +18,6 @@
         <th scope="col">Product ID</th>
         <th scope="col">Seller ID</th>
         <th scope="col">Quantity</th>
-        <th scope="col">Item Price</th>
         <th scope="col">Select From Cart</th>
       </tr>
     </thead>
@@ -36,13 +26,12 @@
         <tr>
           <td>
             <form method="POST" action="/cart/">
-              <button value="{{cart_items[i].pid, cart_items[i].sid, cart_items[i].quantity}}" name="trash">remove</button>
+              <button value="{{cart_items[i].pid, cart_items[i].sid, cart_items[i].uid}}" name="trash">remove</button>
             </form>
           </td>
           <td>{{cart_items[i].pid}}</td>
           <td>{{cart_items[i].sid}}</td>
           <td>{{cart_items[i].quantity}}</td>
-          <td>{{prices[i]}}</td>
           <th scope="col"><input type="checkbox" value="{{cart_items[i].pid, cart_items[i].sid, cart_items[i].quantity}}" name="selectfromcart"></th>
         </tr>
       {% endfor %}

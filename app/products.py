@@ -57,3 +57,5 @@ def change_status(stat, uid, pid, time):
 @bp.route('/add_product', methods = ['POST', 'GET'])
 def add_product():
     return render_template('new_products.html')
+
+
