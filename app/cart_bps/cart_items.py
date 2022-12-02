@@ -48,7 +48,6 @@ def index():
         carts = Cart.get(current_user.id)
         product_names = []
         for item in carts:
-            print(Product.get_name(item.pid))
             product_names.append(Product.get_name(item.pid)[0][0])
         return render_template('carts.html',
                             cart_items=carts, cart_len=len(carts), product_names=product_names,logged_in=True)

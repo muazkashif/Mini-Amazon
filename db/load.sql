@@ -1,4 +1,7 @@
 \COPY Users FROM 'Users.csv' WITH DELIMITER ',' NULL '' CSV
+SELECT pg_catalog.setval('public.users_id_seq',
+                         (SELECT MAX(id)+1 FROM Users),
+                         false);
 
 \COPY Sellers FROM 'Sellers.csv' WITH DELIMITER ',' NULL '' CSV
 

@@ -29,13 +29,22 @@ WHERE pid = :pid AND sid = :sid
                               pid=pid, sid=sid)
         return rows[0][2]
 
+    @staticmethod
+    def get_price(pid, sid):
+        rows = app.db.execute('''
+SELECT price
+FROM ForSaleItems 
+WHERE pid = :pid AND sid = :sid
+''',
+                              pid=pid, sid=sid)
+        return rows[0]
 
     @staticmethod
     def add(pid, sid, quantity, price):
         try:
             app.db.execute("""
 INSERT INTO ForSaleItems(pid, sid, quantity, price)
-VALUES(:pid, :sid, :quantity)
+VALUES(:pid, :sid, :quantity, :price)
 """,
                                   pid=pid, sid=sid, quantity=quantity, price = price)
         except Exception as e:
