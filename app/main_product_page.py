@@ -72,7 +72,6 @@ def inc_page(prop,by):
     order_by = by
     order_prop = prop
     return redirect(url_for('main_product_page.index', k = 1))
-    return
     
     
     
