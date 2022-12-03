@@ -62,6 +62,7 @@
             <th scope="col">Product ID</th>
             <th scope="col">Product Name</th>
             <th scope="col">Product Rating</th>
+            <th scope="col">Product Price</th>
             <th scope="col">Quantity</th>
             <th scope="col">Edit</th>
             <th scope="col">Delete</th>
@@ -71,8 +72,9 @@
           {% for p in prod%}
             <tr>
               <td>{{p.id}}</td>
-              <td><a href="/ind_prod/{{p.pid}}">{{p.name}}</a></td>
+              <td><a href="/ind_prod/{{p.pid}}/main">{{p.name}}</a></td>
               <td>{{p.rating}}</td>
+              <td>{{p.price}}</td>
               <td>{{p.quantity}}</td>
               <td>
                 <form method="POST" action="/product_edit/{{p.id}}">
