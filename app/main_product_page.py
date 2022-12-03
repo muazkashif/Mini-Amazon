@@ -1,11 +1,13 @@
 from flask import render_template, redirect, url_for, flash, request
 import datetime
+from flask_paginate import Pagination, get_page_parameter
+from flask_login import login_user, logout_user, current_user
 
 from .models.products import Product
 from .models.purchase import Purchase
+from .models.for_sale import ForSaleItems
 
 from flask import Blueprint
-from flask_paginate import Pagination
 
 
 bp = Blueprint('main_product_page', __name__)
@@ -28,7 +30,14 @@ def jump():
 
 @bp.route('/index', methods = ["POST", "GET"])
 def fix_index():
-    return redirect(url_for('main_product_page.index', k = 1))
+    search = False
+    q = request.args.get('q')
+    if q:
+        search = True
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    products_for_sale = ForSaleItems.get_all_products_for_sale()
+    pagination = Pagination(page=page, total=len(products_for_sale), search=search, record_name='products_for_sale', per_page=20)
+    return render_template('main_product_page.html', avail_products = products_for_sale, pagination = pagination) 
 
 @bp.route('/index/<k>', methods = ["POST", "GET"])
 def index(k):
@@ -74,6 +83,7 @@ def inc_page(prop,by):
     order_by = by
     order_prop = prop
     return redirect(url_for('main_product_page.index', k = 1))
+    return
     
     
     

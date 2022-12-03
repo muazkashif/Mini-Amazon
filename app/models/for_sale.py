@@ -18,6 +18,15 @@ FROM ForSaleItems
 ''')
         return [ForSaleItems(*row) for row in rows]
 
+    @staticmethod
+    def get_all_products_for_sale():
+        rows = app.db.execute('''
+SELECT DISTINCT *
+FROM ForSaleItems, Products
+WHERE ForSaleItems.pid = Products.id
+''')
+        return rows
+
 
     @staticmethod
     def get_quantity(pid, sid):
