@@ -143,9 +143,9 @@
         <form method="POST" action="/ind_prod/{{prod_items.id}}/{{seller.sid}}">
         <div>
           <input type="radio" onClick = "this.form.submit()" id="{{seller.sid}}">
-          <label for="{{seller.sid}}">Seller: {{seller.sid}}</label>
-          <p> <b> Quantity:</b> {{seller.quantity}}</p>
-          <p>Rating: Placeholder</p>
+          <label for="{{seller.sid}}">Seller: <a href="/seller_reviews/{{seller.sid}}">{{seller.sid}}</a></label>
+          <p> <b> Quantity:</b> {{seller.quantity}} <br>
+          <b> Rating:</b> {{seller.avg_r}}</p>
         </div>
       </form>
         {% endfor %}

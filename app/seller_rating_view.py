@@ -18,8 +18,8 @@ def index():
     return render_template('user_rating_view.html',
                            ratings=ratings)
 
-@bp.route('/seller_reviews/<uid>')
-def show_rating_uid(uid):
-    ratings = Rating.get_recent_sid(uid, k=5)
-    return render_template('user_rating_view.html',
-                           ratings=ratings)
+@bp.route('/seller_reviews/<sid>', methods=['GET','POST'])
+def show_rating_uid(sid):
+    ratings = Rating.get_seller_ratings(sid)
+    return render_template('seller_rating_view.html',
+                           ratings=ratings, sid = sid)

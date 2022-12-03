@@ -35,7 +35,7 @@ bp = Blueprint('ind_prod', __name__)
 @bp.route('/ind_prod/<k>/<sid>', methods = ["POST", "GET"])
 def show_product(k, sid):
     prod = Product.get(k)
-    ratings = Rating.get_prod_reviews(k)
+    prod_ratings = Rating.get_prod_reviews(k)
     sellers = ForSaleItems.get_sellers_for_product(k)
     if sid == "main":
         seller_info = "None"
@@ -45,7 +45,7 @@ def show_product(k, sid):
         review_button="enabled"
         return render_template('ind_product.html',
                            prod_items=prod,
-                           ratings=ratings,
+                           ratings=prod_ratings,
                            sellers = sellers,
                            review_button=review_button,
                            seller_info = seller_info,
@@ -59,7 +59,7 @@ def show_product(k, sid):
         review_button="disabled"
         return render_template('ind_product.html',
                            prod_items=prod,
-                           ratings=ratings,
+                           ratings=prod_ratings,
                            sellers = sellers,
                            review_button=review_button,
                            seller_info = seller_info,
