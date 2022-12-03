@@ -19,6 +19,16 @@ FROM ForSaleItems
         return [ForSaleItems(*row) for row in rows]
 
     @staticmethod
+    def update_sale(pid, sid, price, quantity):
+        rows = app.db.execute('''
+UPDATE ForSaleItems
+SET pid = :pid, sid = :sid, price = :price, quantity = :quantity
+WHERE pid = :pid and sid = :sid
+''',
+                        pid = pid, sid = sid, price = price, quantity = quantity)
+        return 
+
+    @staticmethod
     def get_all_products_for_sale():
         rows = app.db.execute('''
 SELECT DISTINCT *
@@ -75,13 +85,12 @@ WHERE pid = :pid
     @staticmethod
     def get_sellers_for_product(pid):
         rows = app.db.execute("""
-SELECT ForSaleItems.pid, ForSaleItems.sid, quantity, price, ROUND(AVG(rating),2) as avg_r
-FROM ForSaleItems, Ratings
-WHERE ForSaleItems.pid = :pid AND ForSaleItems.sid = Ratings.sid
-GROUP BY ForSaleItems.sid, ForSaleItems.pid
+SELECT *
+FROM ForSaleItems
+WHERE pid = :pid
 """, 
                                     pid = pid)
-        return rows
+        return [ForSaleItems(*row) for row in rows]
 
     @staticmethod
     def get_prod_seller_info(pid, sid):
@@ -92,3 +101,12 @@ WHERE pid = :pid AND sid = :sid
 """, 
                                     pid = pid, sid = sid)
         return [ForSaleItems(*row) for row in rows][0]
+
+    @staticmethod
+    def add_new_sale(pid, sid, quantity, price):
+        rows = app.db.execute("""
+INSERT INTO ForSaleItems(pid, sid, quantity, price)
+VALUES(:pid, :sid, :quantity, :price)
+""",
+                    pid = pid, sid = sid, quantity = quantity, price = price)
+        return None

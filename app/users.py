@@ -62,7 +62,7 @@ class RegistrationForm(FlaskForm):
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('main_product_page.index', k = 1))
+        return redirect(url_for('main_product_page.index'))
     form = RegistrationForm()
     if form.validate_on_submit():
         if User.register(form.email.data,
@@ -88,7 +88,6 @@ def user_profile():
     if current_user.is_authenticated:
         sellers = Seller.get_sellers()
         check = False
-        print(sellers)
         if current_user.id in sellers: ##Issue with checking membership
             check = True
         user_info = User.get(current_user.id)

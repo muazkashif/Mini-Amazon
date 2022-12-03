@@ -1,4 +1,6 @@
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, flash, request
+from werkzeug.urls import url_parse
+from flask_login import login_user, logout_user, current_user
 
 from .models.products import Product
 from .models.for_sale import ForSaleItems
@@ -58,4 +60,60 @@ def change_status(stat, uid, pid, time):
 def add_product():
     return render_template('new_products.html')
 
+@bp.route('/add_product_now', methods = ['POST', 'GET'])
+def add_product_current():
+    product_name = request.form.get('new_product_name')
+    product_description = request.form.get('new_product_description')
+    product_category = request.form.get('trans')
+    product_image = request.form.get('new_product_image')
+    if product_name == "" or product_description == "" or product_category == "" or product_category is None or product_image == "":
+        flash("Invalid Product Descriptions")
+        return redirect(url_for('product.add_product'))
+    try:
+        product_price = float(request.form.get('new_product_price'))
+        product_quantity = int(request.form.get('new_product_quantity'))
+    except ValueError:
+        flash("Invalid quantity or price input")
+        return redirect(url_for('product.add_product'))
+    if product_price < 0 or product_quantity < 0:
+        flash("Invalid quantity or price input")
+        return redirect(url_for('product.add_product'))
+    pid = Product.add_new_product(product_name, product_description, product_category, 1, product_image, True)
+    if pid is None:
+        flash("Invalid Name. Already Exists")
+        return redirect(url_for('product.add_product'))
+    ForSaleItems.add_new_sale(pid, current_user.id, product_quantity, product_price)
+    return redirect(url_for('users.see_seller_products'))
+
+
+@bp.route('/product_edit/<pid>', methods = ['POST', 'GET'])
+def edit_product_info(pid):
+    product_info = Product.get(pid)
+    seller_info = ForSaleItems.get_prod_seller_info(pid, current_user.id)
+    return render_template('edit_product_info.html', product = product_info, seller = seller_info)
+
+@bp.route('/update_product_now/<pid>', methods = ['POST', 'GET'])
+def update_product_info(pid):
+    product_name = request.form.get('new_product_name')
+    product_description = request.form.get('new_product_description')
+    product_category = request.form.get('trans')
+    product_image = request.form.get('new_product_image')
+    product_info = Product.get(pid)
+    if product_category is None:
+        product_category = product_info.category
+    if product_name == "" or product_description == "" or product_category == "" or product_image == "":
+        flash("Invalid Product Descriptions")
+        return redirect(url_for('product.edit_product_info', pid = pid))
+    try:
+        product_price = float(request.form.get('new_product_price'))
+        product_quantity = int(request.form.get('new_product_quantity'))
+    except ValueError:
+        flash("Invalid quantity or price input")
+        return redirect(url_for('product.edit_product_info', pid = pid))
+    if product_price < 0 or product_quantity < 0:
+        flash("Invalid quantity or price input")
+        return redirect(url_for('product.edit_product_info', pid = pid))
+    Product.update_product(pid, product_name, product_description, product_category, product_image, 1, True)
+    ForSaleItems.update_sale(pid, current_user.id, product_price, product_quantity)
+    return redirect(url_for('users.see_seller_products'))
 

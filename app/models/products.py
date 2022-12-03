@@ -23,6 +23,16 @@ LIMIT :k
         return [Product(*row) for row in rows]
 
     @staticmethod
+    def update_product(pid, name, description, category, images, rating, available):
+        rows = app.db.execute('''
+UPDATE Products
+SET id = :pid, name = :name, descriptions = :description, category = :category, images = :images, rating = :rating, available = :available
+WHERE id = :pid
+''',
+                            pid = pid, name = name, description = description, category = category, images = images, rating = rating, available = available)
+        return
+
+    @staticmethod
     def get_name(id):
         name = app.db.execute('''
 SELECT name
@@ -62,6 +72,24 @@ FROM Products
 ORDER BY rating DESC
 ''')
         return [Product(*row) for row in rows]
+
+    @staticmethod
+    def add_new_product(name, description, category, rating, images, available):
+        try:
+            rows = app.db.execute("""
+INSERT INTO Products(name, category, descriptions, images, rating, available)
+VALUES(:name, :category, :description, :images, :rating, :available)
+RETURNING id
+""",
+                    name = name, description = description, category = category, rating = rating, images = images, available = available)
+            id = rows[0][0]
+            return id
+        except Exception as e:
+            # likely email already in use; better error checking and reporting needed;
+            # the following simply prints the error to the console:
+            print(str(e))
+            return None
+
 
     @staticmethod
     def sort_ratings_asc():
