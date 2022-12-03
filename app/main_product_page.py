@@ -1,11 +1,13 @@
 from flask import render_template, redirect, url_for, flash, request
-from flask_login import current_user
 import datetime
 
 from .models.products import Product
 from .models.purchase import Purchase
 
 from flask import Blueprint
+from flask_paginate import Pagination
+
+
 bp = Blueprint('main_product_page', __name__)
 
 order_prop= "No Simple"
