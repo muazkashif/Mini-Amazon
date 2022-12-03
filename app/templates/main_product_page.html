@@ -114,6 +114,7 @@
     }
 
     .pagination-page-info {
+    position:relative;
     padding: .6em;
     padding-left: 0;
     width: 40em;
@@ -122,13 +123,16 @@
     font-size: 12px;
 }
   .pagination-page-info b {
+    position:relative;
     color: black;
     background: #6aa6ed;
     padding-left: 2px;
     padding: .1em .25em;
     font-size: 150%;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
 }
-
 
 </style>
 
@@ -212,32 +216,6 @@
       {{pagination.info}}
       {{pagination.links}}
 
-
-      <!-- <h3>Current Page: {{curr_page}}</h3>
-
-     <form action="/index/{{next_page}}">
-    <button name = "Next" 
-            button style = "position:relative;align-self:center;height:70px;width:200px;margin:5px;" 
-            type = "submit" 
-            class = "button"
-            value = "Next Page">Next Page</button>
-      </form>
-      
-  {% if check %}
-      <form action="/index/{{prev_page}}">
-        <button name = "Prev" 
-                button style = "position:relative;align-self:center;height:70px;width:200px;margin:5px;" 
-                type = "submit" 
-                class = "button"
-                value = "Previous Page">Previous Page</button>
-        </form>
-    {% endif %}
-
-  <form method="POST" action="/page_jump">
-    <input type="text" name="Go To Page">
-    <input type="submit" value="Go To Page">
-
-</form> -->
 
     </body>
 

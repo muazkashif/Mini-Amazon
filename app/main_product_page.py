@@ -29,7 +29,7 @@ def jump():
     return redirect(url_for('main_product_page.index', k = page))
 
 @bp.route('/index', methods = ["POST", "GET"])
-def fix_index():
+def index():
     search = False
     # q = request.args.get('q')
     # if q:
@@ -39,48 +39,48 @@ def fix_index():
     products_for_sale = ForSaleItems.get_all_products_for_sale()
     pagination_prods = get_prods(offset=offset,per_page=per_page)
     pagination = Pagination(page=page, total=len(products_for_sale), search=search, per_page=per_page)
-    return render_template('main_product_page.html', avail_products = pagination_prods, css_framework='bootstrap4', pagination = pagination) 
+    return render_template('main_product_page.html', avail_products = pagination_prods, css_framework='bootstrap3', pagination = pagination) 
 
 def get_prods(offset, per_page):
     products_for_sale = ForSaleItems.get_all_products_for_sale()
     return products_for_sale[offset: offset+per_page]
     
-@bp.route('/index/<k>', methods = ["POST", "GET"])
-def index(k):
-    # get all available products for sale:
-    check = True
-    if k != "1":
-        offset = ((int(k) - 1) * 20) + 1
-    else:
-        offset = 0
-        check = False
-    products = Product.get_all_offset(True, offset,order_prop,order_by) 
-    if products is None:
-        flash('Invalid id')
-        return redirect(url_for('main_product_page.index', k = 1))
-    # find the products current user has bought:
-    logged_in = False
-    if current_user.is_authenticated:
-        purchases = Purchase.get_all_by_uid_since(
-            current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
-        logged_in = True
-        return render_template('main_product_page.html',
-                           avail_products=products,
-                           curr_page = int(k),
-                           next_page = (int(k) + 1),
-                           prev_page = (int(k) - 1),
-                           purchase_history=purchases, logged_in=logged_in,purchase_history_len=len(purchases),
-                           check = check)
-    else:
-        purchases = None
-    # render the page by adding information to the index.html file
-        return render_template('main_product_page.html',
-                           avail_products=products,
-                           curr_page = int(k),
-                           next_page = (int(k) + 1),
-                           prev_page = (int(k) - 1),
-                           purchase_history=purchases, logged_in=logged_in,purchase_history_len=0,
-                           check = check)
+# @bp.route('/index/<k>', methods = ["POST", "GET"])
+# def index(k):
+#     # get all available products for sale:
+#     check = True
+#     if k != "1":
+#         offset = ((int(k) - 1) * 20) + 1
+#     else:
+#         offset = 0
+#         check = False
+#     products = Product.get_all_offset(True, offset,order_prop,order_by) 
+#     if products is None:
+#         flash('Invalid id')
+#         return redirect(url_for('main_product_page.index', k = 1))
+#     # find the products current user has bought:
+#     logged_in = False
+#     if current_user.is_authenticated:
+#         purchases = Purchase.get_all_by_uid_since(
+#             current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
+#         logged_in = True
+#         return render_template('main_product_page.html',
+#                            avail_products=products,
+#                            curr_page = int(k),
+#                            next_page = (int(k) + 1),
+#                            prev_page = (int(k) - 1),
+#                            purchase_history=purchases, logged_in=logged_in,purchase_history_len=len(purchases),
+#                            check = check)
+#     else:
+#         purchases = None
+#     # render the page by adding information to the index.html file
+#         return render_template('main_product_page.html',
+#                            avail_products=products,
+#                            curr_page = int(k),
+#                            next_page = (int(k) + 1),
+#                            prev_page = (int(k) - 1),
+#                            purchase_history=purchases, logged_in=logged_in,purchase_history_len=0,
+#                            check = check)
 
 @bp.route('/change_stat/<prop>_<by>', methods = ["POST", "GET"])
 def inc_page(prop,by):
