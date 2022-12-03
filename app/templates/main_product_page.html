@@ -11,6 +11,22 @@
     flex-flow: row wrap;
  }
 
+ .pagination-page-info {
+  padding: .6em;
+  padding-left: 0;
+  width: 40em;
+  margin: .5em;
+  margin-left: 0;
+  font-size: 12px;
+}
+.pagination-page-info b {
+  color: black;
+  background: #6aa6ed;
+  padding-left: 2px;
+  padding: .1em .25em;
+  font-size: 150%;
+}
+
     .v_align{
         display:inline-block;
     }
@@ -172,7 +188,6 @@
 </div>
   </div>
 
-
     {% for product in avail_products %}
     <div class = "v_align">
     <div class = "container">
@@ -194,8 +209,8 @@
 </div>
 </div>
       {% endfor %}
-      {{ pagination.info }}
-      {{ pagination.links }}
+      {{pagination.info}}
+      {{pagination.links}}
 
 
       <!-- <h3>Current Page: {{curr_page}}</h3>

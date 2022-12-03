@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request
 import datetime
-from flask_paginate import Pagination, get_page_parameter
+from flask_paginate import Pagination, get_page_parameter,get_page_args
 from flask_login import login_user, logout_user, current_user
 
 from .models.products import Product
@@ -31,14 +31,20 @@ def jump():
 @bp.route('/index', methods = ["POST", "GET"])
 def fix_index():
     search = False
-    q = request.args.get('q')
-    if q:
-        search = True
-    page = request.args.get(get_page_parameter(), type=int, default=1)
+    # q = request.args.get('q')
+    # if q:
+    #     search = True
+    # page = request.args.get(get_page_parameter(), type=int, default=1)
+    page, per_page, offset = get_page_args(get_page_parameter(), per_page=20)
     products_for_sale = ForSaleItems.get_all_products_for_sale()
-    pagination = Pagination(page=page, total=len(products_for_sale), search=search, record_name='products_for_sale', per_page=20)
-    return render_template('main_product_page.html', avail_products = products_for_sale, pagination = pagination) 
+    pagination_prods = get_prods(offset=offset,per_page=per_page)
+    pagination = Pagination(page=page, total=len(products_for_sale), search=search, per_page=per_page)
+    return render_template('main_product_page.html', avail_products = pagination_prods, css_framework='bootstrap4', pagination = pagination) 
 
+def get_prods(offset, per_page):
+    products_for_sale = ForSaleItems.get_all_products_for_sale()
+    return products_for_sale[offset: offset+per_page]
+    
 @bp.route('/index/<k>', methods = ["POST", "GET"])
 def index(k):
     # get all available products for sale:
