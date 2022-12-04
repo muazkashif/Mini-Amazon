@@ -104,9 +104,12 @@ WHERE pid = :pid AND sid = :sid
 
     @staticmethod
     def add_new_sale(pid, sid, quantity, price):
-        rows = app.db.execute("""
+        try:
+            rows = app.db.execute("""
 INSERT INTO ForSaleItems(pid, sid, quantity, price)
 VALUES(:pid, :sid, :quantity, :price)
 """,
                     pid = pid, sid = sid, quantity = quantity, price = price)
-        return None
+            return True
+        except Exception as e:
+            return None

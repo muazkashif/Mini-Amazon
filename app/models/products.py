@@ -134,7 +134,7 @@ WHERE id = :id
         rows = app.db.execute('''
 SELECT id, name, descriptions, rating, images, available, category
 FROM Products
-WHERE available = :available
+ORDER BY name
 ''',
                               available=available)
         return [Product(*row) for row in rows]
@@ -204,6 +204,17 @@ WHERE category = :cat
 ''',
                               cat=cat)
         return [Product(*row) for row in rows]
+
+    @staticmethod
+    def get_all_search(search):
+        rows = app.db.execute('''
+SELECT id, name, descriptions, rating, images, available, category
+FROM Products
+WHERE name LIKE concat('%',:search,'%') OR descriptions LIKE concat('%',:search,'%')
+ORDER BY name
+''',
+                              search = search)
+        return [Product(*row) for row in rows] if rows else None
     
     @staticmethod
     def update_rating(pid,avg):
