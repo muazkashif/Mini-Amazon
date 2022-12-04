@@ -44,7 +44,7 @@ def index():
     if products_for_sale is None:
         check = True
         return render_template('/main_product_page.html', check = check, search_term = search_sort)
-    pagination = Pagination(page=page, total=len(products_for_sale), search=search, per_page=per_page)
+    pagination = Pagination(page=page, total=len(products_for_sale), search=False, per_page=per_page)
     return render_template('main_product_page.html', avail_products = pagination_prods, css_framework='bootstrap3', pagination = pagination, search_term = search_sort, check = check) 
 
 def get_prods(search, term, offset, per_page):
