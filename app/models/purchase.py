@@ -2,11 +2,12 @@ from flask import current_app as app
 from datetime import datetime
 
 class Purchase:
-    def __init__(self, uid, sid, pid, quantity, time_purchased, order_status, rating, review):
+    def __init__(self, uid, sid, pid, quantity, price, time_purchased, order_status, rating, review):
         self.uid = uid
         self.sid = sid
         self.pid = pid
         self.quantity = quantity
+        self.price = price
         self.time_purchased = time_purchased
         self.order_status = order_status
         self.rating = rating
@@ -27,14 +28,14 @@ class Purchase:
             return None
 
     @staticmethod
-    def add(uid, pid, sid, quantity, time_purchased):
+    def add(uid, pid, sid, quantity, price, time_purchased):
         try:
             app.db.execute("""
-INSERT INTO Transactions(uid, pid, sid, quantity, time_purchased, order_status)
-VALUES(:uid, :pid, :sid, :quantity, :time_purchased, :order_status)
+INSERT INTO Transactions(uid, pid, sid, quantity, price, time_purchased, order_status)
+VALUES(:uid, :pid, :sid, :quantity, :price, :time_purchased, :order_status)
 RETURNING uid
 """,
-                                  uid=uid, pid=pid, sid=sid, quantity=quantity, time_purchased=time_purchased, order_status="Processing")
+                                  uid=uid, pid=pid, sid=sid, quantity=quantity, price=price, time_purchased=time_purchased, order_status="Processing")
             return None
         except Exception as e:
             # likely email already in use; better error checking and reporting needed;
@@ -55,7 +56,7 @@ WHERE id = :id
     @staticmethod
     def get_all_by_uid_since(uid, since):
         rows = app.db.execute('''
-SELECT uid, sid, pid, quantity, time_purchased, order_status, NULL, NULL
+SELECT uid, sid, pid, quantity, price, time_purchased, order_status, NULL, NULL
 FROM Transactions
 WHERE uid = :uid
 AND time_purchased >= :since
@@ -68,7 +69,7 @@ ORDER BY time_purchased DESC
     @staticmethod
     def get_order(uid, time_purchased):
         rows = app.db.execute('''
-SELECT uid, sid, pid, quantity, time_purchased, order_status, NULL, NULL
+SELECT uid, sid, pid, quantity, price, time_purchased, order_status, NULL, NULL
 FROM Transactions
 WHERE uid = :uid
 AND time_purchased = :time_purchased
@@ -80,7 +81,7 @@ AND time_purchased = :time_purchased
     @staticmethod
     def get_all_purchases_by_uid(uid):
         rows = app.db.execute('''
-SELECT T.uid, T.sid, T.pid, T.quantity, T.time_purchased, T.order_status, R.rating, R.review
+SELECT T.uid, T.sid, T.pid, T.quantity, T.price, T.time_purchased, T.order_status, R.rating, R.review
 FROM Transactions T LEFT JOIN 
 (SELECT uid, pid, rating, review
 FROM Ratings
@@ -94,7 +95,7 @@ ORDER BY T.time_purchased DESC
     @staticmethod
     def get_all():
         rows = app.db.execute('''
-SELECT uid, sid, pid, quantity, time_purchased, order_status, NULL, NULL
+SELECT uid, sid, pid, quantity, price, time_purchased, order_status, NULL, NULL
 FROM Transactions
 ORDER BY time_purchased DESC
 ''')
