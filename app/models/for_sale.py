@@ -40,11 +40,25 @@ WHERE ForSaleItems.pid = Products.id
     @staticmethod
     def get_all_products_for_sale_search(search):
         rows = app.db.execute('''
-SELECT DISTINCT *
-FROM ForSaleItems, Products
-WHERE ForSaleItems.pid = Products.id AND (name LIKE concat('%',:search,'%') OR descriptions LIKE concat('%',:search,'%'))
-''',
+        SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+        FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+        WHERE Products.id = S.pid AND (name LIKE concat('% ',:search,' %') OR descriptions LIKE concat('% ',:search,' %'))
+        ''',
                         search = search)
+        
+        # '''
+        # SELECT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+        # FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+        # WHERE available = :available AND Products.id = S.pid
+        # LIMIT 20
+        # OFFSET :k 
+        # '''
+        
+        # '''
+        # SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+        # FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+        # WHERE Products.id = S.pid AND (name LIKE concat('%',:search,'%') OR descriptions LIKE concat('%',:search,'%'))
+        # '''
         return rows if rows else None
         
 
