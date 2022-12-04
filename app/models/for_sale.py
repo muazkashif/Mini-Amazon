@@ -42,7 +42,7 @@ WHERE ForSaleItems.pid = Products.id
         rows = app.db.execute('''
         SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
         FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
-        WHERE Products.id = S.pid AND (name LIKE concat('% ',:search,' %') OR descriptions LIKE concat('% ',:search,' %'))
+        WHERE Products.id = S.pid AND (name LIKE concat('%',:search,'%') OR descriptions LIKE concat('%',:search,'%'))
         ''',
                         search = search)
         
