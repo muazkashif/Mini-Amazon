@@ -39,6 +39,17 @@ FROM Sellers
 """)
         return [Seller(*row).id for row in rows]
 
+
+    
+    @staticmethod
+    def update_status(pid, sid, time, uid):
+        rows = app.db.execute("""
+SELECT id
+FROM Sellers
+""")
+        return 
+
+
     @staticmethod
     def add_seller_relation(id):
         try:

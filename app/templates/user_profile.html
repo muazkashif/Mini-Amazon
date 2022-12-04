@@ -92,17 +92,17 @@
                                                 <p>{{info.date}}</p>
                                             </div>
                                         </div>
-                                        <div class = "row">
-                                                <form action="/user_update_form">
-                                                    <button button style="margin:10px;" name = update_info >Update Info</button>
-                                                  </form>
-                                        </div>
+                    
+            
+                                    
                             </div>
                         </div>
                     </div>
                 </div>
             </form>           
         </div>
+
+        
 
         <div class = "wrapper-funds">
         <h5>Add Funds:</h5>
@@ -112,6 +112,7 @@
         </form>
         </div>
 
+<<<<<<< HEAD
         <div class = "wrapper-funds">
         <h5>Withdraw Funds:</h5>
         <form method="POST" action="/withdraw">
@@ -120,6 +121,11 @@
         </form>
         </div>
 
+=======
+        <form action="/user_update_form">
+            <button button style="margin:10px;" name = update_info >Update Info</button>
+          </form>
+>>>>>>> main_broken
 
           {% if not sell %}
           <form method="POST" action="/add_seller">

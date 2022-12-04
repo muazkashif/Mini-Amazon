@@ -17,6 +17,17 @@ class User(UserMixin):
         self.balance = balance
         self.date = date
 
+
+    @staticmethod
+    def get_balance(id):
+        rows = app.db.execute('''
+SELECT balance
+FROM Users 
+WHERE id = :id
+''',
+                              id=id)
+        return rows[0][0]
+
     @staticmethod
     def get_by_auth(email, password):
         rows = app.db.execute("""

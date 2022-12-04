@@ -24,7 +24,6 @@ CREATE TABLE Products (
     category VARCHAR(255) NOT NULL,
     descriptions VARCHAR(8000) UNIQUE NOT NULL,
     images VARCHAR(255) NOT NULL,
-    price DECIMAL(12,2) NOT NULL,
     rating DECIMAL(3,2),
     available BOOLEAN DEFAULT TRUE
 );
@@ -33,6 +32,7 @@ CREATE TABLE ForSaleItems (
     pid INT NOT NULL REFERENCES Products(id),
     sid INT NOT NULL REFERENCES Sellers(id),
     quantity INT NOT NULL,
+    price DECIMAL(12,2) NOT NULL,
     PRIMARY KEY (pid, sid)
 );
 

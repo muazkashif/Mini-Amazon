@@ -11,17 +11,18 @@ class Rating:
         self.rating = rating
         self.review = review
         self.time_reviewed = time_reviewed
+    
 
     @staticmethod
-    def get(uid):
+    def get_user_ratings(uid):
         rows = app.db.execute('''
-SELECT uid, sid, pid, rating, review, time_reviewed
-FROM Ratings
+SELECT uid, sid, pid, Ratings.rating, review, time_reviewed, name
+FROM Ratings JOIN Products ON Ratings.pid=Products.id
 WHERE uid = :uid
 ORDER BY time_reviewed DESC
 ''',
                               uid=uid)
-        return [Rating(*row) for row in rows]
+        return rows
 
     @staticmethod
     def get_all():
@@ -61,6 +62,7 @@ ORDER BY time_reviewed DESC
 SELECT uid, sid, pid, rating, review, time_reviewed
 FROM Ratings
 WHERE pid = :pid
+ORDER BY time_reviewed DESC
 ''',
                                 pid = pid)
         return [Rating(*row) for row in rows]
@@ -103,4 +105,58 @@ RETURNING uid
 """,
                               uid=uid, sid=sid, pid=pid,ratingvalue=ratingvalue,reviewvalue=reviewvalue,time=time)
         # return [Rating(*row) for row in rows]
+        
+    @staticmethod
+    def get_ratings_for_avg(pid):
+        rows = app.db.execute('''
+SELECT AVG(rating) AS avrg
+FROM Ratings
+WHERE pid = :pid
+''',
+                              pid=pid)
+        avg = rows[0][0]
+        return avg
     
+    @staticmethod
+    def get_number_of_ratings(pid):
+        rows = app.db.execute('''
+SELECT COUNT(rating) AS cnt
+FROM Ratings
+WHERE pid = :pid
+''',
+                              pid=pid)
+        cnt = rows[0][0]
+        return cnt
+
+    @staticmethod
+    def get_seller_ratings(sid):
+        rows = app.db.execute('''
+SELECT *
+FROM Ratings, Products
+WHERE sid = :sid AND pid = id
+ORDER BY time_reviewed DESC
+''',
+                              sid=sid)
+        return rows if rows else None
+    
+    @staticmethod
+    def delete_review(uid,pid):
+        rows = app.db.execute('''
+DELETE FROM Ratings
+WHERE uid = :uid and pid = :pid
+''',
+                              uid=uid,pid=pid)
+        return
+
+    @staticmethod
+    def get_ratings_seller_avg(sid):
+        rows = app.db.execute('''
+SELECT AVG(rating) AS avrg
+FROM Ratings
+WHERE sid = :sid
+''',
+                              sid = sid)
+        avg = rows[0][0]
+        return avg if rows else None
+
+   

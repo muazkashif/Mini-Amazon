@@ -11,6 +11,22 @@
     flex-flow: row wrap;
  }
 
+ .pagination-page-info {
+  padding: .6em;
+  padding-left: 0;
+  width: 40em;
+  margin: .5em;
+  margin-left: 0;
+  font-size: 12px;
+}
+.pagination-page-info b {
+  color: black;
+  background: #6aa6ed;
+  padding-left: 2px;
+  padding: .1em .25em;
+  font-size: 150%;
+}
+
     .v_align{
         display:inline-block;
     }
@@ -97,6 +113,26 @@
     width:100%;
     }
 
+    .pagination-page-info {
+    position:relative;
+    padding: .6em;
+    padding-left: 0;
+    width: 40em;
+    margin: .5em;
+    margin-left: 0;
+    font-size: 12px;
+}
+  .pagination-page-info b {
+    position:relative;
+    color: black;
+    background: #6aa6ed;
+    padding-left: 2px;
+    padding: .1em .25em;
+    font-size: 150%;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
 
 </style>
 
@@ -104,6 +140,12 @@
 <br><br>
 
 <body>
+
+  <form class = "search_existing" method="POST" action="/index"  style="text-align: center;">
+    <input type="text" placeholder = "Search..." {% if search_term != None %} value = "{{search_term}}" {% endif %} name="sort_search_main" style="width:600px;margin:10px;">
+   <input type="submit" value="Search">
+</form>
+
     
     <div class = "header">
         <h1>Products</h1>
@@ -116,9 +158,9 @@
           <h5>Ratings</h5>
           <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
               <option selected="selected"></option>
-              <option value="/index">No Sort</option>
-              <option value="/index/rate/ASC">Worst Rated Items</option>
-              <option value="/index/rate/DESC">Top Rated Items</option>
+              <option value="/change_stat/no_simple">No Sort</option>
+              <option value="/change_stat/rate_ASC">Worst Rated Items</option>
+              <option value="/change_stat/rate_DESC">Top Rated Items</option>
           </select>
       </form>
 
@@ -128,9 +170,9 @@
         <h5>Price</h5>
         <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
             <option selected="selected"></option>
-            <option value="/index">No Sort</option>
-            <option value="/index/price/ASC">Least Expensive</option>
-            <option value="/index/price/DESC">Most Expensive</option>
+            <option value="/change_stat/no_simple">No Sort</option>
+            <option value="/change_stat/price_ASC">Least Expensive</option>
+            <option value="/change_stat/price_DESC">Most Expensive</option>
         </select>
     </form>
 
@@ -156,8 +198,11 @@
 </div>
   </div>
 
-  
+  {% if check %}
+  <h1 style="text-align: center;">No Results</h1>
+  {% endif %}
 
+  {% if not check %}
     {% for product in avail_products %}
     <div class = "v_align">
     <div class = "container">
@@ -166,11 +211,11 @@
         <img class="card-img-top" src={{product.images}} onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'" style='width: 320px; height: 200px; object-fit: scale-down;'>
         <div class="card-body">
           <h5 class="card-title">{{product.name}}</h5>
-          <p class="card-text">{{product.description}}</p>
-          <p class = "price">${{product.price}}</p>
+          <p class="card-text">{{product.descriptions}}</p>
+          <p class = "price">Avg Price: ${{product.avg}}</p>
           <p class = "rating">Rating: {{product.rating}}/5</p>
           <p class = "Category">Category: {{product.category}}</p>
-          <form action="/ind_prod/{{product.id}}" method = "POST" value = product name = "prod">
+          <form action="/ind_prod/{{product.id}}/main" method = "POST" value = product name = "prod">
             <input type="submit" value = "See more"/>  
         </form>
         </div>
@@ -179,33 +224,10 @@
 </div>
 </div>
       {% endfor %}
+      {{pagination.info}}
+      {{pagination.links}}
 
-
-      <h3>Current Page: {{curr_page}}</h3>
-
-     <form action="/index/{{next_page}}">
-    <button name = "Next" 
-            button style = "position:relative;align-self:center;height:70px;width:200px;margin:5px;" 
-            type = "submit" 
-            class = "button"
-            value = "Next Page">Next Page</button>
-      </form>
-      
-  {% if check %}
-      <form action="/index/{{prev_page}}">
-        <button name = "Prev" 
-                button style = "position:relative;align-self:center;height:70px;width:200px;margin:5px;" 
-                type = "submit" 
-                class = "button"
-                value = "Previous Page">Previous Page</button>
-        </form>
-    {% endif %}
-
-  <form method="POST" action="/page_jump">
-    <input type="text" name="Go To Page">
-    <input type="submit" value="Go To Page">
-
-</form>
+{% endif %}
 
     </body>
 

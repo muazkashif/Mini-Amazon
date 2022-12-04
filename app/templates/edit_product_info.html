@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .updating_info{
+        position:absolute;
+        left:20px; 
+        margin:10px;
+        padding: 10px;
+        height:20px; 
+    }
+
+    .return_no_edit{
+        position:absolute;
+        bottom:12%;
+        left: 2.5%;
+    }
+    .updating_info edit_submit{
+        position:absolute;
+        padding: 10px;
+    }
+
+</style>
+
+<br><br>
+<form class = "updating_info" method="POST" action="/update_product_now/{{product.id}}">
+<h3> <b>Update Product Information (Changes Listing for All Sellers):</b></h3>
+  <h5>Product Name:</h5>
+  <input type="text" value= "{{product.name}}"  style="width:600px;margin:10px;" name="new_product_name">
+  &nbsp
+  <h5>Product Description:</h5>
+  <input type="text" value="{{product.description}}" style="width:600px;margin:10px;" name="new_product_description">
+  <h5>Product Category:</h5>
+  <TD class = "select", value = "{{product_category}}"> 
+    <select name="trans" style="width:600px;margin:10px;">
+            <option value="{{product.category}}" selected default disabled hidden>{{product.category}}</option>
+            <option value="Books">Books</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Kitchenware">Kitchenware</option>
+            <option value="Pet">Pet</option>
+            <option value="School">School</option>
+            <option value="Sports">Sports</option>
+            <option value="Toiletries">Toiletries</option>
+            <option value="Travel">Travel</option>
+    </select>
+</tr>
+  <h5>Product Image Link:</h5>
+  <input type="text" value="{{product.images}}" style="width:600px;margin:10px;" name="new_product_image">
+<h3 style = "position:relative;left:0%;margin:15px;"> <b> Update Personal Product Information (Only Affects You): </b></h3>
+<h5>Product Price ($):</h5>
+  <input type="text" value="{{seller.price}}" style="width:600px;margin:10px;" name="new_product_price">
+
+  <h5>Product Quantity:</h5>
+  <input type="text" value="{{seller.quantity}}" style="width:600px;margin:10px;" name="new_product_quantity">
+    <div class = "edit_submit" style = right:50px;margin:10px>
+        <input type="submit" value="Update">
+    </div>
+    
+</form>
+<div class = "return_no_edit">
+<form action="/seller_products">
+    <button name = "B2" 
+            type="submit" 
+            class = "button"
+            value = "back seller">Back Without Changing</button>
+    </form>
+</div>
+
+<br><br>
+
+{% endblock %}
