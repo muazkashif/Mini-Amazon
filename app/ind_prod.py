@@ -35,21 +35,23 @@ bp = Blueprint('ind_prod', __name__)
 @bp.route('/ind_prod/<k>/<sid>', methods = ["POST", "GET"])
 def show_product(k, sid):
     prod = Product.get(k)
-    ratings = Rating.get_prod_reviews(k)
+    prod_ratings = Rating.get_prod_reviews(k)
     sellers = ForSaleItems.get_sellers_for_product(k)
     if sid == "main":
         seller_info = "None"
     else:
         seller_info = ForSaleItems.get_prod_seller_info(k, sid)
+        sid = int(sid)
     if (current_user.is_authenticated and len(Purchase.get_quantity_purchased(current_user.id,k))>0):
         review_button="enabled"
         return render_template('ind_product.html',
                            prod_items=prod,
-                           ratings=ratings,
+                           ratings=prod_ratings,
                            sellers = sellers,
                            review_button=review_button,
                            seller_info = seller_info,
                            current_uid=current_user.id,
+                           sid = sid,
                            ratingsNumber=Rating.get_number_of_ratings(k))
     else:
         if (current_user.is_authenticated):
@@ -59,11 +61,12 @@ def show_product(k, sid):
         review_button="disabled"
         return render_template('ind_product.html',
                            prod_items=prod,
-                           ratings=ratings,
+                           ratings=prod_ratings,
                            sellers = sellers,
                            review_button=review_button,
                            seller_info = seller_info,
                            current_uid=curr_uid,
+                           sid = sid,
                            ratingsNumber=Rating.get_number_of_ratings(k))
 
 
