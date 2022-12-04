@@ -41,6 +41,7 @@ def show_product(k, sid):
         seller_info = "None"
     else:
         seller_info = ForSaleItems.get_prod_seller_info(k, sid)
+        sid = int(sid)
     if (current_user.is_authenticated and len(Purchase.get_quantity_purchased(current_user.id,k))>0):
         review_button="enabled"
         return render_template('ind_product.html',
@@ -50,6 +51,7 @@ def show_product(k, sid):
                            review_button=review_button,
                            seller_info = seller_info,
                            current_uid=current_user.id,
+                           sid = sid,
                            ratingsNumber=Rating.get_number_of_ratings(k))
     else:
         if (current_user.is_authenticated):
@@ -64,6 +66,7 @@ def show_product(k, sid):
                            review_button=review_button,
                            seller_info = seller_info,
                            current_uid=curr_uid,
+                           sid = sid,
                            ratingsNumber=Rating.get_number_of_ratings(k))
 
 

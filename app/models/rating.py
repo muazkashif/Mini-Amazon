@@ -158,4 +158,5 @@ WHERE sid = :sid
                               sid = sid)
         avg = rows[0][0]
         return avg if rows else None
-    
+
+   

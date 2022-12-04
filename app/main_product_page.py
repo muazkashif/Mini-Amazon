@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for, flash, request
 import datetime
 from flask_paginate import Pagination, get_page_parameter,get_page_args
 from flask_login import login_user, logout_user, current_user
+from flask import current_app as app
 
 from .models.products import Product
 from .models.purchase import Purchase
@@ -30,19 +31,46 @@ def jump():
 
 @bp.route('/index', methods = ["POST", "GET"])
 def index():
+    check = False
     search = False
-    # q = request.args.get('q')
-    # if q:
-    #     search = True
-    # page = request.args.get(get_page_parameter(), type=int, default=1)
+    search_sort= request.form.get('sort_search_main')
     page, per_page, offset = get_page_args(get_page_parameter(), per_page=20)
-    products_for_sale = ForSaleItems.get_all_products_for_sale()
-    pagination_prods = get_prods(offset=offset,per_page=per_page)
-    pagination = Pagination(page=page, total=len(products_for_sale), search=search, per_page=per_page)
-    return render_template('main_product_page.html', avail_products = pagination_prods, css_framework='bootstrap3', pagination = pagination) 
+    products_for_sale = ForSaleItems.get_all_products_for_sale() 
+    pagination_prods = get_prods(False, "", offset=offset, per_page=per_page)
+        
+    if products_for_sale is None:
+        check = True
+        return render_template('/main_product_page.html', check = check, search_term = search_sort)
+    if search_sort is None or search_sort == "":
+        pagination = Pagination(page=page, total=len(products_for_sale), search=search, per_page=per_page)
+        return render_template('main_product_page.html', avail_products = pagination_prods, css_framework='bootstrap3', pagination = pagination, search_term = search_sort, check = check) 
+    else:
+        return redirect(url_for('main_product_page.search', search= request.form.get('sort_search_main')))
 
-def get_prods(offset, per_page):
-    products_for_sale = ForSaleItems.get_all_products_for_sale()
+@bp.route('/search/<search>', methods = ["POST", "GET"])
+def search(search):
+    # search= request.form.get('sort_search_main')
+    check = False
+    page, per_page, offset = get_page_args(get_page_parameter(), per_page=20)
+    
+    products_for_sale = ForSaleItems.get_all_products_for_sale_search(search) 
+    # print(len(products_for_sale))
+    pagination_prods = get_prods(True, search, offset=offset, per_page=per_page)
+        
+    if products_for_sale is None:
+        check = True
+        return render_template('/main_product_page.html', check = check, search_term = search)
+    pagination = Pagination(page=page, total=len(products_for_sale), search=False, per_page=per_page)
+    return render_template('main_product_page.html', avail_products = pagination_prods, css_framework='bootstrap3', pagination = pagination, search_term = search, check = check) 
+    
+    
+def get_prods(search, term, offset, per_page):
+    if search:
+        products_for_sale = ForSaleItems.get_all_products_for_sale_search(term)
+        if products_for_sale is None:
+            return None
+    else:
+        products_for_sale = ForSaleItems.get_all_products_for_sale()
     return products_for_sale[offset: offset+per_page]
     
 # @bp.route('/index/<k>', methods = ["POST", "GET"])

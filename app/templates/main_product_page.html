@@ -140,6 +140,12 @@
 <br><br>
 
 <body>
+
+  <form class = "search_existing" method="POST" action="/index"  style="text-align: center;">
+    <input type="text" placeholder = "Search..." {% if search_term != None %} value = "{{search_term}}" {% endif %} name="sort_search_main" style="width:600px;margin:10px;">
+   <input type="submit" value="Search">
+</form>
+
     
     <div class = "header">
         <h1>Products</h1>
@@ -192,6 +198,11 @@
 </div>
   </div>
 
+  {% if check %}
+  <h1 style="text-align: center;">No Results</h1>
+  {% endif %}
+
+  {% if not check %}
     {% for product in avail_products %}
     <div class = "v_align">
     <div class = "container">
@@ -216,6 +227,7 @@
       {{pagination.info}}
       {{pagination.links}}
 
+{% endif %}
 
     </body>
 
