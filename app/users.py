@@ -136,8 +136,6 @@ def add_seller():
 
 @bp.route('/seller_page', methods = ['POST', 'GET'])
 def see_seller_page():
-    prod = Transaction.get_transactions(current_user.id)
-    return render_template('seller_pers_page.html', prod=prod)
     no_ratings = False
     user_info = User.get(current_user.id)
     transactions = Transaction.get_transactions(current_user.id)
