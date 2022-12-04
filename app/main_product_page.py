@@ -30,19 +30,30 @@ def jump():
 
 @bp.route('/index', methods = ["POST", "GET"])
 def index():
+    check = False
+    search_sort = request.form.get('sort_search_main')
     search = False
-    # q = request.args.get('q')
-    # if q:
-    #     search = True
-    # page = request.args.get(get_page_parameter(), type=int, default=1)
     page, per_page, offset = get_page_args(get_page_parameter(), per_page=20)
-    products_for_sale = ForSaleItems.get_all_products_for_sale()
-    pagination_prods = get_prods(offset=offset,per_page=per_page)
+    if search_sort is None or search_sort == "":
+        products_for_sale = ForSaleItems.get_all_products_for_sale() 
+        pagination_prods = get_prods(False, "", offset=offset, per_page=per_page)
+        search_sort = "None"
+    else:
+        products_for_sale = ForSaleItems.get_all_products_for_sale_search(search_sort)
+        pagination_prods = get_prods(True, search_sort, offset=offset,per_page=per_page)
+    if products_for_sale is None:
+        check = True
+        return render_template('/main_product_page.html', check = check, search_term = search_sort)
     pagination = Pagination(page=page, total=len(products_for_sale), search=search, per_page=per_page)
-    return render_template('main_product_page.html', avail_products = pagination_prods, css_framework='bootstrap3', pagination = pagination) 
+    return render_template('main_product_page.html', avail_products = pagination_prods, css_framework='bootstrap3', pagination = pagination, search_term = search_sort, check = check) 
 
-def get_prods(offset, per_page):
-    products_for_sale = ForSaleItems.get_all_products_for_sale()
+def get_prods(search, term, offset, per_page):
+    if search:
+        products_for_sale = ForSaleItems.get_all_products_for_sale_search(term)
+        if products_for_sale is None:
+            return None
+    else:
+        products_for_sale = ForSaleItems.get_all_products_for_sale()
     return products_for_sale[offset: offset+per_page]
     
 # @bp.route('/index/<k>', methods = ["POST", "GET"])
