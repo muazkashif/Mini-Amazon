@@ -14,9 +14,9 @@ num_ratings = 5000
 
 
 
-file_path = "../generated/"
+file_path = "../data/"
 
-categories = ["Travel", "Personal_Care", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
+categories = ["Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
 Faker.seed(0)
 fake = Faker()
@@ -255,7 +255,8 @@ def gen_products(num_products, ratings_prods):
                     else:
                         rating = 0
                     descriptions = row[10]
-                    category = row[4].split(">>")[0][2:].split("\"]")[0]
+                    #category = row[4].split(">>")[0][2:].split("\"]")[0]
+                    category = fake.random_element(elements = ("Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"))
                     if len(category)>39:
                         category = "Other"
                     images = row[8].split("\"\"")[0][2:].replace('\"','').split(",")[0]

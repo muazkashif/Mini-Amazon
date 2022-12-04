@@ -6,7 +6,7 @@
 <form action="/carte/">
   <button>Clear Cart</button>
 </form>
-<form action="/purchase/">
+<form action="/order/checkout">
   <button>Check Out</button>
 </form>
 <form method="POST" action="/order/">
@@ -29,7 +29,7 @@
               <button value="{{cart_items[i].pid, cart_items[i].sid, cart_items[i].uid}}" name="trash">remove</button>
             </form>
           </td>
-          <td>{{cart_items[i].pid}}</td>
+          <td>{{product_names[i]}}</td>
           <td>{{cart_items[i].sid}}</td>
           <td>{{cart_items[i].quantity}}</td>
           <th scope="col"><input type="checkbox" value="{{cart_items[i].pid, cart_items[i].sid, cart_items[i].quantity}}" name="selectfromcart"></th>

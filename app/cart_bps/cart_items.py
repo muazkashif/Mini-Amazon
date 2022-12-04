@@ -39,15 +39,18 @@ def index():
             items = ForSaleItems.get_all()
             for i in range(len(form)):
                 if int(form[i]) != 0:
-                    quantity_available = ForSaleItems.get_quantity(items[i].pid, items[i].sid)[0][0]
+                    quantity_available = items[i].quantity
                     if int(form[i]) <= quantity_available:
                         Cart.add(current_user.id, items[i].pid, items[i].sid, int(form[i]))
 
     carts = Cart.get_all()
     if current_user.is_authenticated:
         carts = Cart.get(current_user.id)
+        product_names = []
+        for item in carts:
+            product_names.append(Product.get_name(item.pid)[0][0])
         return render_template('carts.html',
-                            cart_items=carts, cart_len=len(carts), logged_in=True)
+                            cart_items=carts, cart_len=len(carts), product_names=product_names,logged_in=True)
     return render_template('carts.html',
                             cart_items=carts)
 

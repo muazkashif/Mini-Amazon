@@ -52,7 +52,7 @@ def update_review(uid,pid):
     Rating.updateReview(uid,pid,reviewvalue,ratingvalue,time)
     avg = Rating.get_ratings_for_avg(pid)
     Product.update_rating(pid,avg)
-    return redirect(url_for('ind_prod.show_product', k = pid))
+    return redirect(url_for('ind_prod.show_product', k = pid, sid = "main"))
 
 @bp.route('/add_review/<uid>break<pid>break<sid>', methods = ['GET', 'POST'])
 def add_review(uid,sid,pid):
