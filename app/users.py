@@ -92,6 +92,7 @@ def user_profile():
             check = True
         user_info = User.get(current_user.id)
         purchases = Purchase.get_all_purchases_by_uid(current_user.id)
+        print(purchases)
         return render_template('user_profile.html',
                             info=user_info, purchase_history=purchases, purchase_history_len=len(purchases), logged_in=True, sell = check)
     return render_template('main_product_page.html')
@@ -190,3 +191,9 @@ def withdraw():
         flash('$' + str(toWithdraw) + ' are being transferred to your connected bank account.')
         User.updateBalance(current_user.id, newBalance)
         return redirect(url_for('users.user_profile'))
+
+@bp.route('/view_order/<uid>break<time_purchased>', methods = ['GET', 'POST'])
+def view_order(uid,time_purchased):
+    purchases = Purchase.get_order(uid, time_purchased)
+    return render_template('orders.html',
+                            purchases=purchases, purchases_len=len(purchases))

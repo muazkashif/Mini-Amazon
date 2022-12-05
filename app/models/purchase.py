@@ -102,6 +102,17 @@ ORDER BY time_purchased DESC
         return [Purchase(*row) for row in rows]
     
     @staticmethod
+    def get_order(uid, time_purchased):
+        rows = app.db.execute('''
+SELECT pid, sid, quantity, price, time_purchased, order_status
+FROM Transactions
+WHERE uid = :uid AND time_purchased = :time_purchased
+ORDER BY time_purchased DESC
+''', 
+                        uid=uid, time_purchased=time_purchased)
+        return [Purchase(*row) for row in rows]
+
+    @staticmethod
     def get_quantity_purchased(uid,pid):
         rows = app.db.execute('''
 SELECT uid, sid, pid, quantity, time_purchased, order_status, NULL, NULL

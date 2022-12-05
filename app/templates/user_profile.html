@@ -155,6 +155,7 @@
       <th scope="col">Rating</th>
       <th scope="col">Review</th>
       <th scope="col">Change Review and Rating</th>
+      <th scope="col">View Full Transaction</th>
     </tr>
   </thead>
   <tbody>
@@ -173,6 +174,11 @@
         <td>
             <form method="POST" action="/write_review/{{purchase_history[i].uid}}break{{purchase_history[i].pid}}">
                 <input type="submit" value="Update review">
+            </form>
+        </td>
+        <td>
+            <form method="POST" action="/view_order/{{purchase_history[i].uid}}break{{purchase_history[i].time_purchased}}">
+                <input type="submit" value="View Order">
             </form>
         </td>
       </tr>
