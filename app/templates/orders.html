@@ -3,7 +3,7 @@
 {% block content %}
 <br><br>
 
-<h2>Purchases:</h2>
+<h2>Detailed Order:</h2>
   <table class='table table-hover table-bordered container'>
     <thead class="thead-dark">
       <tr>
@@ -27,7 +27,7 @@
           <td>{{p.pid}}</td>
           <td>{{p.sid}}</td>
           <td>{{p.quantity}}</td>
-          <td>{{p.price}}</td>
+          <td>${{p.price}}</td>
           <td>{{p.time_purchased}}</td>
           <td>{{p.order_status}}</td>
         </tr>

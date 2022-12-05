@@ -67,21 +67,9 @@ ORDER BY time_purchased DESC
         return [Purchase(*row) for row in rows]
 
     @staticmethod
-    def get_order(uid, time_purchased):
-        rows = app.db.execute('''
-SELECT uid, sid, pid, quantity, price, time_purchased, order_status, NULL, NULL
-FROM Transactions
-WHERE uid = :uid
-AND time_purchased = :time_purchased
-''',
-                              uid=uid,
-                              time_purchased=time_purchased)
-        return [Purchase(*row) for row in rows]
-
-    @staticmethod
     def get_all_purchases_by_uid(uid):
-        rows = app.db.execute('''
-SELECT T.uid, T.sid, T.pid, T.quantity, T.price, T.time_purchased, T.order_status, R.rating, R.review
+        rows = app.db.execute(
+'''SELECT T.uid, T.sid, T.pid, T.quantity, T.price, T.time_purchased, T.order_status, R.rating, R.review
 FROM Transactions T LEFT JOIN 
 (SELECT uid, pid, rating, review
 FROM Ratings
@@ -90,6 +78,7 @@ WHERE T.uid = :uid
 ORDER BY T.time_purchased DESC
 ''',
                               uid=uid)
+        print(rows)
         return [Purchase(*row) for row in rows]
 
     @staticmethod
@@ -104,7 +93,7 @@ ORDER BY time_purchased DESC
     @staticmethod
     def get_order(uid, time_purchased):
         rows = app.db.execute('''
-SELECT pid, sid, quantity, price, time_purchased, order_status
+SELECT uid, sid, pid, quantity, price, time_purchased, order_status, NULL, NULL
 FROM Transactions
 WHERE uid = :uid AND time_purchased = :time_purchased
 ORDER BY time_purchased DESC

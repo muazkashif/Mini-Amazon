@@ -92,7 +92,6 @@ def user_profile():
             check = True
         user_info = User.get(current_user.id)
         purchases = Purchase.get_all_purchases_by_uid(current_user.id)
-        print(purchases)
         return render_template('user_profile.html',
                             info=user_info, purchase_history=purchases, purchase_history_len=len(purchases), logged_in=True, sell = check)
     return render_template('main_product_page.html')
