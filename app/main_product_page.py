@@ -34,14 +34,18 @@ def jump():
 @bp.route('/index/<flag>_<sort>_<direction>', methods = ["POST", "GET"])  
 def index(flag, sort, direction):
     if flag:
+        print(flag + "\n")
+        print(sort)
         if sort == "Rate":
             products_for_sale = ForSaleItems.get_all_products_for_sale_rate(direction)
-            print(products_for_sale)
         elif sort == "Price":
-            if direction == "ASC":
-                products_for_sale = ForSaleItems.get_all_products_for_sale_price(direction)
-            else:
-               products_for_sale = ForSaleItems.get_all_products_for_sale_price(direction)
+            products_for_sale = ForSaleItems.get_all_products_for_sale_price(direction)
+        elif sort == "cat":
+            products_for_sale = ForSaleItems.get_all_products_for_sale_fil_cat(direction)
+        elif sort == "ratef":
+            products_for_sale = ForSaleItems.get_all_products_for_sale_fil_rate(direction)
+        elif sort == "pricef":
+            products_for_sale = ForSaleItems.get_all_products_for_sale_fil_price(direction)
     else:
         products_for_sale = ForSaleItems.get_all_products_for_sale() 
     check = False
@@ -85,6 +89,7 @@ def rating_sort(dir):
     else:
         return redirect(url_for('main_product_page.index'))
 
+
 @bp.route('/sort_price/<dir>', methods = ["POST", "GET"])
 def price_sort(dir):
     if dir == "ASC":
@@ -93,6 +98,18 @@ def price_sort(dir):
         return redirect(url_for('main_product_page.index', flag=True, sort="Price", direction="DESC" ))
     else:
         return redirect(url_for('main_product_page.index'))
+    
+@bp.route('/filter_category/<dir>', methods = ["POST", "GET"])
+def filter_category(dir):
+    return redirect(url_for('main_product_page.index', flag=True, sort="cat", direction=dir))
+
+@bp.route('/filter_price/<dir>', methods = ["POST", "GET"])
+def filter_price(dir):
+    return redirect(url_for('main_product_page.index', flag=True, sort="pricef", direction=dir))
+
+@bp.route('/filter_rate/<dir>', methods = ["POST", "GET"])
+def filter_rate(dir):
+    return redirect(url_for('main_product_page.index', flag=True, sort="ratef", direction= int(dir)))
     
     
     
