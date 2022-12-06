@@ -31,9 +31,80 @@ WHERE pid = :pid and sid = :sid
     @staticmethod
     def get_all_products_for_sale():
         rows = app.db.execute('''
-SELECT DISTINCT *
-FROM ForSaleItems, Products
-WHERE ForSaleItems.pid = Products.id
+SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+WHERE S.pid = Products.id
+''')
+        return rows
+
+
+    @staticmethod
+    def get_all_products_for_sale_fil_price(price):
+        rows = app.db.execute('''
+SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+WHERE S.pid = Products.id AND avg <= :price
+''',
+                                   price = price)
+        return rows
+
+    @staticmethod
+    def get_all_products_for_sale_fil_cat(category):
+        rows = app.db.execute('''
+SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+WHERE S.pid = Products.id AND category = :category
+''',
+                                    category = category)
+        return rows
+
+    @staticmethod
+    def get_all_products_for_sale_fil_rate(rating):
+        rating1 = int(rating) + 1
+        rows = app.db.execute('''
+SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+WHERE S.pid = Products.id AND rating >= :rating AND rating < :rating1
+''',
+                                    rating = rating, rating1 = rating1)
+        return rows
+
+
+        
+
+    @staticmethod
+    def get_all_products_for_sale_rate(direction):
+        if direction == "ASC":
+            rows = app.db.execute('''
+SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+WHERE S.pid = Products.id
+ORDER BY rating 
+''')
+        else:
+            rows = app.db.execute('''
+SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+WHERE S.pid = Products.id
+ORDER BY rating DESC
+''')
+        return rows
+
+    @staticmethod
+    def get_all_products_for_sale_price(direction):
+        if direction == "ASC":
+            rows = app.db.execute('''
+SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+WHERE S.pid = Products.id
+ORDER BY avg 
+''')
+        else:
+            rows = app.db.execute('''
+SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+WHERE S.pid = Products.id
+ORDER BY avg DESC
 ''')
         return rows
 

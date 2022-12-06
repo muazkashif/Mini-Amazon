@@ -154,47 +154,75 @@
     <div class = "sidebar">
         <h2><u>Sort</u></h2>
         &nbsp
-        <form name="Rating:">
+        <form name="sort_rating:">
           <h5>Ratings</h5>
           <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
               <option selected="selected"></option>
-              <option value="/change_stat/no_simple">No Sort</option>
-              <option value="/change_stat/rate_ASC">Worst Rated Items</option>
-              <option value="/change_stat/rate_DESC">Top Rated Items</option>
+              <option value = "/index">No Sort</option>
+              <option value="/sort_rate/{{'ASC'}}">Worst Rated Items</option>
+              <option value="/sort_rate/{{'DESC'}}">Top Rated Items</option>
           </select>
       </form>
 
       &nbsp
       
-      <form name="Price:">
+      <form name="sort_price:">
         <h5>Price</h5>
         <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
             <option selected="selected"></option>
-            <option value="/change_stat/no_simple">No Sort</option>
-            <option value="/change_stat/price_ASC">Least Expensive</option>
-            <option value="/change_stat/price_DESC">Most Expensive</option>
+            <option value="/index">No Sort</option>
+            <option value="/sort_price/{{'ASC'}}">Least Expensive</option>
+            <option value="/sort_price/{{'DESC'}}">Most Expensive</option>
         </select>
     </form>
 
     &nbsp
-
+    <h2><u>Filter</u></h2>
+    &nbsp
     <form name="Category:">
       <h5>Category</h5>
       <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
           <option selected="selected"></option>
           <option value="/index">No Sort</option>
-          <option value="/index/category/Books">Books</option>
-          <option value="/index/category/Clothing">Clothing</option>
-          <option value="/index/category/Electronics">Electronics</option>
-          <option value="/index/category/Furniture">Furniture</option>
-          <option value="/index/category/Kitchenware">Kitchenware</option>
-          <option value="/index/category/Personal_Care">Personal Care</option>
-          <option value="/index/category/School">School</option>
-          <option value="/index/category/Sports">Sports</option>
-          <option value="/index/category/Toiletries">Toiletries</option>
-          <option value="/index/category/Travel">Travel</option>
+          <option value="/filter_category/Books">Books</option>
+          <option value="/filter_category/Clothing">Clothing</option>
+          <option value="/filter_category/Electronics">Electronics</option>
+          <option value="/filter_category/Furniture">Furniture</option>
+          <option value="/filter_category/Kitchenware">Kitchenware</option>
+          <option value="/filter_category/Personal_Care">Personal Care</option>
+          <option value="/filter_category/School">School</option>
+          <option value="/filter_category/Sports">Sports</option>
+          <option value="/filter_category/Toiletries">Toiletries</option>
+          <option value="/filter_category/Travel">Travel</option>
       </select>
   </form>
+  &nbsp
+  <form name="filter_price:">
+        <h5>Price</h5>
+        <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
+            <option selected="selected"></option>
+            <option selected="selected"></option>
+            <option value="/index">No Sort</option>
+            <option value="/filter_price/50"><$50</option>
+            <option value="/filter_price/150"><$150</option>
+            <option value="/filter_rate/250"><$250</option>
+            <option value="/filter_rate/350"><$350</option>
+        </select>
+    </form>
+    &nbsp
+    <form name="filter_rating:">
+        <h5>Rating</h5>
+        <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
+            <option selected="selected"></option>
+            <option value="/index">No Sort</option>
+            <option value="/filter_rate/0"><1</option>
+            <option value="/filter_rate/1">1</option>
+            <option value="/filter_rate/2">2</option>
+            <option value="/filter_rate/3">3</option>
+            <option value="/filter_rate/4">4</option>
+            <option value="/filter_rate/5">5</option>
+        </select>
+    </form>
 </div>
   </div>
 
