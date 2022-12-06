@@ -4,6 +4,7 @@ from datetime import datetime
 
 from .models.purchase import Purchase
 from .models.cart import Cart
+from .models.products import Product
 from .models.for_sale import ForSaleItems
 from .models.user import User
 
@@ -59,13 +60,25 @@ def check_out_all():
                 ForSaleItems.remove(pid, sid, quantity_available, price)
                 ForSaleItems.add(pid, sid, new_quantity, price)
     purchases = Purchase.get_all()
+
     if current_user.is_authenticated:
+        product_names = []
         if success:
             purchases = Purchase.get_order(current_user.id, time)
         else:
             purchases = Purchase.get_all_purchases_by_uid(current_user.id)
+        for item in purchases:
+            product_names.append(Product.get_name(item.pid)[0][0])
+        all_processed = True
+        for item in purchases:
+            if item.order_status == "Processing":
+                all_processed = False
+        if all_processed:
+            message = "Complete"
+        else:
+            message = "Incomplete"
         return render_template('orders.html',
-                            purchases=purchases, logged_in=True)
+                            purchases=purchases, logged_in=True, processed_info=message, product_names=product_names, purchase_len=len(product_names))
     return render_template('orders.html',
                             purchases=purchases)
 
@@ -104,11 +117,22 @@ def index():
                             ForSaleItems.add(pid, sid, new_quantity, price)
     purchases = Purchase.get_all()
     if current_user.is_authenticated:
+        product_names = []
         if success:
             purchases = Purchase.get_order(current_user.id, time)
         else:
             purchases = Purchase.get_all_purchases_by_uid(current_user.id)
+        for item in purchases:
+            product_names.append(Product.get_name(item.pid)[0][0])
+        all_processed = True
+        for item in purchases:
+            if item.order_status == "Processing":
+                all_processed = False
+        if all_processed:
+            message = "Complete"
+        else:
+            message = "Incomplete"
         return render_template('orders.html',
-                            purchases=purchases, logged_in=True)
+                            purchases=purchases, logged_in=True, processed_info=message, product_names=product_names, purchase_len=len(product_names))
     return render_template('orders.html',
                             purchases=purchases)

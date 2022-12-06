@@ -52,6 +52,7 @@ CREATE TABLE Transactions (
     price DECIMAL(12,2) NOT NULL,
     time_purchased timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
     order_status VARCHAR(255) NOT NULL,
+    time_updated timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
     PRIMARY KEY (uid, sid, pid, time_purchased)
 );
 

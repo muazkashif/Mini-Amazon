@@ -8,6 +8,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from .models.user import User
 from .models.rating import Rating
 from .models.purchase import Purchase
+from .models.products import Product
 from datetime import datetime
 from decimal import Decimal
 from .models.seller import Seller
@@ -195,5 +196,16 @@ def withdraw():
 @bp.route('/view_order/<uid>break<time_purchased>', methods = ['GET', 'POST'])
 def view_order(uid,time_purchased):
     purchases = Purchase.get_order(uid, time_purchased)
+    all_processed = True
+    product_names = []
+    for item in purchases:
+        product_names.append(Product.get_name(item.pid)[0][0])
+    for item in purchases:
+        if item.order_status == "Processing":
+            all_processed = False
+    if all_processed:
+        message = "Complete"
+    else:
+        message = "Incomplete"
     return render_template('orders.html',
-                            purchases=purchases, purchases_len=len(purchases))
+                            purchases=purchases, purchases_len=len(purchases), processed_info=message,product_names=product_names, purchase_len=len(product_names))
