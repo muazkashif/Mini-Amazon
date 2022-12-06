@@ -13,19 +13,20 @@
 
  .pagination-page-info {
   padding: .6em;
-  padding-left: 0;
   width: 40em;
   margin: .5em;
   margin-left: 0;
   font-size: 12px;
+  justify-content: center;
 }
 .pagination-page-info b {
   color: black;
   background: #6aa6ed;
-  padding-left: 2px;
+  justify-content: center;
   padding: .1em .25em;
   font-size: 150%;
 }
+
 
     .v_align{
         display:inline-block;
@@ -86,6 +87,21 @@
     opacity: 0.7;
   }
 
+  .pagination_info_bottom{
+    position:relative;
+    left:45%;
+  }
+
+  .pagination_info_bottom_two{
+    position:relative;
+    left:43%;
+  }
+
+  .all-pagination-stuff{
+    vertical-align: center;
+  }
+
+
     .sidebar{
       position: absolute;
       width: 220px;
@@ -113,26 +129,6 @@
     width:100%;
     }
 
-    .pagination-page-info {
-    position:relative;
-    padding: .6em;
-    padding-left: 0;
-    width: 40em;
-    margin: .5em;
-    margin-left: 0;
-    font-size: 12px;
-}
-  .pagination-page-info b {
-    position:relative;
-    color: black;
-    background: #6aa6ed;
-    padding-left: 2px;
-    padding: .1em .25em;
-    font-size: 150%;
-    margin: auto;
-    width: 50%;
-    padding: 10px;
-}
 
 </style>
 
@@ -205,8 +201,8 @@
             <option value="/index">No Sort</option>
             <option value="/filter_price/50"><$50</option>
             <option value="/filter_price/150"><$150</option>
-            <option value="/filter_rate/250"><$250</option>
-            <option value="/filter_rate/350"><$350</option>
+            <option value="/filter_price/250"><$250</option>
+            <option value="/filter_price/350"><$350</option>
         </select>
     </form>
     &nbsp
@@ -252,8 +248,17 @@
 </div>
 </div>
       {% endfor %}
+
+      <div class = "all-pagination-stuff">
+      <div class = "pagination_info_bottom">
       {{pagination.info}}
+    </div>
+
+    <div class = "pagination_info_bottom_two">
       {{pagination.links}}
+    </div>
+  </div>
+  
 
 {% endif %}
 

@@ -70,7 +70,7 @@ def add_product_current():
     product_category = request.form.get('trans')
     product_image = request.form.get('new_product_image')
     if product_name == "" or product_description == "" or product_category == "" or product_category is None or product_image == "":
-        flash("Invalid Product Descriptions")
+        flash("Invalid Product Information")
         return redirect(url_for('product.add_product'))
     try:
         product_price = float(request.form.get('new_product_price'))
