@@ -29,14 +29,31 @@ def jump():
         return redirect(url_for('main_product_page.index', k = 1))
     return redirect(url_for('main_product_page.index', k = page))
 
-@bp.route('/index', methods = ["POST", "GET"])
-def index():
+
+@bp.route('/index', defaults = {'flag':False, 'sort': "", 'direction':""}, methods = ["POST", "GET"])
+@bp.route('/index/<flag>_<sort>_<direction>', methods = ["POST", "GET"])  
+def index(flag, sort, direction):
+    if flag:
+        print(flag + "\n")
+        print(sort)
+        if sort == "Rate":
+            products_for_sale = ForSaleItems.get_all_products_for_sale_rate(direction)
+        elif sort == "Price":
+            products_for_sale = ForSaleItems.get_all_products_for_sale_price(direction)
+        elif sort == "cat":
+            products_for_sale = ForSaleItems.get_all_products_for_sale_fil_cat(direction)
+        elif sort == "ratef":
+            products_for_sale = ForSaleItems.get_all_products_for_sale_fil_rate(direction)
+        elif sort == "pricef":
+            products_for_sale = ForSaleItems.get_all_products_for_sale_fil_price(direction)
+    else:
+        products_for_sale = ForSaleItems.get_all_products_for_sale() 
     check = False
     search = False
     search_sort= request.form.get('sort_search_main')
     page, per_page, offset = get_page_args(get_page_parameter(), per_page=20)
-    products_for_sale = ForSaleItems.get_all_products_for_sale() 
-    pagination_prods = get_prods(False, "", offset=offset, per_page=per_page)
+    #products_for_sale = ForSaleItems.get_all_products_for_sale() 
+    pagination_prods = get_prods(products_for_sale, False, "", offset=offset, per_page=per_page)
         
     if products_for_sale is None:
         check = True
@@ -55,7 +72,7 @@ def search(search):
     
     products_for_sale = ForSaleItems.get_all_products_for_sale_search(search) 
     # print(len(products_for_sale))
-    pagination_prods = get_prods(True, search, offset=offset, per_page=per_page)
+    pagination_prods = get_prods(products_for_sale, True, search, offset=offset, per_page=per_page)
         
     if products_for_sale is None:
         check = True
@@ -63,76 +80,59 @@ def search(search):
     pagination = Pagination(page=page, total=len(products_for_sale), search=False, per_page=per_page)
     return render_template('main_product_page.html', avail_products = pagination_prods, css_framework='bootstrap3', pagination = pagination, search_term = search, check = check) 
     
+@bp.route('/sort_rate/<dir>', methods = ["POST", "GET"])
+def rating_sort(dir):
+    if dir == "ASC":
+        return redirect(url_for('main_product_page.index', flag=True, sort="Rate", direction="ASC"))
+    if dir == "DESC":
+        return redirect(url_for('main_product_page.index', flag=True, sort="Rate", direction="DESC" ))
+    else:
+        return redirect(url_for('main_product_page.index'))
+
+
+@bp.route('/sort_price/<dir>', methods = ["POST", "GET"])
+def price_sort(dir):
+    if dir == "ASC":
+        return redirect(url_for('main_product_page.index', flag=True, sort="Price", direction="ASC"))
+    if dir == "DESC":
+        return redirect(url_for('main_product_page.index', flag=True, sort="Price", direction="DESC" ))
+    else:
+        return redirect(url_for('main_product_page.index'))
     
-def get_prods(search, term, offset, per_page):
+@bp.route('/filter_category/<dir>', methods = ["POST", "GET"])
+def filter_category(dir):
+    return redirect(url_for('main_product_page.index', flag=True, sort="cat", direction=dir))
+
+@bp.route('/filter_price/<dir>', methods = ["POST", "GET"])
+def filter_price(dir):
+    return redirect(url_for('main_product_page.index', flag=True, sort="pricef", direction=dir))
+
+@bp.route('/filter_rate/<dir>', methods = ["POST", "GET"])
+def filter_rate(dir):
+    return redirect(url_for('main_product_page.index', flag=True, sort="ratef", direction= int(dir)))
+    
+    
+    
+def get_prods(products_for_sale, search, term, offset, per_page):
     if search:
         products_for_sale = ForSaleItems.get_all_products_for_sale_search(term)
         if products_for_sale is None:
             return None
-    else:
-        products_for_sale = ForSaleItems.get_all_products_for_sale()
+    #else:
+        #products_for_sale = ForSaleItems.get_all_products_for_sale()
     return products_for_sale[offset: offset+per_page]
     
-# @bp.route('/index/<k>', methods = ["POST", "GET"])
-# def index(k):
-#     # get all available products for sale:
-#     check = True
-#     if k != "1":
-#         offset = ((int(k) - 1) * 20) + 1
-#     else:
-#         offset = 0
-#         check = False
-#     products = Product.get_all_offset(True, offset,order_prop,order_by) 
-#     if products is None:
-#         flash('Invalid id')
-#         return redirect(url_for('main_product_page.index', k = 1))
-#     # find the products current user has bought:
-#     logged_in = False
-#     if current_user.is_authenticated:
-#         purchases = Purchase.get_all_by_uid_since(
-#             current_user.id, datetime.datetime(1980, 9, 14, 0, 0, 0))
-#         logged_in = True
-#         return render_template('main_product_page.html',
-#                            avail_products=products,
-#                            curr_page = int(k),
-#                            next_page = (int(k) + 1),
-#                            prev_page = (int(k) - 1),
-#                            purchase_history=purchases, logged_in=logged_in,purchase_history_len=len(purchases),
-#                            check = check)
-#     else:
-#         purchases = None
-#     # render the page by adding information to the index.html file
-#         return render_template('main_product_page.html',
-#                            avail_products=products,
-#                            curr_page = int(k),
-#                            next_page = (int(k) + 1),
-#                            prev_page = (int(k) - 1),
-#                            purchase_history=purchases, logged_in=logged_in,purchase_history_len=0,
-#                            check = check)
 
-@bp.route('/change_stat/<prop>_<by>', methods = ["POST", "GET"])
-def inc_page(prop,by):
-    global order_by
-    global order_prop
-    order_by = by
-    order_prop = prop
-    return redirect(url_for('main_product_page.index', k = 1))
-    return
+# @bp.route('/change_stat/<prop>_<by>', methods = ["POST", "GET"])
+# def inc_page(prop,by):
+#     global order_by
+#     global order_prop
+#     order_by = by
+#     order_prop = prop
+#     return redirect(url_for('main_product_page.index', k = 1))
+#     return
     
     
-    
-    
-@bp.route('/index/rate/DESC')
-def sort_rate_best():
-    products = Product.sort_ratings_desc()
-    return render_template('main_product_page.html',
-                           avail_products = products)
-
-@bp.route('/index/rate/ASC')
-def sort_rate_worst():
-    products = Product.sort_ratings_asc()
-    return render_template('main_product_page.html',
-                           avail_products = products)
 
 @bp.route('/index/price/DESC')
 def sort_product_expensive():

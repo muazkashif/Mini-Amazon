@@ -14,7 +14,7 @@ num_ratings = 5000
 
 
 
-file_path = "../data/"
+file_path = "../generated/"
 
 categories = ["Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
@@ -169,9 +169,10 @@ def gen_transactions(num_purchases, available_pids, uids,sids):
             sid = fake.random_element(elements=sids)
             pid = fake.random_element(elements=available_pids)
             quant = fake.random_int(min = 1, max = 5) #CHANGE MAX TO TAKE INTO ACCOUNT STALK
+            price = round(random.uniform(0, 500), 2)
             time_purchased = fake.date_time_between(start_date = datetime.datetime(2000, 1, 1))
             status = fake.random_element(elements = order_status)
-            writer.writerow([uid, sid, pid, quant, time_purchased, status])
+            writer.writerow([uid, sid, pid, quant, price, time_purchased, status])
         print(f'{num_purchases} generated')
     return
 
@@ -255,8 +256,8 @@ def gen_products(num_products, ratings_prods):
                     else:
                         rating = 0
                     descriptions = row[10]
-                    #category = row[4].split(">>")[0][2:].split("\"]")[0]
-                    category = fake.random_element(elements = ("Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"))
+                    category = row[4].split(">>")[0][2:].split("\"]")[0]
+                    #category = fake.random_element(elements = ("Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"))
                     if len(category)>39:
                         category = "Other"
                     images = row[8].split("\"\"")[0][2:].replace('\"','').split(",")[0]
@@ -269,7 +270,7 @@ def gen_products(num_products, ratings_prods):
                     # if "Kennel Rubber Dumbell" in pname:
                     # print(rating, end = ' ')
                     unique.append(category)
-    # print(set(unique))
+    print(set(unique))
     return available_pids
 
 def gen_ratings(num_ratings):

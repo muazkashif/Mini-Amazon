@@ -139,6 +139,8 @@ ORDER BY name
                               available=available)
         return [Product(*row) for row in rows]
 
+
+
     @staticmethod
     def get_all_offset(available, k, order_prop,order_by):
         # if order_prop == "price":
