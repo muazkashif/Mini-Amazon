@@ -38,6 +38,7 @@ def check_out_all():
     for item in cart: 
         pid, sid, quantity = item.pid, item.sid, item.quantity
         quantity_available = ForSaleItems.get_quantity(int(pid), int(sid))
+        print(quantity_available)
         new_quantity = quantity_available - int(quantity)
         if new_quantity >= 0:
             total_price += float(ForSaleItems.get_price(pid, sid)[0]) * item.quantity

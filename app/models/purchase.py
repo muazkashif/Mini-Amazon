@@ -104,7 +104,7 @@ ORDER BY time_purchased DESC
     @staticmethod
     def get_quantity_purchased(uid,pid):
         rows = app.db.execute('''
-SELECT uid, sid, pid, quantity, time_purchased, order_status, NULL, NULL
+SELECT uid, sid, pid, quantity, time_purchased, order_status, price
 FROM Transactions
 WHERE uid = :uid and pid=:pid
 ''',

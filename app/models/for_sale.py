@@ -141,7 +141,7 @@ FROM ForSaleItems
 WHERE pid = :pid AND sid = :sid
 ''',
                               pid=pid, sid=sid)
-        return rows[0][2]
+        return rows
 
     @staticmethod
     def get_price(pid, sid):

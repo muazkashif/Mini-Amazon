@@ -14,7 +14,7 @@ num_ratings = 5000
 
 
 
-file_path = "../data/"
+file_path = "../generated/"
 
 categories = ["Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
@@ -256,8 +256,8 @@ def gen_products(num_products, ratings_prods):
                     else:
                         rating = 0
                     descriptions = row[10]
-                    #category = row[4].split(">>")[0][2:].split("\"]")[0]
-                    category = fake.random_element(elements = ("Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"))
+                    category = row[4].split(">>")[0][2:].split("\"]")[0]
+                    #category = fake.random_element(elements = ("Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"))
                     if len(category)>39:
                         category = "Other"
                     images = row[8].split("\"\"")[0][2:].replace('\"','').split(",")[0]
@@ -270,7 +270,7 @@ def gen_products(num_products, ratings_prods):
                     # if "Kennel Rubber Dumbell" in pname:
                     # print(rating, end = ' ')
                     unique.append(category)
-    # print(set(unique))
+    print(set(unique))
     return available_pids
 
 def gen_ratings(num_ratings):
