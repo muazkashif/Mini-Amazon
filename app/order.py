@@ -54,7 +54,7 @@ def check_out_all():
             quantity_available = ForSaleItems.get_quantity(int(pid), int(sid))
             new_quantity = quantity_available - int(quantity)
             if new_quantity >= 0:
-                Purchase.add(current_user.id, int(pid), int(sid), int(quantity), time)
+                Purchase.add(current_user.id, int(pid), int(sid), int(quantity), price, time)
                 Cart.delete_product_cart(current_user.id, int(pid), int(sid))
                 ForSaleItems.remove(pid, sid, quantity_available, price)
                 ForSaleItems.add(pid, sid, new_quantity, price)
@@ -98,7 +98,7 @@ def index():
                         quantity_available = ForSaleItems.get_quantity(int(pid), int(sid))
                         new_quantity = quantity_available - int(quantity)
                         if new_quantity >= 0:
-                            Purchase.add(current_user.id, int(pid), int(sid), int(quantity), time)
+                            Purchase.add(current_user.id, int(pid), int(sid), int(quantity), price, time)
                             Cart.delete_product_cart(current_user.id, int(pid), int(sid))
                             ForSaleItems.remove(pid, sid, quantity_available, price)
                             ForSaleItems.add(pid, sid, new_quantity, price)
