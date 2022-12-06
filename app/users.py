@@ -188,3 +188,9 @@ def withdraw():
         flash('$' + str(toWithdraw) + ' are being transferred to your connected bank account.')
         User.updateBalance(current_user.id, newBalance)
         return redirect(url_for('users.user_profile'))
+
+@bp.route('/view_order/<uid>break<time_purchased>', methods = ['GET', 'POST'])
+def view_order(uid,time_purchased):
+    purchases = Purchase.get_order(uid, time_purchased)
+    return render_template('orders.html',
+                            purchases=purchases, purchases_len=len(purchases))

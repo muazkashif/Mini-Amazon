@@ -169,9 +169,10 @@ def gen_transactions(num_purchases, available_pids, uids,sids):
             sid = fake.random_element(elements=sids)
             pid = fake.random_element(elements=available_pids)
             quant = fake.random_int(min = 1, max = 5) #CHANGE MAX TO TAKE INTO ACCOUNT STALK
+            price = round(random.uniform(0, 500), 2)
             time_purchased = fake.date_time_between(start_date = datetime.datetime(2000, 1, 1))
             status = fake.random_element(elements = order_status)
-            writer.writerow([uid, sid, pid, quant, time_purchased, status])
+            writer.writerow([uid, sid, pid, quant, price, time_purchased, status])
         print(f'{num_purchases} generated')
     return
 
