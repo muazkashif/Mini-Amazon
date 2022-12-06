@@ -3,188 +3,198 @@
 {% block content %}
 
 <style>
-    .container{
-        position: relative; 
-        top: 20%; 
+    .container {
+        position: relative;
+        top: 20%;
         border-style: groove;
     }
 
-    .wrapper-funds{
-        position:relative;
-        left:40px;
-        bottom: 150px; 
+    .wrapper-funds {
+        position: relative;
+        left: 40px;
+        bottom: 150px;
     }
 
 
 
-    .seller_button{
-        position:absolute;
-        height:100px;
-        width:230px
+    .seller_button {
+        position: absolute;
+        height: 100px;
+        width: 230px
     }
 
-    .title{
+    .title {
         text-align: center;
     }
-
 </style>
 
 <br><br>
 
 <body>
-    
-<h1 class = "title">Profile Information: <b>{{info.firstname}} {{info.lastname}}</b></h1>
-<div class="container emp-profile">
-            <form method="post">
-                <div class="row">
-                    <div class="col-md-6">
-                    </div>
+
+    <h1 class="title">Profile Information: <b>{{info.firstname}} {{info.lastname}}</b></h1>
+    <div class="container emp-profile">
+        <form method="post">
+            <div class="row">
+                <div class="col-md-6">
                 </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="tab-content profile-tab">
-                            <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>User ID</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>{{info.id}}</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Name</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>{{info.firstname}} {{info.lastname}}</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Email</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>{{info.email}}</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Address</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>{{info.address}}</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Current Balance</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>${{info.balance}}</p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Date Joined</label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>{{info.date}}</p>
-                                            </div>
-                                        </div>
-                    
-            
-                                    
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="tab-content profile-tab">
+                        <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>User ID</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{info.id}}</p>
+                                </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Name</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{info.firstname}} {{info.lastname}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{info.email}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Address</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{info.address}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Current Balance</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>${{info.balance}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Date Joined</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{info.date}}</p>
+                                </div>
+                            </div>
+
+
+
                         </div>
                     </div>
                 </div>
-            </form>           
-        </div>
+            </div>
+        </form>
+    </div>
 
-        
 
-        <div class = "wrapper-funds">
+
+    <div class="wrapper-funds">
         <h5>Add Funds:</h5>
         <form method="POST" action="/update_Balance">
             <input type="text" value=0 name="addBalance">
             <input type="submit" value="Top Up">
         </form>
-        </div>
+    </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
 
-        <div class = "wrapper-funds">
+    <div class="wrapper-funds">
         <h5>Withdraw Funds:</h5>
         <form method="POST" action="/withdraw">
             <input type="text" value=0 name="withdrawBalance">
             <input type="submit" value="Cash Out">
         </form>
-        </div>
+    </div>
 
-        <form action="/user_update_form">
-            <button button style="margin:10px;" name = update_info >Update Info</button>
-          </form>
+    <form action="/user_update_form">
+        <button button style="margin:10px;" name=update_info>Update Info</button>
+    </form>
 
-          {% if not sell %}
-          <form method="POST" action="/add_seller">
-            <input type="submit" value="Become Seller?">
-            </form>
-          {% endif %}
+    {% if not sell %}
+    <form method="POST" action="/add_seller">
+        <input type="submit" value="Become Seller?">
+    </form>
+    {% endif %}
 
-          <!-- gonna move this up top to header -->
-
-
-    
-
-
-        &nbsp
+    <!-- gonna move this up top to header -->
 
 
 
-<h2>Your Purchase History:</h2>
-<table class='table table-hover table-bordered container'>
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Index #</th>
-      <th scope="col">Seller ID</th>
-      <th scope="col">Product ID</th>
-      <th scope="col">Quantity</th>
-      <th scope="col">Price at Purchase</th>
-      <th scope="col">Total Amount</th>
-      <th scope="col">Time Purchased</th>
-      <th scope="col">Status</th>
-      <th scope="col">Rating</th>
-      <th scope="col">Review</th>
-      <th scope="col">Change Review and Rating</th>
-      <th scope="col">View Full Transaction</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for i in range(purchase_history_len)%}
-      <tr>
-        <th scope="row">{{i+1}}</th>
-        <td>{{purchase_history[i].sid}}</td>
-        <td><a href="/ind_prod/{{purchase_history[i].pid}}">{{purchase_history[i].pid}}</a></td>
-        <td>{{purchase_history[i].quantity}}</td>
-        <td>{{purchase_history[i].price}}</td>
-        <td>${{purchase_history[i].price}}*{{purchase_history[i].quantity}}</td>
-        <td>{{purchase_history[i].time_purchased}}</td>
-        <td>{{purchase_history[i].order_status}}</td>
-        <td>{{purchase_history[i].rating}}</td>
-        <td>{{purchase_history[i].review}}</td>
-        <td>
-            <form method="POST" action="/write_review/{{purchase_history[i].uid}}break{{purchase_history[i].pid}}">
-                <input type="submit" value="Update Review">
-            </form>
-        </td>
-        <td>
-            <form method="POST" action="/view_order/{{purchase_history[i].uid}}break{{purchase_history[i].time_purchased}}">
-                <input type="submit" value="View Order">
-            </form>
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+
+
+    &nbsp
+
+
+
+    <h2>Your Purchase History:</h2>
+    <table class='table table-hover table-bordered container'>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Index #</th>
+                <th scope="col">Seller ID</th>
+                <th scope="col">Product ID</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price at Purchase</th>
+                <th scope="col">Total Amount</th>
+                <th scope="col">Time Purchased</th>
+                <th scope="col">Status</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Review</th>
+                <th scope="col">Change Review and Rating</th>
+                <th scope="col">View Full Transaction</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(purchase_history_len)%}
+            <tr>
+                <th scope="row">{{i+1}}</th>
+                <td>{{purchase_history[i].sid}}</td>
+                <td><a href="/ind_prod/{{purchase_history[i].pid}}">{{purchase_history[i].pid}}</a></td>
+                <td>{{purchase_history[i].quantity}}</td>
+                <td>{{purchase_history[i].price}}</td>
+                <td>${{purchase_history[i].price}}*{{purchase_history[i].quantity}}</td>
+                <td>{{purchase_history[i].time_purchased}}</td>
+                <td>{{purchase_history[i].order_status}}</td>
+                <td>{{purchase_history[i].rating}}</td>
+                <td>{{purchase_history[i].review}}</td>
+                <td>
+                    <form method="POST"
+                        action="/write_review/{{purchase_history[i].uid}}break{{purchase_history[i].pid}}">
+                        <input type="submit" value="Update Review">
+                    </form>
+                </td>
+                <td>
+                    <form method="POST"
+                        action="/view_order/{{purchase_history[i].uid}}break{{purchase_history[i].time_purchased}}">
+                        <input type="submit" value="View Order">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 </body>
 
