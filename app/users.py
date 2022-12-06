@@ -37,7 +37,7 @@ def login():
         login_user(user)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('main_product_page.index', k = 1)
+            next_page = url_for('main_product_page.index')
 
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
@@ -88,7 +88,6 @@ def user_profile():
     if current_user.is_authenticated:
         sellers = Seller.get_sellers()
         check = False
-        print(sellers)
         if current_user.id in sellers: ##Issue with checking membership
             check = True
         user_info = User.get(current_user.id)
@@ -99,9 +98,14 @@ def user_profile():
 
 @bp.route('/update_Balance', methods = ['POST'])
 def update_balance():
-    value = User.get(current_user.id).balance + Decimal(request.form.get('addBalance'))
-    User.updateBalance(current_user.id, value)
-    return redirect(url_for('users.user_profile'))
+    toAdd = request.form.get('addBalance')
+    if (User.is_float(toAdd) == False or Decimal(toAdd) < 0):
+        flash('Invalid value. Please enter a valid positive integer or decimal.')
+        return redirect(url_for('users.user_profile'))
+    else:
+        value = User.get(current_user.id).balance + Decimal(request.form.get('addBalance'))
+        User.updateBalance(current_user.id, value)
+        return redirect(url_for('users.user_profile'))
 
 @bp.route('/user_update_form', methods = ['GET', 'POST'])
 def user_form():
@@ -110,12 +114,17 @@ def user_form():
 @bp.route('/update_user_info', methods = ['GET', 'POST'])
 def update_info():
     email = request.form.get('new_email')
+    print(email)
     password = request.form.get('new_password')
     firstname = request.form.get('new_firstname')
     lastname = request.form.get('new_lastname')
     address = request.form.get('new_address')
-    User.updateUser(current_user.id, email, password, firstname, lastname, address)
-    return redirect(url_for('users.user_profile'))
+    if (email == None or User.email_exists(email) or password == None or firstname == None or lastname == None or address == None):
+        flash('INVALID INPUTS!')
+        return redirect(url_for('users.user_form'))
+    else:
+        User.updateUser(current_user.id, email, password, firstname, lastname, address)
+        return redirect(url_for('users.user_profile'))
 
 @bp.route('/add_seller', methods = ['POST', 'GET'])
 def add_seller():
@@ -167,4 +176,15 @@ def see_seller_products():
         check = True
     return render_template('seller_products.html', prod = pers_products, empty = check, )
 
-
+@bp.route('/withdraw', methods = ['POST'])
+def withdraw():
+    toWithdraw = request.form.get('withdrawBalance')
+    balance = User.get(current_user.id).balance
+    if (User.is_float(toWithdraw) == False or Decimal(toWithdraw) < 0 or Decimal(toWithdraw) > balance):
+        flash('Invalid value. Please enter a valid positive integer or decimal that is less than current balance.')
+        return redirect(url_for('users.user_profile'))
+    else:
+        newBalance = balance - Decimal(toWithdraw)
+        flash('$' + str(toWithdraw) + ' are being transferred to your connected bank account.')
+        User.updateBalance(current_user.id, newBalance)
+        return redirect(url_for('users.user_profile'))

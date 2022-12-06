@@ -168,7 +168,7 @@
               <thead class="thead-dark">
                 <tr>
                   <th scope="col">Product</th>
-                  <th scope="col">Rating</th>
+                  <th scope="col">Product Rating</th>
                   <th scope="col">Review</th>
                   <th scope="col">Time Reviewed</th>
                 </tr>
@@ -176,7 +176,7 @@
               <tbody>
                 {% for rating in seller_ratings %}
                   <tr>
-                    <td><a href="/ind_prod/{{rating.pid}}">{{rating.name}}</a></td>
+                    <td><a href="/ind_prod/{{rating.pid}}/main">{{rating.name}}</a></td>
                     <td>{{rating.rating}}</td>
                     <td>{{rating.review}}</td>
                     <td>{{rating.time_reviewed}}</td>

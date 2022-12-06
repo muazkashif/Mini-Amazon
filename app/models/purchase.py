@@ -27,14 +27,14 @@ class Purchase:
             return None
 
     @staticmethod
-    def add(uid, pid, sid, quantity):
+    def add(uid, pid, sid, quantity, time_purchased):
         try:
             app.db.execute("""
 INSERT INTO Transactions(uid, pid, sid, quantity, time_purchased, order_status)
 VALUES(:uid, :pid, :sid, :quantity, :time_purchased, :order_status)
 RETURNING uid
 """,
-                                  uid=uid, pid=pid, sid=sid, quantity=quantity, time_purchased=datetime.today().strftime('%Y-%m-%d %H:%M:%S'), order_status="Processing")
+                                  uid=uid, pid=pid, sid=sid, quantity=quantity, time_purchased=time_purchased, order_status="Processing")
             return None
         except Exception as e:
             # likely email already in use; better error checking and reporting needed;
@@ -63,6 +63,18 @@ ORDER BY time_purchased DESC
 ''',
                               uid=uid,
                               since=since)
+        return [Purchase(*row) for row in rows]
+
+    @staticmethod
+    def get_order(uid, time_purchased):
+        rows = app.db.execute('''
+SELECT uid, sid, pid, quantity, time_purchased, order_status, NULL, NULL
+FROM Transactions
+WHERE uid = :uid
+AND time_purchased = :time_purchased
+''',
+                              uid=uid,
+                              time_purchased=time_purchased)
         return [Purchase(*row) for row in rows]
 
     @staticmethod
