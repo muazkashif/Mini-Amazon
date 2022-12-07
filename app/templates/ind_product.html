@@ -199,10 +199,21 @@
     <form method="POST" action="/ind_prod/{{prod_items.id}}/{{seller_info.sid}}/add_to_cart">
       <input type="text" value=0 name="cart_quantity">
       <input type="submit" value="Add To Cart">
+      {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      {% for message in messages %}
+        <br> {{ message }} </br>
+      {% endfor %}
+  {% endif %}
+{% endwith %}
     </form>
   </div>
+
+
     {% endif %}
       {% endif %}
+
+
 	</div>
    
 	  <!-- Product Pricing -->

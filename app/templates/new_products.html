@@ -14,7 +14,7 @@
 
     .return_no_edit{
         position:absolute;
-        bottom:12%;
+        bottom:5%;
         left: 2.5%;
     }
     .updating_info edit_submit{
@@ -47,9 +47,12 @@
             <option value="Toiletries">Toiletries</option>
             <option value="Travel">Travel</option>
     </select>
+
 </tr>
   <h5>Product Image Link:</h5>
   <input type="text" value="" style="width:600px;margin:10px;" name="new_product_image">
+
+
 <h3 style = "position:relative;left:0%;margin:15px;"> <b> New Personal Product Information (Only Affects You): </b></h3>
 <h5>Product Price ($):</h5>
   <input type="text" value="0.00" style="width:600px;margin:10px;" name="new_product_price">
@@ -59,6 +62,14 @@
     <div class = "edit_submit" style = right:50px;margin:10px>
         <input type="submit" value="Add Product">
     </div>
+
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      {% for message in messages %}
+        <br> {{ message }} </br>
+      {% endfor %}
+  {% endif %}
+{% endwith %}
     
 </form>
 <div class = "return_no_edit">

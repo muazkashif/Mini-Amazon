@@ -1,4 +1,5 @@
 from flask import current_app as app
+from datetime import datetime
 
 
 class Transaction:
@@ -33,11 +34,17 @@ WHERE pid = :pid AND uid = :uid
 
     @staticmethod
     def update_status(stat, sid, uid, pid, time):
+
         rows = app.db.execute('''
 UPDATE Transactions
 SET order_status = :stat
 WHERE sid = :sid AND uid = :uid AND pid = :pid AND time_purchased = :time
 ''',                                    stat = stat, sid = sid, uid = uid, pid = pid, time = time)
+        app.db.execute('''
+UPDATE Transactions
+SET time_updated = :time_updated
+WHERE sid = :sid AND uid = :uid AND pid = :pid AND time_purchased = :time
+''',                                    stat = stat, sid = sid, uid = uid, pid = pid, time = time, time_updated = datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
         return
 
     @staticmethod
