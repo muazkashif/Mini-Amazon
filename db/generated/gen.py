@@ -4,6 +4,10 @@ from faker import Faker
 import random
 import datetime
 
+# import sys
+# sys.path.insert(0, '/home/aat25/mini-amazon-skeleton/app/models')
+# from for_sale import ForSaleItems
+
 num_users = 10000
 num_products = 10000
 num_purchases = 5000
@@ -14,7 +18,7 @@ num_ratings = 5000
 
 
 
-file_path = "../generated/"
+file_path = "../data/"
 
 categories = ["Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
@@ -106,7 +110,8 @@ def gen_sellers(num_sellers):
 #     return available_pids
 
 
-def gen_carts(num_cart_items, uids, s_uids, available_pids):
+def gen_carts(num_cart_items, uids, prod_to_seller):
+    done = [()]
     with open(file_path + 'Carts.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Carts...', end=' ', flush=True)
@@ -114,15 +119,25 @@ def gen_carts(num_cart_items, uids, s_uids, available_pids):
             if i % 10 == 0:
                 print(f'{i}', end=' ', flush=True)
             uid = fake.random_element(elements=uids)
-            pid = fake.random_element(elements=available_pids)
-            s_uid = fake.random_element(elements=s_uids)
+            prod_seller = fake.random_element(elements=prod_to_seller)
+            pid = prod_seller[0]
+            s_uid = prod_seller[1]
+            key = (uid,s_uid,pid)
+            while key in done:
+                uid = fake.random_element(elements=uids)
+                prod_seller = fake.random_element(elements=prod_to_seller)
+                pid = prod_seller[0]
+                s_uid = prod_seller[1]
+                key = (uid,s_uid,pid)
             quantity = fake.random_int(min=1, max=10)
+            done.append(key)
             writer.writerow([uid, pid, s_uid, quantity])
         print(f'{num_cart_items} generated')
     return 
 
 def gen_forsales(num_forsale_items, s_uids, available_pids):
     already_done_keys = [()]
+    used_pids = []
     with open(file_path + 'ForSaleItems.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('ForSales...', end=' ', flush=True)
@@ -135,11 +150,13 @@ def gen_forsales(num_forsale_items, s_uids, available_pids):
             while key in already_done_keys:
                 pid = fake.random_element(elements=available_pids)
                 s_uid = fake.random_element(elements=s_uids)
+                key = (pid,s_uid)
             quantity = fake.random_int(min=1, max=10)
+            used_pids.append(pid)
             writer.writerow([pid, s_uid, quantity, price])
             already_done_keys.append(key)
         print(f'{num_forsale_items} generated')
-    return 
+    return already_done_keys,used_pids
 
 
         # for i in range(num_forsale_items):
@@ -271,7 +288,7 @@ def gen_products(num_products, ratings_prods):
                     # if "Kennel Rubber Dumbell" in pname:
                     # print(rating, end = ' ')
                     unique.append(category)
-    print(set(unique))
+    #print(set(unique))
     return available_pids
 
 def gen_ratings(num_ratings):
@@ -324,8 +341,9 @@ if __name__ == "__main__":
     # print("\n\n\n\n\n" + str(len(available_pids)))
     
     s_uids, uids = gen_sellers(num_sellers)
-    gen_carts(num_cart_items, uids, s_uids, available_pids)
-    gen_transactions(num_purchases, available_pids, uids,s_uids)
-    gen_forsales(num_forsale_items, s_uids, available_pids)
+    prod_to_seller, products_for_sale = gen_forsales(num_forsale_items, s_uids, available_pids)
+    #products_for_sale = ForSaleItems.get_pids()
+    gen_carts(num_cart_items, uids, prod_to_seller)
+    gen_transactions(num_purchases, products_for_sale, uids, s_uids)
     gen_ratings(num_ratings)
     print("\n")
