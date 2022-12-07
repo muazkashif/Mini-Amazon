@@ -3,8 +3,8 @@
 {% block content %}
 <br><br>
 
-<h2>Changeing Review of User: {{ratings[0].uid}} for Product: {{ratings[0].pid}}</h2>
-<form method="POST" action="/update_review/{{ratings[0].uid}}break{{ratings[0].pid}}">
+<h2>Changing Review <br>User: {{ratings[0].uid}} <br>Product: {{ratings[0].name}} <br>Sold by: {{ratings[0].sid}}</h2>
+<form method="POST" action="/update_review/{{ratings[0].uid}}_{{ratings[0].pid}}_{{ratings[0].sid}}">
     <input type="text" value="{{ratings[0].review}}" name="reviewText" style= "width: 700px; height:200px; outline: solid;"><br>
         <input type="radio" id="0" name="ratingText" value="0">
         <label for="0">0</label>
@@ -21,7 +21,7 @@
     <input type="submit" value="Submit">
 </form>
 
-<form method="POST" action="/delete_review/{{ratings[0].uid}}break{{ratings[0].pid}}">
+<form method="POST" action="/delete_review/{{ratings[0].uid}}_{{ratings[0].pid}}_{{ratings[0].sid}}">
     <input type="submit" value="Delete Review">
 </form>
 
