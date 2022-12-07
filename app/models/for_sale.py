@@ -58,6 +58,25 @@ WHERE S.pid = Products.id AND avg <= :price
         return rows
 
     @staticmethod
+    def filter_products(category, price, rating):
+        if category == "A":
+            category = ""
+        if price == "A": 
+            price = 2147483647
+        if rating == "A": 
+            rating = 0
+            rating1 = 6
+        else:
+            rating1 = int(rating) + 1
+        rows = app.db.execute('''
+SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg
+FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S
+WHERE S.pid = Products.id AND category LIKE concat('%', :category, '%') AND avg <= :price AND rating >= :rating AND rating < :rating1
+''',
+                                    category = category, price = price, rating = rating, rating1 = rating1)
+        return rows
+
+    @staticmethod
     def get_all_products_for_sale_fil_cat(category):
         rows = app.db.execute('''
 SELECT DISTINCT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg

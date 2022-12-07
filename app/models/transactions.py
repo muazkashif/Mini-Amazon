@@ -22,6 +22,27 @@ WHERE sid = :id AND Products.id = Transactions.pid AND Transactions.uid = users.
 ORDER BY time_purchased DESC
 ''',                                    id = id)
         return rows if rows else None
+
+
+    @staticmethod
+    def get_all_products_for_total_sales(direction):
+        if direction == "ASC":
+            rows = app.db.execute('''
+SELECT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg, M.count
+FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S, (select pid, COUNT(pid) as count FROM Transactions GROUP BY pid) as M
+WHERE S.pid = Products.id AND M.pid = S.pid
+GROUP BY S.pid, id, avg, M.count
+ORDER BY count
+''')
+        else:
+            rows = app.db.execute('''
+SELECT id, name, descriptions, rating, images, available, category, ROUND(avg, 2) as avg, M.count
+FROM Products, (SELECT avg(price) AS avg, pid FROM ForSaleItems GROUP BY pid) as S, (select pid, COUNT(pid) as count FROM Transactions GROUP BY pid) as M
+WHERE S.pid = Products.id AND M.pid = S.pid
+GROUP BY S.pid, id, avg, M.count
+ORDER BY count DESC
+''')
+        return rows
     
     @staticmethod
     def getSellers(uid,pid):
