@@ -8,6 +8,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from .models.user import User
 from .models.rating import Rating
 from .models.purchase import Purchase
+from .models.products import Product
 from datetime import datetime
 from decimal import Decimal
 from .models.seller import Seller
@@ -92,8 +93,11 @@ def user_profile():
             check = True
         user_info = User.get(current_user.id)
         purchases = Purchase.get_all_purchases_by_uid(current_user.id)
+        total_amounts = []
+        for purchase in purchases:
+            total_amounts.append(purchase.quantity * purchase.price)
         return render_template('user_profile.html',
-                            info=user_info, purchase_history=purchases, purchase_history_len=len(purchases), logged_in=True, sell = check)
+                            info=user_info, purchase_history=purchases, purchase_history_len=len(purchases), totals=total_amounts, logged_in=True, sell = check)
     return render_template('main_product_page.html')
 
 @bp.route('/update_Balance', methods = ['POST'])
@@ -119,7 +123,7 @@ def update_info():
     firstname = request.form.get('new_firstname')
     lastname = request.form.get('new_lastname')
     address = request.form.get('new_address')
-    if (email == None or User.email_exists(email) or password == None or firstname == None or lastname == None or address == None):
+    if (email == "" or User.email_exists(email) or password == "" or firstname == "" or lastname == "" or address == ""):
         flash('INVALID INPUTS!')
         return redirect(url_for('users.user_form'))
     else:
@@ -192,5 +196,16 @@ def withdraw():
 @bp.route('/view_order/<uid>break<time_purchased>', methods = ['GET', 'POST'])
 def view_order(uid,time_purchased):
     purchases = Purchase.get_order(uid, time_purchased)
+    all_processed = True
+    product_names = []
+    for item in purchases:
+        product_names.append(Product.get_name(item.pid)[0][0])
+    for item in purchases:
+        if item.order_status == "Processing":
+            all_processed = False
+    if all_processed:
+        message = "Complete"
+    else:
+        message = "Incomplete"
     return render_template('orders.html',
-                            purchases=purchases, purchases_len=len(purchases))
+                            purchases=purchases, purchases_len=len(purchases), processed_info=message,product_names=product_names, purchase_len=len(product_names))
