@@ -3,8 +3,8 @@
 {% block content %}
 <br><br>
 
-<h2>Adding Review of User: {{user}} for Product: {{product}}</h2>
-<form method="POST" action="/add_review/{{user}}break{{product}}break{{sid}}">
+<h2>Adding Review <br>User: {{user}} <br>for Product: {{product}}<br> Sold by: {{sid}}</h2>
+<form method="POST" action="/add_review/{{user}}_{{pid}}_{{sid}}">
         <input type="text" name="reviewText" style= "width: 700px; height:200px; outline: solid;"><br>
             <input type="radio" id="0" name="ratingText" value="0">
             <label for="0">0</label>
