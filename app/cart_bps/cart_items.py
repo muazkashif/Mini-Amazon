@@ -11,29 +11,54 @@ from flask import Blueprint
 bp = Blueprint('cart', __name__)
 
 
+def translate(id):
+    p = ""
+    sid = ""
+    quantity = ""
+    count = 0
+    for i in range(1, len(id)-1):
+        if id[i] == ",":
+            count += 1
+        if id[i] != "," and id[i] != " ":
+            if count == 0:
+                p = p + id[i]
+            elif count == 1:
+                sid = sid + id[i]
+            else:
+                quantity = quantity + id[i]
+    return p, sid, quantity
+
 @bp.route('/cart/', methods=['GET','POST'])
 def index():
     if request.method == 'POST':
         if current_user.is_authenticated:
             if request.form.get("trash"):
-                Cart.remove(current_user.id, request.form.get("trash"))
+                pid, sid, uid = translate(request.form.get("trash"))
+                Cart.delete_product_cart(int(uid), int(pid), int(sid))
             form = request.form.getlist("addtocart2")
             items = ForSaleItems.get_all()
             for i in range(len(form)):
                 if int(form[i]) != 0:
-                    Cart.add(current_user.id, items[i].pid, items[i].sid, int(form[i]))
+                    quantity_available = items[i].quantity
+                    if int(form[i]) <= quantity_available:
+                        Cart.add(current_user.id, items[i].pid, items[i].sid, int(form[i]))
 
     carts = Cart.get_all()
     if current_user.is_authenticated:
         carts = Cart.get(current_user.id)
+        product_names = []
         prices = []
-        for i in range(len(carts)):
-            item = carts[i]
-            prices.append(item.quantity * Product.get(item.pid).price)
+        total_price = 0
+        for item in carts:
+            product_names.append(Product.get_name(item.pid)[0][0])
+            print("pid= "+str(item.pid) + "sid= " + str(item.sid))
+            prices.append(item.quantity * float(ForSaleItems.get_price(item.pid, item.sid)[0]))
+            total_price += item.quantity * float(ForSaleItems.get_price(item.pid, item.sid)[0])
         return render_template('carts.html',
-                            cart_items=carts, cart_len=len(carts), prices=prices, logged_in=True)
+                            cart_items=carts, cart_len=len(carts), product_names=product_names,prices=prices,logged_in=True, total_price=total_price)
     return render_template('carts.html',
                             cart_items=carts)
+
 
 @bp.route('/carte/')
 def show_emptycart():

@@ -9,7 +9,7 @@
   width: 65%;
   position: absolute;
   top: 170px;
-  right: 450px; 
+  right: 400px; 
 }
 
 .left-column img{
@@ -51,7 +51,7 @@
   text-decoration: none;
   padding: 12px 30px;
   transition: all .5s;
-  top: 470px;
+  top: 520px;
   right: 200px;  
 }
 .cart-btn:hover {
@@ -68,7 +68,7 @@
   text-decoration: none;
   padding: 12px 30px;
   transition: all .5s;
-  top: 470px;
+  top: 520px;
   right: 45px;  
 }
 .review-btn:hover {
@@ -80,13 +80,25 @@
 
 .price-rating{
 	position: relative;
-	top: 280px;
-	right:280px;
 }
 
 .wrap{
 	position: relative; 
 	top: 650px;
+}
+
+.wrap-table{
+  position:absolute;
+  margin:10px;
+  top:80%;
+  width:100%;
+  
+}
+
+.check-out{
+  position:relative;
+  left:75%;
+  top:20%;
 }
 
 .sidebar{
@@ -106,24 +118,55 @@
 		bottom: 100px; 
 		left: 80px; 
 	}
+
+  .check-out{
+    right:10%;
+    bottom:65px;
+    height:200px;
+  }
+
+  .price-rating{
+    position:relative;
+    right: 60%; 
+  }
+
+  .cart_butt{
+    position:relative;
+    top:20%;
+  }
 </style>
 
 <body>
 
 	<div class = "sidebar">
         <h2><u>Sellers</u></h2>
-        <u1>
-        <li><a href="#"><i class = "fas fa-home"></i>Category</a></li>
-        <li><a href="#"><i class = "fas fa-home"></i>Price</a></li>
-        <li><a href="#"><i class = "fas fa-home"></i>Rating</a></li>
-        </u1>
+        {% for seller in sellers %}
+        <form method="POST" action="/ind_prod/{{prod_items.id}}/{{seller.sid}}">
+        <div>
+          {% if sid == seller.sid %}
+          <input type="radio" {% if seller %} checked = "True" {% endif %} onClick = "this.form.submit()" id="{{seller.sid}}">  
+          {% endif %}
+          {% if sid != seller.sid %}
+          <input type="radio" {% if seller %} {% endif %} onClick = "this.form.submit()" id="{{seller.sid}}">
+          {% endif %}
+          <label for="{{seller.sid}}">Seller: <a href="/seller_reviews/{{seller.sid}}">{{seller.sid}}</a></label>
+          <p> <b> Quantity:</b> {{seller.quantity}} <br>
+          <b> Rating:</b> {{seller.avg_r}}</p>
+        </div>
+      </form>
+        {% endfor %}
+        <form action="/index">
+        <button input = "submit" style="height:30px;width:150px;" >Back Products</button>
+      </form>
+  </form>
+  
     </div>
 
 	<div class = "wrap_all">
  
 	<!-- Left Column / Headphones Image -->
 	<div class="left-column">
-	  <img data-image="black" src="https://i.imgur.com/A8eQsll.jpg" alt="">
+	  <img data-image="black" src={{prod_items.images}} onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'" style='width: 500px; height:500px; object-fit: scale-down;'>
 	</div>
    
    
@@ -132,35 +175,60 @@
    
 	  <!-- Product Description -->
 	  <div class="product-info">
-		<h1>{{prod_items.name}}</h1>
-		<p1>{{prod_items.description}}</p1>
+		<h1><div style="height:150px;width:600px;overflow:auto;">{{prod_items.name}}</div></h1>
+    <h5><div>Category: {{prod_items.category}}</div></h5>
+		<p1><div style="height:300px;width:600px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">{{prod_items.description}}</div></p1>
 	  </div>
 
 
 	  <!-- Final Header -->
 	<div class = "price-rating">
-	  <h1>Price: ${{prod_items.price}}</h1>
+    {% if seller_info != "None" %}
+	  <h1>Price: ${{seller_info.price}}</h1> 
+    {% endif %}
 		<h1>Rating: {{prod_items.rating}}/5</h1>
+    {% if seller_info != "None" %}
+    {% if seller_info.quantity == 0 %}
+    <div class = "check-out">
+      <form action="">
+        <input type="submit" value="Out of Stock">
+      </form>
+    {% endif %}
+    {% if seller_info.quantity != 0 %}
+    <div class = "check-out">
+    <form method="POST" action="/ind_prod/{{prod_items.id}}/{{seller_info.sid}}/add_to_cart">
+      <input type="text" value=0 name="cart_quantity">
+      <input type="submit" value="Add To Cart">
+      {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      {% for message in messages %}
+        <br> {{ message }} </br>
+      {% endfor %}
+  {% endif %}
+{% endwith %}
+    </form>
+  </div>
+
+
+    {% endif %}
+      {% endif %}
+
+
 	</div>
    
 	  <!-- Product Pricing -->
-	  <div class="product-price">
-      <div class="product-price">
-        <a href="#" class="cart-btn">Add to cart</a>
-        <a href="/cart" class="cart-btn">Add to cart</a>
-        </div>
-    
-
-      <form method="POST" action="/write_review/{{current_uid}}break{{prod_items.id}}">
-        <input type="submit" class ="review-btn" {{review_button}} value="Review Item">
-      </form>
 	  </div>
 	</div>
 </div>
 
-<div class = "wrap">
+<form method="POST" action="/write_review/{{current_uid}}_{{prod_items.id}}">
+  <input type="submit" class ="review-btn" {{review_button}} value="Review Item">
+</form>
+
+<div class = "wrap-table">
 <table class='table table-hover table-bordered container'>
-	<h1>Ratings</h1>
+	<h1>Rating</h1>
+  <p1>Number of Ratings: {{ratingsNumber}} </p1>
   <thead class="thead-dark">
     <tr>
       <th scope="col">User</th>
@@ -183,7 +251,6 @@
   </tbody>
 </table>
 </div>
-
 </body>
 
   {% endblock %}

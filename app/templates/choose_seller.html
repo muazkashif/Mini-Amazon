@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br><br>
+
+<h2>Which Seller Would You Like to Review for Product: {{pid}}</h2>
+<form method="POST" action="/write_review/{{uid}}_{{pid}}">
+    <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
+        <option selected="selected"></option>
+            {% for sid in sellers%}
+                <option value="/review_page/{{uid}}_{{pid}}_{{sid}}">{{sid}}</option>
+            {% endfor %}
+    </select>
+</form>
+
+
+
+<br><br>
+
+
+{% endblock %}

@@ -11,6 +11,23 @@
     flex-flow: row wrap;
  }
 
+ .pagination-page-info {
+  padding: .6em;
+  width: 40em;
+  margin: .5em;
+  margin-left: 0;
+  font-size: 12px;
+  justify-content: center;
+}
+.pagination-page-info b {
+  color: black;
+  background: #6aa6ed;
+  justify-content: center;
+  padding: .1em .25em;
+  font-size: 150%;
+}
+
+
     .v_align{
         display:inline-block;
     }
@@ -30,6 +47,10 @@
 
   .card-text{
     text-align: center;
+    width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
     .price {
@@ -66,6 +87,21 @@
     opacity: 0.7;
   }
 
+  .pagination_info_bottom{
+    position:relative;
+    left:45%;
+  }
+
+  .pagination_info_bottom_two{
+    position:relative;
+    left:43%;
+  }
+
+  .all-pagination-stuff{
+    vertical-align: center;
+  }
+
+
     .sidebar{
       position: absolute;
       width: 220px;
@@ -93,6 +129,7 @@
     width:100%;
     }
 
+
 </style>
 
 
@@ -100,74 +137,182 @@
 
 <body>
 
+  <form class = "search_existing" method="POST" action="/index"  style="text-align: center;">
+    <input type="text" placeholder = "Search..." {% if search_term != None %} value = "{{search_term}}" {% endif %} name="sort_search_main" style="width:600px;margin:10px;">
+   <input type="submit" value="Search">
+</form>
 
     
     <div class = "header">
         <h1>Products</h1>
     </div>
 
+    {% if not searching and not check%}
     <div class = "sidebar">
         <h2><u>Sort</u></h2>
         &nbsp
-        <form name="Rating:">
+        <form name="sort_rating:">
           <h5>Ratings</h5>
           <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
-              <option selected="selected"></option>
-              <option value="/index">No Sort</option>
-              <option value="/index/rate/ASC">Worst Rated Items</option>
-              <option value="/index/rate/DESC">Top Rated Items</option>
+            {% if sortrate == "ASC" %}
+            <option value="/sort_rate/{{'ASC'}}" selected hidden>Worst Rated Items</option>
+            {% endif %}
+
+      
+            {% if sortrate == "DESC" %}
+            <option value="/sort_rate/{{'DESC'}}" selected hidden>Top Rated Items</option>
+            {% endif %}
+
+            {% if sortrate == "None" %}
+            <option value="/index" selected hidden></option>
+            {% endif %}
+
+              <option value="/sort_rate/{{'ASC'}}">Worst Rated Items</option>
+              <option value="/sort_rate/{{'DESC'}}">Top Rated Items</option>
           </select>
       </form>
 
       &nbsp
-      
-      <form name="Price:">
+      <form name="sort_price:">
         <h5>Price</h5>
         <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
-            <option selected="selected"></option>
-            <option value="/index">No Sort</option>
-            <option value="/index/price/ASC">Least Expensive</option>
-            <option value="/index/price/DESC">Most Expensive</option>
+
+          {% if sortprice == "ASC" %}
+            <option value="/sort_price/{{'ASC'}}" selected hidden>Least Expensive</option>
+            {% endif %}
+
+      
+            {% if sortprice == "DESC" %}
+            <option value="/sort_price/{{'DESC'}}" selected hidden>Most Expensive</option>
+            {% endif %}
+
+            {% if sortprice == "None" %}
+            <option value="/index" selected hidden></option>
+            {% endif %}
+
+            <option value="/sort_price/{{'ASC'}}">Least Expensive</option>
+            <option value="/sort_price/{{'DESC'}}">Most Expensive</option>
         </select>
     </form>
+    &nbsp
+    <form name="sort_purchase:">
+      <h5>Total Purchases</h5>
+      <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
+
+        {% if sortpurch == "ASC" %}
+            <option value="/sort_purchases/{{'ASC'}}" selected hidden>Least Purchased</option>
+            {% endif %}
+
+      
+            {% if sortpurch == "DESC" %}
+            <option value="/sort_purchases/{{'DESC'}}" selected hidden>Most Purchased</option>
+            {% endif %}
+
+            {% if sortpurch == "None" %}
+            <option value="/index" selected hidden></option>
+            {% endif %}
+
+          <option value="/sort_purchases/{{'ASC'}}">Least Purchased</option>
+          <option value="/sort_purchases//{{'DESC'}}">Most Purchased</option>
+      </select>
+     
+  </form>
+  &nbsp
+  <form action = "/index" style = right:50px>
+    <input type="submit" value="Reset Sorting">
+  </form>
 
     &nbsp
+    <form class = "filter_all" method="POST" action="/filter_products">
+    <h2><u>Filter</u></h2>
+    &nbsp
+    <h5>Product Category:</h5>
+  <TD class = "select">   
+    <select name="filter_cat" style="width:140px;margin:10px;">
+      {% if catfilt == "None" %}
+      <option value="None" selected hidden></option>
+      {% endif %}
 
-    <form name="Category:">
-      <h5>Category</h5>
-      <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
-          <option selected="selected"></option>
-          <option value="/index">No Sort</option>
-          <option value="/index/category/Books">Books</option>
-          <option value="/index/category/Clothing">Clothing</option>
-          <option value="/index/category/Electronics">Electronics</option>
-          <option value="/index/category/Furniture">Furniture</option>
-          <option value="/index/category/Kitchenware">Kitchenware</option>
-          <option value="/index/category/Personal_Care">Personal Care</option>
-          <option value="/index/category/School">School</option>
-          <option value="/index/category/Sports">Sports</option>
-          <option value="/index/category/Toiletries">Toiletries</option>
-          <option value="/index/category/Travel">Travel</option>
-      </select>
-  </form>
+      {% if catfilt != "None" %}
+
+            <option value="{{catfilt}}" selected hidden>{{catfilt}}</option>
+          {% endif %}
+            <option value="Books">Books</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Kitchenware">Kitchenware</option>
+            <option value="Pet">Pet</option>
+            <option value="School">School</option>
+            <option value="Sports">Sports</option>
+            <option value="Toiletries">Toiletries</option>
+            <option value="Travel">Travel</option>
+    </select>
+    </TD>
+  &nbsp
+  <h5>Price</h5>
+  <TD class="select">
+        <select name="filter_price" style="width:140px;margin:10px;">
+          {% if pricefilt == "None" %}
+          <option value="None" selected hidden></option>
+          {% endif %}
+          {% if pricefilt != "None" %}
+          <option value="{{pricefilt}}" selected hidden><${{pricefilt}}</option>
+          {% endif %}
+            <option value="50"><$50</option>
+            <option value="150"><$150</option>
+            <option value="250"><$250</option>
+            <option value="350"><$350</option>
+        </select>
+      </TD>
+    &nbsp
+    <h5>Rating</h5>
+    <TD name="select">
+        <select name="filter_rating" style="width:140px;margin:10px;">
+            {% if ratefilt == "None" %}
+            <option value="None" selected hidden></option>
+            {% endif %}
+            {% if ratefilt != "None" %}
+            <option value="{{ratefilt}}" selected hidden>{{ratefilt}}</option>
+            {% endif %}
+            <option value="0"><1</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+      </TD>
+      <div class = "edit_submit" style = right:50px;margin:10px>
+        <input type="submit" value="Filter">
+    </div>
+    </form>
+    <form action = "/index" style = right:50px;margin:10px>
+      <input type="submit" value="Reset Filters">
+    </form>
 </div>
   </div>
 
-  
+  {% endif %}
 
+  {% if check %}
+  <h1 style="text-align: center;">No Results</h1>
+  {% endif %}
+
+  {% if not check %}
     {% for product in avail_products %}
     <div class = "v_align">
     <div class = "container">
     <div class = "card-wrap">
     <div class="card " style="width: 21rem;height: 33rem;">
-        <img class="card-img-top" src="https://i.imgur.com/A8eQsll.jpg" alt="Card image cap">
+        <img class="card-img-top" src={{product.images}} onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'" style='width: 320px; height: 200px; object-fit: scale-down;'>
         <div class="card-body">
           <h5 class="card-title">{{product.name}}</h5>
-          <p class="card-text">{{product.description}}</p>
-          <p class = "price">${{product.price}}</p>
+          <p class="card-text">{{product.descriptions}}</p>
+          <p class = "price">Avg Price: ${{product.avg}}</p>
           <p class = "rating">Rating: {{product.rating}}/5</p>
           <p class = "Category">Category: {{product.category}}</p>
-          <form action="/ind_prod/{{product.id}}" method = "POST" value = product name = "prod">
+          <form action="/ind_prod/{{product.id}}/main" method = "POST" value = product name = "prod">
             <input type="submit" value = "See more"/>  
         </form>
         </div>
@@ -176,6 +321,20 @@
 </div>
 </div>
       {% endfor %}
+
+      <div class = "all-pagination-stuff">
+      <div class = "pagination_info_bottom">
+      {{pagination.info}}
+    </div>
+
+    <div class = "pagination_info_bottom_two">
+      {{pagination.links}}
+    </div>
+  </div>
+  
+
+{% endif %}
+
     </body>
 
 <br><br>

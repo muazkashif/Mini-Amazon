@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .updating_info{
+        position:absolute;
+        left:20px; 
+        margin:10px;
+        padding: 10px;
+        height:20px; 
+    }
+
+    .return_no_edit{
+        position:absolute;
+        bottom:48%;
+        left: 2.5%;
+    }
+    .updating_info edit_submit{
+        position:absolute;
+        padding: 10px;
+    }
+
+</style>
+
+<br><br>
+<form class = "updating_info" method="POST" action="/add_seller_form_now/{{pid}}">
+<h3> <b>Personal Seller Information (Only Affects You):</b></h3>
+  <h5>Product Price:</h5>
+  <input type="text" value= "0.00"  style="width:600px;margin:10px;" name="existing_product_price">
+  &nbsp
+  <h5>Product Quantity:</h5>
+  <input type="text" value="0" style="width:600px;margin:10px;" name="existing_product_quantity">
+    <div class = "edit_submit" style = right:50px;margin:10px>
+        <input type="submit" value="Add">
+    </div>
+    
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      {% for message in messages %}
+        <br> {{ message }} </br>
+      {% endfor %}
+  {% endif %}
+{% endwith %}
+</form>
+
+    
+<div class = "return_no_edit">
+    <button onclick = "history.back()" name = "B2" 
+            type="submit" 
+            class = "button"
+            value = "back seller">Back Without Adding</button>
+</div>
+
+<br><br>
+
+{% endblock %}

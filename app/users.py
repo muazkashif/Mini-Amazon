@@ -6,7 +6,9 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
 from .models.user import User
+from .models.rating import Rating
 from .models.purchase import Purchase
+from .models.products import Product
 from datetime import datetime
 from decimal import Decimal
 from .models.seller import Seller
@@ -26,7 +28,7 @@ class LoginForm(FlaskForm):
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main_product_page.index'))
+        return redirect(url_for('main_product_page.index', k = 1))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.get_by_auth(form.email.data, form.password.data)
@@ -61,7 +63,7 @@ class RegistrationForm(FlaskForm):
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index.index'))
+        return redirect(url_for('main_product_page.index', k = 1))
     form = RegistrationForm()
     if form.validate_on_submit():
         if User.register(form.email.data,
@@ -81,35 +83,52 @@ def logout():
     logout_user()
     return redirect(url_for('index.opener_page'))
 
-@bp.route('/user_profile')
-@bp.route('/user_profile/')
+@bp.route('/user_profile', methods = ['GET', 'POST'])
+@bp.route('/user_profile/',methods = ['GET', 'POST'])
 def user_profile():
     if current_user.is_authenticated:
+        sellers = Seller.get_sellers()
+        check = False
+        if current_user.id in sellers: ##Issue with checking membership
+            check = True
         user_info = User.get(current_user.id)
         purchases = Purchase.get_all_purchases_by_uid(current_user.id)
+        total_amounts = []
+        for purchase in purchases:
+            total_amounts.append(purchase.quantity * purchase.price)
         return render_template('user_profile.html',
-                            info=user_info, purchase_history=purchases, purchase_history_len=len(purchases), logged_in=True)
+                            info=user_info, purchase_history=purchases, purchase_history_len=len(purchases), totals=total_amounts, logged_in=True, sell = check)
     return render_template('main_product_page.html')
 
 @bp.route('/update_Balance', methods = ['POST'])
 def update_balance():
-    value = User.get(current_user.id).balance + Decimal(request.form.get('addBalance'))
-    User.updateBalance(current_user.id, value)
-    return redirect(url_for('users.user_profile'))
+    toAdd = request.form.get('addBalance')
+    if (User.is_float(toAdd) == False or Decimal(toAdd) < 0):
+        flash('Invalid value. Please enter a valid positive integer or decimal.')
+        return redirect(url_for('users.user_profile'))
+    else:
+        value = User.get(current_user.id).balance + Decimal(request.form.get('addBalance'))
+        User.updateBalance(current_user.id, value)
+        return redirect(url_for('users.user_profile'))
 
-@bp.route('/user_update_form')
+@bp.route('/user_update_form', methods = ['GET', 'POST'])
 def user_form():
     return render_template('user_update_form.html')
 
-@bp.route('/update_user_info', methods = ['POST'])
+@bp.route('/update_user_info', methods = ['GET', 'POST'])
 def update_info():
     email = request.form.get('new_email')
+    print(email)
     password = request.form.get('new_password')
     firstname = request.form.get('new_firstname')
     lastname = request.form.get('new_lastname')
     address = request.form.get('new_address')
-    User.updateUser(current_user.id, email, password, firstname, lastname, address)
-    return redirect(url_for('users.user_profile'))
+    if (email == "" or User.email_exists(email) or password == "" or firstname == "" or lastname == "" or address == ""):
+        flash('INVALID INPUTS!')
+        return redirect(url_for('users.user_form'))
+    else:
+        User.updateUser(current_user.id, email, password, firstname, lastname, address)
+        return redirect(url_for('users.user_profile'))
 
 @bp.route('/add_seller', methods = ['POST', 'GET'])
 def add_seller():
@@ -119,5 +138,74 @@ def add_seller():
 
 @bp.route('/seller_page', methods = ['POST', 'GET'])
 def see_seller_page():
-    prod = Transaction.get_transactions(current_user.id)
-    return render_template('seller_pers_page.html', prod=prod)
+    no_ratings = False
+    user_info = User.get(current_user.id)
+    transactions = Transaction.get_transactions(current_user.id)
+    if transactions is None:
+        total = 0
+    else:
+        total = len(transactions)
+    status_count = Transaction.count_status(current_user.id)
+    all_counts = [["Delivered", 0], ["Processing", 0], ["Received", 0], ["Shipped", 0]]
+    if status_count is not None:
+        for i in range(len(status_count)):
+            for j in range(4): 
+                if status_count[i][0] == all_counts[j][0]:
+                    all_counts[j][1] = status_count[i][1]
+    seller_ratings = Rating.get_seller_ratings(current_user.id)
+    if seller_ratings is None:
+        rating_count = 0
+        seller_rating = "N/A"
+        no_ratings = True; 
+    else:
+        rating_count = len(seller_ratings)
+        seller_rating = round(Rating.get_ratings_seller_avg(current_user.id), 2)
+
+    return render_template('seller_pers_page.html', info = user_info, length = total, counts = all_counts, num_ratings = rating_count, seller_rating = seller_rating,
+    seller_ratings = seller_ratings, no_ratings = no_ratings)
+
+@bp.route('/seller_transaction', methods = ['POST', 'GET'])
+def see_seller_transactions():
+    check = False
+    transactions = Transaction.get_transactions(current_user.id)
+    if transactions is None:
+        check = True
+    return render_template('seller_transactions.html',prod = transactions, empty = check)
+
+@bp.route('/seller_products', methods = ['POST', 'GET'])
+def see_seller_products():
+    check = False
+    pers_products = Transaction.seller_prod(current_user.id)
+    if pers_products is None:
+        check = True
+    return render_template('seller_products.html', prod = pers_products, empty = check, )
+
+@bp.route('/withdraw', methods = ['POST'])
+def withdraw():
+    toWithdraw = request.form.get('withdrawBalance')
+    balance = User.get(current_user.id).balance
+    if (User.is_float(toWithdraw) == False or Decimal(toWithdraw) < 0 or Decimal(toWithdraw) > balance):
+        flash('Invalid value. Please enter a valid positive integer or decimal that is less than current balance.')
+        return redirect(url_for('users.user_profile'))
+    else:
+        newBalance = balance - Decimal(toWithdraw)
+        flash('$' + str(toWithdraw) + ' are being transferred to your connected bank account.')
+        User.updateBalance(current_user.id, newBalance)
+        return redirect(url_for('users.user_profile'))
+
+@bp.route('/view_order/<uid>break<time_purchased>', methods = ['GET', 'POST'])
+def view_order(uid,time_purchased):
+    purchases = Purchase.get_order(uid, time_purchased)
+    all_processed = True
+    product_names = []
+    for item in purchases:
+        product_names.append(Product.get_name(item.pid)[0][0])
+    for item in purchases:
+        if item.order_status == "Processing":
+            all_processed = False
+    if all_processed:
+        message = "Complete"
+    else:
+        message = "Incomplete"
+    return render_template('orders.html',
+                            purchases=purchases, purchases_len=len(purchases), processed_info=message,product_names=product_names, purchase_len=len(product_names))
