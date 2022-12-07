@@ -3,8 +3,59 @@
 {% block content %}
 
 <br><br>
+<h2 class="title">Seller: <b>{{info.firstname}} {{info.lastname}}</b></h2>
+    <div class="container emp-profile">
+        <form method="post">
+            <div class="row">
+                <div class="col-md-6">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="tab-content profile-tab">
+                        <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>User ID</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{info.id}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{info.email}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Date Joined</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{info.date}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                  <label>Total Sales</label>
+                              </div>
+                              <div class="col-md-6">
+                                  <p>{{counts[0][0]}}</p>
+                              </div>
+                          </div>
 
-<h2>Ratings written for Seller: {{sid}}</h2>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+<h2>Ratings Received</h2>
 <table class='table table-hover table-bordered container'>
   <thead class="thead-dark">
     <tr>
