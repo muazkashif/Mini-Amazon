@@ -13,7 +13,7 @@
 
     .return_no_edit{
         position:absolute;
-        bottom:53%;
+        bottom:48%;
         left: 2.5%;
     }
     .updating_info edit_submit{
@@ -35,7 +35,16 @@
         <input type="submit" value="Add">
     </div>
     
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      {% for message in messages %}
+        <br> {{ message }} </br>
+      {% endfor %}
+  {% endif %}
+{% endwith %}
 </form>
+
+    
 <div class = "return_no_edit">
     <button onclick = "history.back()" name = "B2" 
             type="submit" 

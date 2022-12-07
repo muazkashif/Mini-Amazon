@@ -47,10 +47,15 @@ def index():
     if current_user.is_authenticated:
         carts = Cart.get(current_user.id)
         product_names = []
+        prices = []
+        total_price = 0
         for item in carts:
             product_names.append(Product.get_name(item.pid)[0][0])
+            print("pid= "+str(item.pid) + "sid= " + str(item.sid))
+            prices.append(item.quantity * float(ForSaleItems.get_price(item.pid, item.sid)[0]))
+            total_price += item.quantity * float(ForSaleItems.get_price(item.pid, item.sid)[0])
         return render_template('carts.html',
-                            cart_items=carts, cart_len=len(carts), product_names=product_names,logged_in=True)
+                            cart_items=carts, cart_len=len(carts), product_names=product_names,prices=prices,logged_in=True, total_price=total_price)
     return render_template('carts.html',
                             cart_items=carts)
 
