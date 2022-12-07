@@ -147,14 +147,26 @@
         <h1>Products</h1>
     </div>
 
+    {% if not searching and not check%}
     <div class = "sidebar">
         <h2><u>Sort</u></h2>
         &nbsp
         <form name="sort_rating:">
           <h5>Ratings</h5>
           <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
-              <option selected="selected"></option>
-              <option value = "/index">No Sort</option>
+            {% if sortrate == "ASC" %}
+            <option value="/sort_rate/{{'ASC'}}" selected hidden>Worst Rated Items</option>
+            {% endif %}
+
+      
+            {% if sortrate == "DESC" %}
+            <option value="/sort_rate/{{'DESC'}}" selected hidden>Top Rated Items</option>
+            {% endif %}
+
+            {% if sortrate == "None" %}
+            <option value="/index" selected hidden></option>
+            {% endif %}
+
               <option value="/sort_rate/{{'ASC'}}">Worst Rated Items</option>
               <option value="/sort_rate/{{'DESC'}}">Top Rated Items</option>
           </select>
@@ -164,8 +176,20 @@
       <form name="sort_price:">
         <h5>Price</h5>
         <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
-            <option selected="selected"></option>
-            <option value="/index">No Sort</option>
+
+          {% if sortprice == "ASC" %}
+            <option value="/sort_price/{{'ASC'}}" selected hidden>Least Expensive</option>
+            {% endif %}
+
+      
+            {% if sortprice == "DESC" %}
+            <option value="/sort_price/{{'DESC'}}" selected hidden>Most Expensive</option>
+            {% endif %}
+
+            {% if sortprice == "None" %}
+            <option value="/index" selected hidden></option>
+            {% endif %}
+
             <option value="/sort_price/{{'ASC'}}">Least Expensive</option>
             <option value="/sort_price/{{'DESC'}}">Most Expensive</option>
         </select>
@@ -174,62 +198,102 @@
     <form name="sort_purchase:">
       <h5>Total Purchases</h5>
       <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
-          <option selected="selected"></option>
-          <option value="/index">No Sort</option>
+
+        {% if sortpurch == "ASC" %}
+            <option value="/sort_purchases/{{'ASC'}}" selected hidden>Least Purchased</option>
+            {% endif %}
+
+      
+            {% if sortpurch == "DESC" %}
+            <option value="/sort_purchases/{{'DESC'}}" selected hidden>Most Purchased</option>
+            {% endif %}
+
+            {% if sortpurch == "None" %}
+            <option value="/index" selected hidden></option>
+            {% endif %}
+
           <option value="/sort_purchases/{{'ASC'}}">Least Purchased</option>
           <option value="/sort_purchases//{{'DESC'}}">Most Purchased</option>
       </select>
+     
+  </form>
+  &nbsp
+  <form action = "/index" style = right:50px>
+    <input type="submit" value="Reset Sorting">
   </form>
 
     &nbsp
+    <form class = "filter_all" method="POST" action="/filter_products">
     <h2><u>Filter</u></h2>
     &nbsp
-    <form name="filtercategory">
-      <h5>Category</h5>
-      <select name="home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="{{avail_products}}">
-          <option selected="selected"></option>
-          <option value="/index">No Sort</option>
-          <option value="/filter_category/Books">Books</option>
-          <option value="/filter_category/Clothing">Clothing</option>
-          <option value="/filter_category/Electronics">Electronics</option>
-          <option value="/filter_category/Furniture">Furniture</option>
-          <option value="/filter_category/Kitchenware">Kitchenware</option>
-          <option value="/filter_category/Personal_Care">Personal Care</option>
-          <option value="/filter_category/School">School</option>
-          <option value="/filter_category/Sports">Sports</option>
-          <option value="/filter_category/Toiletries">Toiletries</option>
-          <option value="/filter_category/Travel">Travel</option>
-      </select>
-  </form>
+    <h5>Product Category:</h5>
+  <TD class = "select">   
+    <select name="filter_cat" style="width:140px;margin:10px;">
+      {% if catfilt == "None" %}
+      <option value="None" selected hidden></option>
+      {% endif %}
+
+      {% if catfilt != "None" %}
+
+            <option value="{{catfilt}}" selected hidden>{{catfilt}}</option>
+          {% endif %}
+            <option value="Books">Books</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Kitchenware">Kitchenware</option>
+            <option value="Pet">Pet</option>
+            <option value="School">School</option>
+            <option value="Sports">Sports</option>
+            <option value="Toiletries">Toiletries</option>
+            <option value="Travel">Travel</option>
+    </select>
+    </TD>
   &nbsp
-  <form name="filter_price:">
-        <h5>Price</h5>
-        <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
-            <option selected="selected"></option>
-            <option selected="selected"></option>
-            <option value="/index">No Sort</option>
-            <option value="/filter_price/50"><$50</option>
-            <option value="/filter_price/150"><$150</option>
-            <option value="/filter_price/250"><$250</option>
-            <option value="/filter_price/350"><$350</option>
+  <h5>Price</h5>
+  <TD class="select">
+        <select name="filter_price" style="width:140px;margin:10px;">
+          {% if pricefilt == "None" %}
+          <option value="None" selected hidden></option>
+          {% endif %}
+          {% if pricefilt != "None" %}
+          <option value="{{pricefilt}}" selected hidden><${{pricefilt}}</option>
+          {% endif %}
+            <option value="50"><$50</option>
+            <option value="150"><$150</option>
+            <option value="250"><$250</option>
+            <option value="350"><$350</option>
         </select>
-    </form>
+      </TD>
     &nbsp
-    <form name="filter_rating:">
-        <h5>Rating</h5>
-        <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
-            <option selected="selected"></option>
-            <option value="/index">No Sort</option>
-            <option value="/filter_rate/0"><1</option>
-            <option value="/filter_rate/1">1</option>
-            <option value="/filter_rate/2">2</option>
-            <option value="/filter_rate/3">3</option>
-            <option value="/filter_rate/4">4</option>
-            <option value="/filter_rate/5">5</option>
+    <h5>Rating</h5>
+    <TD name="select">
+        <select name="filter_rating" style="width:140px;margin:10px;">
+            {% if ratefilt == "None" %}
+            <option value="None" selected hidden></option>
+            {% endif %}
+            {% if ratefilt != "None" %}
+            <option value="{{ratefilt}}" selected hidden>{{ratefilt}}</option>
+            {% endif %}
+            <option value="0"><1</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
         </select>
+      </TD>
+      <div class = "edit_submit" style = right:50px;margin:10px>
+        <input type="submit" value="Filter">
+    </div>
+    </form>
+    <form action = "/index" style = right:50px;margin:10px>
+      <input type="submit" value="Reset Filters">
     </form>
 </div>
   </div>
+
+  {% endif %}
 
   {% if check %}
   <h1 style="text-align: center;">No Results</h1>
