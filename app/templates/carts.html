@@ -3,6 +3,15 @@
 {% block content %}
 
 <h2>Cart Items:</h2>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 <form action="/carte/">
   <button>Clear Cart</button>
 </form>
@@ -23,6 +32,7 @@
         <th scope="col">Select From Cart</th>
       </tr>
     </thead>
+  </form>
     <tbody>
       {% for i in range(cart_len)%}
         <tr>
@@ -35,12 +45,11 @@
           <td>{{cart_items[i].sid}}</td>
           <td>{{cart_items[i].quantity}}</td>
           <td>{{prices[i]}}</td>
-          <th scope="col"><input type="checkbox" value="{{cart_items[i].pid, cart_items[i].sid, cart_items[i].quantity}}" name="selectfromcart"></th>
+          <td><input type="checkbox" value="{{cart_items[i].pid, cart_items[i].sid, cart_items[i].quantity}}" name="selectfromcart"></td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
-</form>
 
 <br><br>
 
