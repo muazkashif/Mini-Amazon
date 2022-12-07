@@ -45,13 +45,13 @@ ORDER BY count DESC
         return rows
     
     @staticmethod
-    def getSeller(pid,uid):
+    def getSellers(uid,pid):
         rows = app.db.execute('''
-SELECT sid
+SELECT DISTINCT sid
 FROM Transactions
 WHERE pid = :pid AND uid = :uid
 ''',                                    pid = pid, uid=uid)
-        return rows[0][0]
+        return rows
 
     @staticmethod
     def update_status(stat, sid, uid, pid, time):
