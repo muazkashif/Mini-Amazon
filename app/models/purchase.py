@@ -70,17 +70,19 @@ ORDER BY time_purchased DESC
     @staticmethod
     def get_all_purchases_by_uid(uid):
         rows = app.db.execute(
-'''SELECT T.uid, T.sid, T.pid, T.quantity, T.price, T.time_purchased, T.order_status, R.rating, R.review, T.time_updated
+'''SELECT *
+FROM Products P, (SELECT T.uid, T.sid, T.pid, T.quantity, T.price, T.time_purchased, T.order_status, R.rating, R.review, T.time_updated
 FROM Transactions T LEFT JOIN 
-(SELECT uid, pid, rating, review
+(SELECT uid, sid, pid, rating, review
 FROM Ratings
-WHERE uid=:uid) R ON T.pid=R.pid
+WHERE uid=:uid) R ON T.pid=R.pid AND T.sid = R.sid
 WHERE T.uid = :uid
-ORDER BY T.time_purchased DESC
+ORDER BY T.time_purchased DESC) PUR
+WHERE P.id = PUR.pid
 ''',
                               uid=uid)
         print(rows)
-        return [Purchase(*row) for row in rows]
+        return rows
 
     @staticmethod
     def get_all():
