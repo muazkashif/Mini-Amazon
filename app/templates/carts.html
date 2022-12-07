@@ -3,6 +3,15 @@
 {% block content %}
 
 <h2>Cart Items:</h2>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 <form action="/carte/">
   <button>Clear Cart</button>
 </form>
