@@ -17,7 +17,6 @@
   <table class='table table-hover table-bordered container'>
     <thead class="thead-dark">
       <tr>
-        <th scope="col"></th>
         <th scope="col">Product</th>
         <th scope="col">Seller ID</th>
         <th scope="col">Quantity</th>
@@ -30,11 +29,6 @@
     <tbody>
       {% for i in range(purchase_len)%}
         <tr>
-          <td>
-            <form method="POST" action="/order/">
-              <button value="{{purchases[i].pid, purchases[i].sid, purchases[i].time_purchased}}" name="trash">remove</button>
-            </form>
-          </td>
           <td>{{product_names[i]}}</td>
           <td>{{purchases[i].sid}}</td>
           <td>{{purchases[i].quantity}}</td>
