@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, flash, redirect, url_for
 from flask_login import current_user
 from datetime import datetime
 
@@ -32,19 +32,21 @@ def translate(id):
 
 @bp.route('/order/checkout', methods=['GET','POST'])
 def check_out_all():
-    success = False
+    success_price = False
+    success_quantity = True
     cart = Cart.get(current_user.id)
     total_price = 0
     balance = User.get_balance(current_user.id)
     for item in cart: 
         pid, sid, quantity = item.pid, item.sid, item.quantity
         quantity_available = ForSaleItems.get_quantity(int(pid), int(sid))
-        print(quantity_available)
         new_quantity = quantity_available - int(quantity)
         if new_quantity >= 0:
             total_price += float(ForSaleItems.get_price(pid, sid)[0]) * item.quantity
+        else:
+            success_quantity = False
     if total_price < balance:
-        success = True
+        success_price = True
         User.updateBalance(current_user.id, float(balance)-total_price)
         time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         for item in cart:
@@ -63,28 +65,32 @@ def check_out_all():
 
     if current_user.is_authenticated:
         product_names = []
-        if success:
+        if success_price:
             purchases = Purchase.get_order(current_user.id, time)
+            for item in purchases:
+                product_names.append(Product.get_name(item.pid)[0][0])
+            all_processed = True
+            for item in purchases:
+                if item.order_status == "Processing":
+                    all_processed = False
+            if all_processed:
+                message = "Complete"
+            else:
+                message = "Incomplete"
+            if not success_quantity:
+                flash("***NOTICE: Some Items In Your Purchase No Longer Available***")
+            return render_template('orders.html',
+                                purchases=purchases, logged_in=True, processed_info=message, product_names=product_names, purchase_len=len(product_names))
         else:
-            purchases = Purchase.get_all_purchases_by_uid(current_user.id)
-        for item in purchases:
-            product_names.append(Product.get_name(item.pid)[0][0])
-        all_processed = True
-        for item in purchases:
-            if item.order_status == "Processing":
-                all_processed = False
-        if all_processed:
-            message = "Complete"
-        else:
-            message = "Incomplete"
-        return render_template('orders.html',
-                            purchases=purchases, logged_in=True, processed_info=message, product_names=product_names, purchase_len=len(product_names))
+            flash("Purchase Failed: Insufficient Funds or Empty Selection")
+            return redirect(url_for('cart.index'))
     return render_template('orders.html',
                             purchases=purchases)
 
 @bp.route('/order/', methods=['GET','POST'])
 def index():
-    success = False
+    success_price = False
+    success_quantity = True
     if request.method == 'POST':
         if current_user.is_authenticated:
             if request.form.get("trash"):
@@ -99,8 +105,10 @@ def index():
                     new_quantity = quantity_available - int(quantity)
                     if new_quantity >= 0:
                         total_price += float(ForSaleItems.get_price(pid, sid)[0]) * int(quantity)
+                    else:
+                        success_quantity = False
                 if total_price < balance:
-                    success = True
+                    success_price = True
                     time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
                     User.updateBalance(current_user.id, float(balance)-total_price)
                     for id in request.form.getlist("selectfromcart"):
@@ -118,21 +126,24 @@ def index():
     purchases = Purchase.get_all()
     if current_user.is_authenticated:
         product_names = []
-        if success:
+        if success_price:
             purchases = Purchase.get_order(current_user.id, time)
+            for item in purchases:
+                product_names.append(Product.get_name(item.pid)[0][0])
+            all_processed = True
+            for item in purchases:
+                if item.order_status == "Processing":
+                    all_processed = False
+            if all_processed:
+                message = "Complete"
+            else:
+                message = "Incomplete"
+            if not success_quantity:
+                flash("***NOTICE: Some Items In Your Purchase No Longer Available***")
+            return render_template('orders.html',
+                                purchases=purchases, logged_in=True, processed_info=message, product_names=product_names, purchase_len=len(product_names))
         else:
-            purchases = Purchase.get_all_purchases_by_uid(current_user.id)
-        for item in purchases:
-            product_names.append(Product.get_name(item.pid)[0][0])
-        all_processed = True
-        for item in purchases:
-            if item.order_status == "Processing":
-                all_processed = False
-        if all_processed:
-            message = "Complete"
-        else:
-            message = "Incomplete"
-        return render_template('orders.html',
-                            purchases=purchases, logged_in=True, processed_info=message, product_names=product_names, purchase_len=len(product_names))
+            flash("Purchase Failed: Insufficient Funds or Empty Selection")
+            return redirect(url_for('cart.index'))
     return render_template('orders.html',
                             purchases=purchases)
