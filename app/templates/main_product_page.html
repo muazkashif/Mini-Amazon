@@ -161,7 +161,6 @@
       </form>
 
       &nbsp
-      
       <form name="sort_price:">
         <h5>Price</h5>
         <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
@@ -171,13 +170,23 @@
             <option value="/sort_price/{{'DESC'}}">Most Expensive</option>
         </select>
     </form>
+    &nbsp
+    <form name="sort_purchase:">
+      <h5>Total Purchases</h5>
+      <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
+          <option selected="selected"></option>
+          <option value="/index">No Sort</option>
+          <option value="/sort_purchases/{{'ASC'}}">Least Purchased</option>
+          <option value="/sort_purchases//{{'DESC'}}">Most Purchased</option>
+      </select>
+  </form>
 
     &nbsp
     <h2><u>Filter</u></h2>
     &nbsp
-    <form name="Category:">
+    <form name="filtercategory">
       <h5>Category</h5>
-      <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
+      <select name="home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="{{avail_products}}">
           <option selected="selected"></option>
           <option value="/index">No Sort</option>
           <option value="/filter_category/Books">Books</option>

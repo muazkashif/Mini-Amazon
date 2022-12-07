@@ -7,6 +7,7 @@ from flask import current_app as app
 from .models.products import Product
 from .models.purchase import Purchase
 from .models.for_sale import ForSaleItems
+from .models.transactions import Transaction
 
 from flask import Blueprint
 
@@ -40,12 +41,17 @@ def index(flag, sort, direction):
             products_for_sale = ForSaleItems.get_all_products_for_sale_rate(direction)
         elif sort == "Price":
             products_for_sale = ForSaleItems.get_all_products_for_sale_price(direction)
+        elif sort == "sales":
+            products_for_sale = Transaction.get_all_products_for_total_sales(direction)
+        # elif sort = "filter":
+        #     products_for_sale = #multipe sort function
         elif sort == "cat":
             products_for_sale = ForSaleItems.get_all_products_for_sale_fil_cat(direction)
         elif sort == "ratef":
             products_for_sale = ForSaleItems.get_all_products_for_sale_fil_rate(direction)
         elif sort == "pricef":
             products_for_sale = ForSaleItems.get_all_products_for_sale_fil_price(direction)
+        
     else:
         products_for_sale = ForSaleItems.get_all_products_for_sale() 
     check = False
@@ -102,6 +108,11 @@ def price_sort(dir):
 @bp.route('/filter_category/<dir>', methods = ["POST", "GET"])
 def filter_category(dir):
     return redirect(url_for('main_product_page.index', flag=True, sort="cat", direction=dir))
+
+@bp.route('/sort_purchases/<dir>', methods = ["POST", "GET"])
+def sort_by_total_purchases(dir):
+    return redirect(url_for('main_product_page.index', flag=True, sort="sales", direction=dir))
+
 
 @bp.route('/filter_price/<dir>', methods = ["POST", "GET"])
 def filter_price(dir):
