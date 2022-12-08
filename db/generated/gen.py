@@ -19,7 +19,7 @@ num_coupons = 1000
 
 
 
-file_path = "../data/"
+file_path = "../generated/"
 
 categories = ["Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
