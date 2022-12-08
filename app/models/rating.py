@@ -4,30 +4,34 @@ from flask import render_template, redirect, url_for, flash, request
 
 
 class Rating:
-    def __init__(self, uid, sid, pid, rating, review, time_reviewed):
+    global sort_type
+    sort_type = "time_reviewed"
+    def __init__(self, uid, sid, pid, rating, review, time_reviewed,votes):
         self.uid = uid
         self.sid = sid
         self.pid = pid
         self.rating = rating
         self.review = review
         self.time_reviewed = time_reviewed
+        self.votes = votes
+        
     
 
     @staticmethod
     def get_user_ratings(uid):
         rows = app.db.execute('''
-SELECT uid, sid, pid, Ratings.rating, review, time_reviewed, name
+SELECT uid, sid, pid, Ratings.rating, review, time_reviewed, votes, name
 FROM Ratings JOIN Products ON Ratings.pid=Products.id
 WHERE uid = :uid
 ORDER BY time_reviewed DESC
 ''',
-                              uid=uid)
+                              uid=uid,sort=sort_type)
         return rows
 
     @staticmethod
     def get_all():
         rows = app.db.execute('''
-SELECT uid, sid, pid, rating, review, time_reviewed
+SELECT uid, sid, pid, rating, review, time_reviewed,votes
 FROM Ratings
 ''')
         return [Rating(*row) for row in rows]
@@ -35,8 +39,9 @@ FROM Ratings
 
     @staticmethod
     def get_recent_pid(pid, k):
+        global sort_type
         rows = app.db.execute('''
-SELECT uid, sid, pid, rating, review, time_reviewed
+SELECT uid, sid, pid, rating, review, time_reviewed,votes
 FROM Ratings
 WHERE pid = :pid
 ORDER BY time_reviewed DESC
@@ -46,8 +51,9 @@ ORDER BY time_reviewed DESC
     
     @staticmethod
     def get_recent_uid(uid, k):
+        global sort_type
         rows = app.db.execute('''
-SELECT uid, sid, pid, rating, review, time_reviewed
+SELECT uid, sid, pid, rating, review, time_reviewed,votes
 FROM Ratings
 WHERE uid = :uid
 ORDER BY time_reviewed DESC
@@ -58,27 +64,29 @@ ORDER BY time_reviewed DESC
 
     @staticmethod
     def get_prod_reviews(pid): 
+        global sort_type
         rows = app.db.execute('''
-SELECT uid, sid, pid, rating, review, time_reviewed
+SELECT uid, sid, pid, rating, review, time_reviewed,votes
 FROM Ratings
 WHERE pid = :pid
-ORDER BY time_reviewed DESC
-''',
+ORDER BY {} DESC
+'''.format(sort_type),
                                 pid = pid)
         return [Rating(*row) for row in rows]
 
     @staticmethod
     def get_all():
         rows = app.db.execute('''
-SELECT uid, sid, pid, rating, review, time_reviewed
+SELECT uid, sid, pid, rating, review, time_reviewed,votes
 FROM Ratings
 ''')
         return [Rating(*row) for row in rows]
     
     @staticmethod
     def get_specific_review(uid, pid,sid):
+        global sort_type
         rows = app.db.execute('''
-SELECT uid, sid, pid, Ratings.rating, review, time_reviewed, name
+SELECT uid, sid, pid, Ratings.rating, review, time_reviewed, votes, name
 FROM Ratings, Products
 WHERE pid = :pid AND uid =:uid AND sid = :sid and Products.id=Ratings.pid
 ORDER BY time_reviewed DESC
@@ -99,8 +107,8 @@ WHERE uid = :uid and pid = :pid and sid = :sid
     @staticmethod
     def addReview(uid, sid, pid,reviewvalue,ratingvalue,time):
         rows = app.db.execute("""
-INSERT INTO Ratings(uid, sid, pid, rating,review,time_reviewed)
-VALUES(:uid, :sid, :pid, :ratingvalue, :reviewvalue, :time)
+INSERT INTO Ratings(uid, sid, pid, rating,review,time_reviewed,votes)
+VALUES(:uid, :sid, :pid, :ratingvalue, :reviewvalue, :time,0)
 RETURNING uid
 """,
                               uid=uid, sid=sid, pid=pid,ratingvalue=ratingvalue,reviewvalue=reviewvalue,time=time)
@@ -130,6 +138,7 @@ WHERE pid = :pid
 
     @staticmethod
     def get_seller_ratings(sid):
+        global sort_type
         rows = app.db.execute('''
 SELECT *
 FROM Ratings, Products
@@ -158,5 +167,37 @@ WHERE sid = :sid
                               sid = sid)
         avg = rows[0][0]
         return avg if rows else None
+    
+    @staticmethod
+    def getvotes_for_Review(uid,pid,sid):
+        rows = app.db.execute('''
+SELECT votes
+FROM Ratings
+WHERE uid = :uid and pid = :pid and sid = :sid
+''',
+                              sid = sid,uid=uid,pid=pid)
+        return rows[0][0]
+        
+    @staticmethod
+    def change_upvote_Review(uid,pid,sid,val):
+        rows = app.db.execute('''
+UPDATE Ratings
+SET votes = :val
+WHERE uid = :uid and pid = :pid and sid = :sid
+''',
+                              sid = sid,uid=uid,pid=pid,val=val)
+        return
+    
+    @staticmethod
+    def change_order_by(type):
+        global sort_type
+        sort_type = type
+        return
+    
+    @staticmethod
+    def get_rating_sort():
+        global sort_type
+        return sort_type
+    
 
    

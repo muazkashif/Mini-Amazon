@@ -18,7 +18,7 @@ num_ratings = 5000
 
 
 
-file_path = "../generated/"
+file_path = "../data/"
 
 categories = ["Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
@@ -325,10 +325,11 @@ def gen_ratings(num_ratings):
                 sid = transaction[1]
                 pid = transaction[2]
                 rand_int = fake.random_int(min=1, max=20000)
+                votes = fake.random_int(min = -3, max = 5)
                 rating = int(float(reader[rand_int][1]))
                 review = reader[rand_int][3]
                 time = fake.date_time_between(start_date = datetime.datetime(2000, 1, 1))
-                writer.writerow([uid, sid, pid, rating,review,time])
+                writer.writerow([uid, sid, pid, rating,review,time,votes])
                 already_done_keys.append(transaction)
                 if pid in ratings_prods:
                     ratings_prods[pid].append(rating)

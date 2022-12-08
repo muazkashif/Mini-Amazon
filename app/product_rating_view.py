@@ -48,12 +48,12 @@ def review_page(uid,pid,sid):
         return render_template('add_review_page.html',
                             ratings=ratings,user=uid,product= str(Product.get_name(pid)[0])[2:-3],sid=sid,pid=pid)
 
-@bp.route('/delete_review/<uid>_pid>_<sid>', methods = ['GET', 'POST'])
-def delete_review(uid,pid):
-    Rating.delete_review(uid,pid)
+@bp.route('/delete_review/<uid>_<pid>_<sid>', methods = ['GET', 'POST'])
+def delete_review(uid,pid,sid):
+    Rating.delete_review(uid,pid,sid)
     avg = Rating.get_ratings_for_avg(pid)
     Product.update_rating(pid,avg)
-    return redirect(url_for('ind_prod.show_product', k = pid))
+    return redirect(url_for('ind_prod.show_product', k = pid, sid = "main" ))
     
 @bp.route('/update_review/<uid>_<pid>_<sid>', methods = ['GET', 'POST'])
 def update_review(uid,pid,sid):

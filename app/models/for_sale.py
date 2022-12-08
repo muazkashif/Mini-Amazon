@@ -224,12 +224,12 @@ WHERE pid = :pid
     @staticmethod
     def get_sellers_for_product(pid):
         rows = app.db.execute("""
-SELECT *
-FROM ForSaleItems
-WHERE pid = :pid
+SELECT *, ROUND(avg, 2) as avg
+FROM ForSaleItems, (SELECT avg(rating) AS avg, sid FROM Ratings GROUP BY sid) as S
+WHERE pid = :pid AND S.sid = ForSaleItems.sid
 """, 
                                     pid = pid)
-        return [ForSaleItems(*row) for row in rows]
+        return rows
 
     @staticmethod
     def get_prod_seller_info(pid, sid):

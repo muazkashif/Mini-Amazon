@@ -71,8 +71,8 @@
     {% for i in range(ratings_len)%}
       <tr>
         <th scope="row">{{i+1}}</th>
-        <td>{{ratings[i].sid}}</td>
-        <td><a href="/ind_prod/{{ratings[i].pid}}">{{ratings[i].name}}</a></td>
+        <td><a href="/seller_reviews/{{ratings[i].sid}}">{{ratings[i].sid}}</a></td>
+        <td><a href="/ind_prod/{{ratings[i].pid}}/main">{{ratings[i].name}}</a></td>
         <td>{{ratings[i].rating}}</td>
         <td>{{ratings[i].review}}</td>
         <td>{{ratings[i].time_reviewed}}</td>

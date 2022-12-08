@@ -15,6 +15,29 @@
 .left-column img{
 	border:solid #000000;
 }
+.up_button{
+  background:none;
+}
+
+.up_button:hover{
+  background:#ADD8E6;
+}
+
+.down_button{
+  background:none;
+}
+
+.down_button:hover{
+  background:#ADD8E6;
+}
+
+.down_button {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
  
 .right-column {
   width: 35%;
@@ -68,7 +91,7 @@
   text-decoration: none;
   padding: 12px 30px;
   transition: all .5s;
-  top: 520px;
+  top: 700px;
   right: 45px;  
 }
 .review-btn:hover {
@@ -151,7 +174,7 @@
           {% endif %}
           <label for="{{seller.sid}}">Seller: <a href="/seller_reviews/{{seller.sid}}">{{seller.sid}}</a></label>
           <p> <b> Quantity:</b> {{seller.quantity}} <br>
-          <b> Rating:</b> {{seller.avg_r}}</p>
+          <b> Rating:</b> {{seller.avg}}</p>
         </div>
       </form>
         {% endfor %}
@@ -228,13 +251,26 @@
 <div class = "wrap-table">
 <table class='table table-hover table-bordered container'>
 	<h1>Rating</h1>
-  <p1>Number of Ratings: {{ratingsNumber}} </p1>
+  <p1>Number of Ratings: {{ratingsNumber}} </p1> <br>
+  <p1>Sort By:    
+    <select name="Home" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO">
+      {%if rating_sort == "time_reviewed"%}
+      <option selected="selected" value="/change_rating_sort/time_reviewed/{{prod_items.id}}">Time Reviewed</option>
+      <option value="/change_rating_sort/votes/{{prod_items.id}}">Upvotes/Downvotes</option>
+      {% elif rating_sort == "votes"%}
+      <option value="/change_rating_sort/time_reviewed/{{prod_items.id}}">Time Reviewed</option>
+      <option selected="selected"value="/change_rating_sort/votes/{{prod_items.id}}">Upvotes/Downvotes</option>
+      {%endif%}
+    </select>
+  </p1>
   <thead class="thead-dark">
     <tr>
       <th scope="col">User</th>
+      <th scope="col">Seller</th>
       <th scope="col">Rating</th>
       <th scope="col">Review</th>
       <th scope="col">Time Reviewed</th>
+      <th scope="col">Upvote/Downvote</th>
     </tr>
   </thead>
   <tbody>
@@ -243,9 +279,19 @@
         <td>
             <a href="/view_all_reviews/{{rating.uid}}">{{rating.uid}}</a>
         </td>
+        <td>
+          <a href="/seller_reviews/{{rating.sid}}">{{rating.sid}}</a>
+        </td>
         <td>{{rating.rating}}</td>
         <td>{{rating.review}}</td>
         <td>{{rating.time_reviewed}}</td>
+        <td>
+          {%if current_uid!= -1%}
+          <a href="/upvote_review/{{rating.uid}}_{{rating.pid}}_{{rating.sid}}"> <img class="up_button" src="https://pixabay.com/get/gdf2f85ade0ffda888902442ef6a68012fa2fb35a7d353b8cd227cf52afc42c5a1b83e118c368256f27bea4bd1a568c124e08b21fb32858ef79fe6c61b65ad634202c530b563747f307823e566b7dc08a_1280.png" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'" style='width: 30px; height: 30px; object-fit: scale-down;'></a>
+          <a href="/downvote_review/{{rating.uid}}_{{rating.pid}}_{{rating.sid}}"> <img class="down_button" src="https://pixabay.com/get/gdf2f85ade0ffda888902442ef6a68012fa2fb35a7d353b8cd227cf52afc42c5a1b83e118c368256f27bea4bd1a568c124e08b21fb32858ef79fe6c61b65ad634202c530b563747f307823e566b7dc08a_1280.png" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'" style='width: 30px; height: 30px; object-fit: scale-down;'></a>
+          {%endif%}
+          <p1>{{rating.votes}}</p1>
+        </td>
       </tr>
     {% endfor %}
   </tbody>
