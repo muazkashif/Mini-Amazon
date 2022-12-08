@@ -8,6 +8,7 @@ from .models.cart import Cart
 from .models.rating import Rating
 from datetime import datetime
 from .models.transactions import Transaction
+from .models.user import User
 
 from flask import Blueprint
 bp = Blueprint('product_rating_view', __name__)
@@ -47,12 +48,12 @@ def review_page(uid,pid,sid):
         return render_template('add_review_page.html',
                             ratings=ratings,user=uid,product= str(Product.get_name(pid)[0])[2:-3],sid=sid,pid=pid)
 
-@bp.route('/delete_review/<uid>_pid>_<sid>', methods = ['GET', 'POST'])
-def delete_review(uid,pid):
-    Rating.delete_review(uid,pid)
+@bp.route('/delete_review/<uid>_<pid>_<sid>', methods = ['GET', 'POST'])
+def delete_review(uid,pid,sid):
+    Rating.delete_review(uid,pid,sid)
     avg = Rating.get_ratings_for_avg(pid)
     Product.update_rating(pid,avg)
-    return redirect(url_for('ind_prod.show_product', k = pid))
+    return redirect(url_for('ind_prod.show_product', k = pid, sid = "main" ))
     
 @bp.route('/update_review/<uid>_<pid>_<sid>', methods = ['GET', 'POST'])
 def update_review(uid,pid,sid):
@@ -79,5 +80,7 @@ def add_review(uid,sid,pid):
 @bp.route('/view_all_reviews/<uid>', methods = ['GET', 'POST'])
 def view_all(uid):
     ratings = Rating.get_user_ratings(uid)
+    user_info = User.get(uid)
+    counts = Transaction.getCountForUid(uid)
     return render_template('all_review_page.html',
-                          ratings=ratings, ratings_len=len(ratings))
+                          ratings=ratings, ratings_len=len(ratings), info=user_info, counts=counts)

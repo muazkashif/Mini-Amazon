@@ -89,3 +89,20 @@ ORDER BY order_status
 ''',                                    id = id)
         return rows if rows else None
 
+    @staticmethod
+    def getCountForUid(uid):
+        rows = app.db.execute('''
+SELECT COUNT(*)
+FROM Transactions
+WHERE uid = :uid
+''',                                    uid=uid)
+        return rows
+
+    @staticmethod
+    def getCountForSid(sid):
+        rows = app.db.execute('''
+SELECT COUNT(*)
+FROM Transactions
+WHERE sid = :sid
+''',                                    sid=sid)
+        return rows
