@@ -8,6 +8,7 @@ from .models.cart import Cart
 from .models.rating import Rating
 from datetime import datetime
 from .models.transactions import Transaction
+from .models.user import User
 
 from flask import Blueprint
 bp = Blueprint('product_rating_view', __name__)
@@ -79,5 +80,7 @@ def add_review(uid,sid,pid):
 @bp.route('/view_all_reviews/<uid>', methods = ['GET', 'POST'])
 def view_all(uid):
     ratings = Rating.get_user_ratings(uid)
+    user_info = User.get(uid)
+    counts = Transaction.getCountForUid(uid)
     return render_template('all_review_page.html',
-                          ratings=ratings, ratings_len=len(ratings))
+                          ratings=ratings, ratings_len=len(ratings), info=user_info, counts=counts)

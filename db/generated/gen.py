@@ -18,7 +18,7 @@ num_ratings = 5000
 
 
 
-file_path = "../data/"
+file_path = "../generated/"
 
 categories = ["Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
@@ -120,6 +120,10 @@ def gen_carts(num_cart_items, uids, prod_to_seller):
                 print(f'{i}', end=' ', flush=True)
             uid = fake.random_element(elements=uids)
             prod_seller = fake.random_element(elements=prod_to_seller)
+            while prod_seller == ():
+                prod_seller = fake.random_element(elements=prod_to_seller)
+            # print(str(prod_seller[0]) + "\n")
+            # print(str(prod_seller[1]) + "\n")
             pid = prod_seller[0]
             s_uid = prod_seller[1]
             key = (uid,s_uid,pid)
@@ -274,8 +278,8 @@ def gen_products(num_products, ratings_prods):
                     else:
                         rating = 0
                     descriptions = row[10]
-                    category = row[4].split(">>")[0][2:].split("\"]")[0]
-                    #category = fake.random_element(elements = ("Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"))
+                    #category = row[4].split(">>")[0][2:].split("\"]")[0]
+                    category = fake.random_element(elements = ("Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"))
                     if len(category)>39:
                         category = "Other"
                     images = row[8].split("\"\"")[0][2:].replace('\"','').split(",")[0]
