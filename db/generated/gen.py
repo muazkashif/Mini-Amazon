@@ -268,12 +268,12 @@ def gen_products(num_products, ratings_prods):
     available_pids = []
     names = []
     unique = []
-    # categories_dict = {}
+    categories_dict = {}
     print(ratings_prods)
-    # with open("../../outside_data/" + 'Sorted_cats.csv', 'r') as r:
-    #     reader = get_csv_reader(r)
-    #     for row in reader:
-    #         categories_dict[row[0]] = row[1]
+    with open("../../outside_data/" + 'Cats_sorted.csv', 'r') as r:
+        reader = get_csv_reader(r)
+        for row in reader:
+            categories_dict[row[0]] = row[1]
     
     with open(file_path + 'Products.csv', 'w') as f:
         writer = get_csv_writer(f)
@@ -303,8 +303,8 @@ def gen_products(num_products, ratings_prods):
                         rating = 0
                     descriptions = row[10]
                     category = row[4].split(">>")[0][2:].split("\"]")[0]
-                    # if category in categories_dict:
-                    #     category = categories_dict[category]
+                    if category in categories_dict:
+                        category = categories_dict[category]
                     # category = fake.random_element(elements = ("Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"))
                     # if len(category)>39:
                     #     category = "Other"

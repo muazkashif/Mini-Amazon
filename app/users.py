@@ -124,7 +124,7 @@ def update_info():
     lastname = request.form.get('new_lastname')
     address = request.form.get('new_address')
     if (email == "" or User.email_exists(email) or password == "" or firstname == "" or lastname == "" or address == ""):
-        flash('INVALID INPUTS!')
+        flash('INVALID INPUTS! Incorrect format or email may be taken')
         return redirect(url_for('users.user_form'))
     else:
         User.updateUser(current_user.id, email, password, firstname, lastname, address)

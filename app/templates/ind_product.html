@@ -210,7 +210,8 @@
 	  <h1>Price: ${{seller_info.price}}</h1> 
     {% endif %}
 		<h1>Rating: {{prod_items.rating}}/5</h1>
-    {% if seller_info != "None" %}
+    {% if seller_info != "None" and current_user.is_authenticated%}
+    
     {% if seller_info.quantity == 0 %}
     <div class = "check-out">
       <form action="">

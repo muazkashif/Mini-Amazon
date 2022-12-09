@@ -81,7 +81,7 @@ def add_product_current():
     if product_price < 0 or product_quantity < 0:
         flash("Invalid quantity or price input")
         return redirect(url_for('product.add_product'))
-    pid = Product.add_new_product(product_name, product_description, product_category, 1, product_image, True)
+    pid = Product.add_new_product(product_name, product_description, product_category, 0, product_image, True)
     if pid is None:
         flash("Invalid Name. Already Exists")
         return redirect(url_for('product.add_product'))
