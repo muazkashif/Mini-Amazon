@@ -29,8 +29,6 @@ def show_rating_uid(sid):
     counts = Transaction.getCountForSid(sid)
     user_info = User.get(sid)
     total = Rating.get_ratings_seller_avg(sid)
-    print(total)
-    print(ratings)
     if total is None:
         total = "N/A"
     else:

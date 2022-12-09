@@ -140,7 +140,7 @@ WHERE pid = :pid
     def get_seller_ratings(sid):
         global sort_type
         rows = app.db.execute('''
-SELECT *
+SELECT *, Ratings.rating as rate
 FROM Ratings, Products
 WHERE sid = :sid AND pid = id
 ORDER BY time_reviewed DESC
