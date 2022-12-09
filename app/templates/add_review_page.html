@@ -5,22 +5,25 @@
 
 <h2>Adding Review <br>User: {{user}} <br>for Product: {{product}}<br> Sold by: {{sid}}</h2>
 <form method="POST" action="/add_review/{{user}}_{{pid}}_{{sid}}">
-        <input type="text" name="reviewText" style= "width: 700px; height:200px; outline: solid;"><br>
-            <input type="radio" id="0" name="ratingText" value="0">
+        <input type="text" name="reviewText" style= "width: 700px; height:200px; outline: solid;" required><br>
+            <input type="radio" id="0" name="ratingText" value="0" required>
             <label for="0">0</label>
-            <input type="radio" id="1" name="ratingText" value="1">
+            <input type="radio" id="1" name="ratingText" value="1" required>
             <label for="1">1</label>
-            <input type="radio" id="2" name="ratingText" value="2">
+            <input type="radio" id="2" name="ratingText" value="2" required>
             <label for="2">2</label>
-            <input type="radio" id="3" name="ratingText" value="3">
+            <input type="radio" id="3" name="ratingText" value="3" required>
             <label for="3">3</label>
-            <input type="radio" id="4" name="ratingText" value="4">
+            <input type="radio" id="4" name="ratingText" value="4" required>
             <label for="4">4</label>
-            <input type="radio" id="5" name="ratingText" value="5">
+            <input type="radio" id="5" name="ratingText" value="5" required>
             <label for="5">5</label><br>
         <input type="submit" value="Submit">
 </form>
 
+<form method="POST" action="/ind_prod/{{pid}}/main">
+    <input type="submit" value="Cancel">
+</form>
 
 
 <br><br>

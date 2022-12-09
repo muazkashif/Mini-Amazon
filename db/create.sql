@@ -63,5 +63,14 @@ CREATE TABLE Ratings (
     rating DECIMAL(3,2) NOT NULL,
     review VARCHAR(8000) NOT NULL,
     time_reviewed timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
+    votes INT NOT NULL,
     PRIMARY KEY (uid, sid, pid)
+);
+
+CREATE TABLE Coupons (
+    code VARCHAR(8000) NOT NULL, 
+    pid VARCHAR(255),
+    category VARCHAR(8000), 
+    effect DECIMAL(3, 2) NOT NULL,
+    PRIMARY KEY (code)
 );

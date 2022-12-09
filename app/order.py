@@ -16,6 +16,7 @@ def translate(id):
     p = ""
     sid = ""
     quantity = ""
+    price = ""
     count = 0
     for i in range(1, len(id)-1):
         if id[i] == ",":
@@ -25,9 +26,12 @@ def translate(id):
                 p = p + id[i]
             elif count == 1:
                 sid = sid + id[i]
-            else:
+            elif count == 2:
                 quantity = quantity + id[i]
-    return p, sid, quantity
+            else:
+                price = price + id[i]
+
+    return p, sid, quantity, price
 
 
 @bp.route('/order/checkout', methods=['GET','POST'])
@@ -38,7 +42,7 @@ def check_out_all():
     total_price = 0
     balance = User.get_balance(current_user.id)
     for item in cart: 
-        pid, sid, quantity = item.pid, item.sid, item.quantity
+        pid, sid, quantity= item.pid, item.sid, item.quantity
         quantity_available = ForSaleItems.get_quantity(int(pid), int(sid))
         new_quantity = quantity_available - int(quantity)
         if new_quantity >= 0:
@@ -49,17 +53,17 @@ def check_out_all():
         success_price = True
         User.updateBalance(current_user.id, float(balance)-total_price)
         time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
-        for item in cart:
-            pid, sid, quantity = item.pid, item.sid, item.quantity
+        for item in cart:                       #Fix this
+            pid, sid, quantity, price = item.pid, item.sid, item.quantity, item.price
             seller_balance = User.get_balance(sid)
             price = float(ForSaleItems.get_price(pid, sid)[0])
-            User.updateBalance(item.sid, float(seller_balance) + price*int(quantity))
+            User.updateBalance(item.sid, float(seller_balance) + price)
             quantity_available = ForSaleItems.get_quantity(int(pid), int(sid))
             new_quantity = quantity_available - int(quantity)
             if new_quantity >= 0:
                 Purchase.add(current_user.id, int(pid), int(sid), int(quantity), price, time)
                 Cart.delete_product_cart(current_user.id, int(pid), int(sid))
-                ForSaleItems.remove(pid, sid, quantity_available, price)
+                ForSaleItems.remove(pid, sid, quantity_available, price)  #FIX THESE
                 ForSaleItems.add(pid, sid, new_quantity, price)
     purchases = Purchase.get_all()
 
@@ -100,11 +104,12 @@ def index():
                 total_price = 0
                 balance = User.get_balance(current_user.id)
                 for id in request.form.getlist("selectfromcart"): 
-                    pid, sid, quantity = translate(id)
+                    pid, sid, quantity, price = translate(id)
                     quantity_available = ForSaleItems.get_quantity(int(pid), int(sid))
                     new_quantity = quantity_available - int(quantity)
                     if new_quantity >= 0:
-                        total_price += float(ForSaleItems.get_price(pid, sid)[0]) * int(quantity)
+                        #total_price += float(ForSaleItems.get_price(pid, sid)[0]) * int(quantity)
+                        total_price += float(price)
                     else:
                         success_quantity = False
                 if total_price < balance:
@@ -112,17 +117,21 @@ def index():
                     time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
                     User.updateBalance(current_user.id, float(balance)-total_price)
                     for id in request.form.getlist("selectfromcart"):
-                        pid, sid, quantity = translate(id)
+                        pid, sid, quantity, price = translate(id)
                         seller_balance = User.get_balance(sid)
-                        price = float(ForSaleItems.get_price(pid, sid)[0])
+                        #price = float(ForSaleItems.get_price(pid, sid)[0])
+                        price = round(float(price) / int(quantity), 2)
                         User.updateBalance(sid, float(seller_balance) + int(quantity)*price)
                         quantity_available = ForSaleItems.get_quantity(int(pid), int(sid))
                         new_quantity = quantity_available - int(quantity)
                         if new_quantity >= 0:
                             Purchase.add(current_user.id, int(pid), int(sid), int(quantity), price, time)
                             Cart.delete_product_cart(current_user.id, int(pid), int(sid))
-                            ForSaleItems.remove(pid, sid, quantity_available, price)
-                            ForSaleItems.add(pid, sid, new_quantity, price)
+                            #add a grab of the orig_price
+                            orig_price = ForSaleItems.get_price(pid, sid)[0]
+                            print(orig_price)
+                            ForSaleItems.remove(pid, sid, quantity_available, orig_price)
+                            ForSaleItems.add(pid, sid, new_quantity, orig_price)
     purchases = Purchase.get_all()
     if current_user.is_authenticated:
         product_names = []

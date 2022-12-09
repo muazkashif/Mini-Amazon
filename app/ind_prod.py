@@ -52,7 +52,8 @@ def show_product(k, sid):
                            seller_info = seller_info,
                            current_uid=current_user.id,
                            sid = sid,
-                           ratingsNumber=Rating.get_number_of_ratings(k))
+                           ratingsNumber=Rating.get_number_of_ratings(k),
+                           rating_sort = Rating.get_rating_sort())
     else:
         if (current_user.is_authenticated):
             curr_uid = current_user.id
@@ -67,7 +68,8 @@ def show_product(k, sid):
                            seller_info = seller_info,
                            current_uid=curr_uid,
                            sid = sid,
-                           ratingsNumber=Rating.get_number_of_ratings(k))
+                           ratingsNumber=Rating.get_number_of_ratings(k),
+                           rating_sort = Rating.get_rating_sort())
 
 
 @bp.route('/ind_prod/<pid>/<sid>/add_to_cart', methods = ["POST", "GET"])
@@ -83,6 +85,24 @@ def add_to_cart(pid, sid):
         return redirect(url_for('ind_prod.show_product', k = pid, sid = sid))
     Cart.add(current_user.id, pid, sid, quantity)
     return redirect(url_for('ind_prod.show_product', k = pid, sid = sid))
+
+
+@bp.route('/upvote_review/<uid>_<pid>_<sid>', methods = ["POST", "GET"])
+def upvote_review(uid,pid,sid):
+    val = Rating.getvotes_for_Review(uid,pid,sid) +1
+    Rating.change_upvote_Review(uid,pid,sid,val)
+    return redirect(url_for('ind_prod.show_product', k = pid, sid = "main"))
+
+@bp.route('/downvote_review/<uid>_<pid>_<sid>', methods = ["POST", "GET"])
+def downvote_review(uid,pid,sid):
+    val = Rating.getvotes_for_Review(uid,pid,sid) -1
+    Rating.change_upvote_Review(uid,pid,sid,val)
+    return redirect(url_for('ind_prod.show_product', k = pid, sid = "main"))
+
+@bp.route('/change_rating_sort/<type>/<pid>', methods = ["POST", "GET"])
+def change_rating_sort(type,pid):
+    Rating.change_order_by(type)
+    return redirect(url_for('ind_prod.show_product', k = pid, sid = "main"))
                            
 
 
