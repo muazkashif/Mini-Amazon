@@ -19,7 +19,7 @@ num_coupons = 1000
 
 
 
-file_path = "../generated/"
+file_path = "../data/"
 
 categories = ["Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
@@ -179,8 +179,17 @@ def gen_forsales(num_forsale_items, s_uids, available_pids):
     #return 
 
 
-def gen_transactions(num_purchases, available_pids, uids,sids):
+def gen_transactions(num_purchases, uids):
     order_status = ["Received","Processing","Shipped","Delivered"]
+    seller_to_prods = []
+    already_done = [()]
+    
+    with open(file_path + 'ForSaleItems.csv', 'r') as r:
+        reader = get_csv_reader(r)
+        for row in reader:
+            seller_to_prods.append(row)
+            
+            
     with open(file_path + 'Transactions.csv', 'w') as f:
         writer = get_csv_writer(f)
         print('Purchases...', end=' ', flush=True)
@@ -188,13 +197,22 @@ def gen_transactions(num_purchases, available_pids, uids,sids):
             if id % 10 == 0:
                 print(f'{id}', end=' ', flush=True)
             uid = fake.random_element(elements=uids)
-            sid = fake.random_element(elements=sids)
-            pid = fake.random_element(elements=available_pids)
+            s_to_p = fake.random_element(elements=seller_to_prods)
+            sid = s_to_p[1]
+            pid = s_to_p[0]
+            key = (uid,sid,pid)
+            while key in already_done:
+                uid = fake.random_element(elements=uids)
+                s_to_p = fake.random_element(elements=seller_to_prods)
+                sid = s_to_p[1]
+                pid = s_to_p[0]
+                key = (uid,sid,pid)
             quant = fake.random_int(min = 1, max = 5) #CHANGE MAX TO TAKE INTO ACCOUNT STALK
             price = round(random.uniform(0, 500), 2)
             time_purchased = fake.date_time_between(start_date = datetime.datetime(2000, 1, 1))
             time_updated = time_purchased
             status = fake.random_element(elements = order_status)
+            already_done.append(key)
             writer.writerow([uid, sid, pid, quant, price, time_purchased, status, time_updated])
         print(f'{num_purchases} generated')
     return
@@ -250,7 +268,12 @@ def gen_products(num_products, ratings_prods):
     available_pids = []
     names = []
     unique = []
+    # categories_dict = {}
     print(ratings_prods)
+    # with open("../../outside_data/" + 'Sorted_cats.csv', 'r') as r:
+    #     reader = get_csv_reader(r)
+    #     for row in reader:
+    #         categories_dict[row[0]] = row[1]
     
     with open(file_path + 'Products.csv', 'w') as f:
         writer = get_csv_writer(f)
@@ -279,10 +302,14 @@ def gen_products(num_products, ratings_prods):
                     else:
                         rating = 0
                     descriptions = row[10]
-                    #category = row[4].split(">>")[0][2:].split("\"]")[0]
-                    category = fake.random_element(elements = ("Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"))
-                    if len(category)>39:
-                        category = "Other"
+                    category = row[4].split(">>")[0][2:].split("\"]")[0]
+                    # if category in categories_dict:
+                    #     category = categories_dict[category]
+                    # category = fake.random_element(elements = ("Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"))
+                    # if len(category)>39:
+                    #     category = "Other"
+                    if category not in categories:
+                        categories.append(category)
                     images = row[8].split("\"\"")[0][2:].replace('\"','').split(",")[0]
                     if len(images) != 0 and images[-1] == ']':
                         images = images[:-1]
@@ -294,7 +321,7 @@ def gen_products(num_products, ratings_prods):
                     # print(rating, end = ' ')
                     unique.append(category)
     #print(set(unique))
-    return available_pids
+    return available_pids, categories
 
 def gen_ratings(num_ratings):
     already_done_keys = []
@@ -365,15 +392,25 @@ def gen_coupons(num_coupons, available_pids):
         print(f'{num_coupons} generated')
     return
 
+def print_cat(cats):
+    with open("../../outside_data/" +  'Cats.csv', 'w') as f:
+        for i in cats:
+            writer = get_csv_writer(f)
+            writer.writerow([i])
+    return
+        
+
 if __name__ == "__main__":
     uids = gen_users(num_users)
-    available_pids = gen_products(num_products,{})
+    available_pids, categories = gen_products(num_products,{})
     # print("\n\n\n\n\n" + str(len(available_pids)))
     s_uids, uids = gen_sellers(num_sellers)
     prod_to_seller, products_for_sale = gen_forsales(num_forsale_items, s_uids, available_pids)
     #products_for_sale = ForSaleItems.get_pids()
     gen_carts(num_cart_items, uids, prod_to_seller)
-    gen_transactions(num_purchases, products_for_sale, uids, s_uids)
+    gen_transactions(num_purchases, uids)
     gen_ratings(num_ratings)
     gen_coupons(num_coupons, products_for_sale)
+    
+    print_cat(categories)
     print("\n")
