@@ -47,6 +47,15 @@
                               </div>
                           </div>
 
+                          <div class="row">
+                            <div class="col-md-6">
+                                <label>Seller Rating</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{total}}</p>
+                            </div>
+                        </div>
+
 
 
                         </div>
@@ -55,6 +64,8 @@
             </div>
         </form>
     </div>
+
+   {% if not check %} 
 <h2>Ratings Received</h2>
 <table class='table table-hover table-bordered container'>
   <thead class="thead-dark">
@@ -67,6 +78,7 @@
     </tr>
   </thead>
   <tbody>
+
     {% for ratingg in ratings%}
       <tr>
         <td><a href="/view_all_reviews/{{ratingg.uid}}">{{ratingg.uid}}</a></td>
@@ -78,6 +90,8 @@
     {% endfor %}
   </tbody>
 </table>
+
+{% endif %}
 
 <br><br>
 

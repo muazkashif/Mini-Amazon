@@ -81,7 +81,7 @@ def add_to_cart(pid, sid):
         return redirect(url_for('ind_prod.show_product', k = pid, sid = sid))
     if quantity == 0: 
         return redirect(url_for('ind_prod.show_product', k = pid, sid = sid))
-    print(ForSaleItems.get_quantity(pid, sid))
+    #print(ForSaleItems.get_quantity(pid, sid))
     curr_quantity = int(ForSaleItems.get_quantity(pid, sid))
     if quantity < 0 or quantity > curr_quantity:
         flash('Invalid Quantity Amount')
