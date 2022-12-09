@@ -131,13 +131,21 @@
     <form action="/user_update_form">
         <button button style="margin:10px;" name=update_info>Update Info</button>
     </form>
-    </div>
+    </div> 
     
     {% if not sell %}
     <form method="POST" action="/add_seller">
         <input type="submit" value="Become Seller?">
     </form>
     {% endif %}
+
+    {% if sell %}
+    <div class = "seller-button">
+        <form action="/seller_page">
+            <button >Seller Info</button>
+        </form>
+          </div>
+      {% endif %}
 
     <!-- gonna move this up top to header -->
 

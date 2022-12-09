@@ -77,23 +77,26 @@ def index(descrp, effect, check):
         carts = Cart.get(current_user.id)
         product_names = []
         prices = []
+        unit_price = []
         total_price = 0
         for item in carts:
             product_info = Product.get(item.pid) 
             product_names.append(Product.get_name(item.pid)[0][0])
             if descrp == product_info.category or descrp == str(item.pid) or descrp == "All":
+                unit_price.append(round(float(ForSaleItems.get_price(item.pid, item.sid)[0]) * float(effect), 2))
                 price_no_effect = item.quantity * float(ForSaleItems.get_price(item.pid, item.sid)[0])
                 price_with_effect_round = round(price_no_effect * float(effect), 2)
                 price_temp_round = price_with_effect_round
                 prices.append(price_with_effect_round)
                 total_price += price_temp_round
             else:
+                unit_price.append(round(float(ForSaleItems.get_price(item.pid, item.sid)[0]), 2))
                 price_no_effect = item.quantity * float(ForSaleItems.get_price(item.pid, item.sid)[0])
                 price_round = round(price_no_effect, 2)
                 prices.append(price_round)
                 total_price +=  price_round
         return render_template('carts.html',
-                            cart_items=carts, cart_len=len(carts), product_names=product_names,prices=prices,logged_in=True, total_price=round(total_price,2), check = check)
+                            cart_items=carts, cart_len=len(carts), product_names=product_names,prices=prices,logged_in=True, total_price=round(total_price,2), check = check, unit_price = unit_price)
     return render_template('carts.html',
                             cart_items=carts)
 
