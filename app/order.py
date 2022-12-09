@@ -54,7 +54,7 @@ def check_out_all():
         User.updateBalance(current_user.id, float(balance)-total_price)
         time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         for item in cart:                       #Fix this
-            pid, sid, quantity, price = item.pid, item.sid, item.quantity, item.price
+            pid, sid, quantity = item.pid, item.sid, item.quantity 
             seller_balance = User.get_balance(sid)
             price = float(ForSaleItems.get_price(pid, sid)[0])
             User.updateBalance(item.sid, float(seller_balance) + price)

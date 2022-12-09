@@ -74,8 +74,11 @@ def show_product(k, sid):
 
 @bp.route('/ind_prod/<pid>/<sid>/add_to_cart', methods = ["POST", "GET"])
 def add_to_cart(pid, sid):
-    quantity = int(request.form.get('cart_quantity'))
-    #check is provided value is an integer
+    try:
+        quantity = int(request.form.get('cart_quantity'))
+    except ValueError:
+        flash("Invalid Cart Input")
+        return redirect(url_for('ind_prod.show_product', k = pid, sid = sid))
     if quantity == 0: 
         return redirect(url_for('ind_prod.show_product', k = pid, sid = sid))
     print(ForSaleItems.get_quantity(pid, sid))

@@ -44,7 +44,8 @@
         <th scope="col">Product ID</th>
         <th scope="col">Seller ID</th>
         <th scope="col">Quantity</th>
-        <th scope="col">Price</th>
+        <th scope="col">Unit Price</th>
+        <th scope="col">Total Price</th>
         <th scope="col">Select From Cart</th>
       </tr>
     </thead>
@@ -60,6 +61,7 @@
           <td>{{product_names[i]}}</td>
           <td>{{cart_items[i].sid}}</td>
           <td>{{cart_items[i].quantity}}</td>
+          <td>{{unit_price[i]}}</td>
           <td>{{prices[i]}}</td>
           <td><input type="checkbox" value="{{cart_items[i].pid, cart_items[i].sid, cart_items[i].quantity, prices[i]}}" name="selectfromcart"></td>
         </tr>
