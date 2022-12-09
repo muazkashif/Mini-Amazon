@@ -228,4 +228,6 @@ WHERE id = :pid
                               pid=pid,avg=avg)
         # return [Product(*row) for row in rows]
     
+
+    
   

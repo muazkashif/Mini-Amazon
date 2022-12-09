@@ -15,10 +15,11 @@ num_sellers = 2000
 num_cart_items = 4000
 num_forsale_items = 4000
 num_ratings = 5000
+num_coupons = 1000
 
 
 
-file_path = "../data/"
+file_path = "../generated/"
 
 categories = ["Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School"]
 
@@ -340,15 +341,39 @@ def gen_ratings(num_ratings):
     gen_products(num_products,ratings_prods)
     return
 
+def gen_coupons(num_coupons, available_pids):
+    with open(file_path + 'Coupons.csv', 'w') as f:
+        writer = get_csv_writer(f)
+        print('Coupons...', end=' ', flush=True)
+        codes = 1000000000
+        for count in range(num_coupons):
+            if count % 10 == 0:
+                print(f'{count}', end = ' ', flush = True)
+            if count % 2 == 0:
+                code_use = codes
+                codes += 1
+                pid = str(fake.random_element(elements = available_pids))
+                effect = round(random.uniform(0, .99), 2)
+                category = "None"
+            else:
+                code_use = codes
+                codes += 1
+                category = fake.random_element(elements = ("Travel", "Pets", "Kitchenware", "Furniture", "Electronics", "Sports", "Toiletries", "Clothing", "Books", "School", "All"))
+                effect = round(random.uniform(0, .99), 2)
+                pid = "None" 
+            writer.writerow([code_use, pid, category, effect])
+        print(f'{num_coupons} generated')
+    return
+
 if __name__ == "__main__":
     uids = gen_users(num_users)
     available_pids = gen_products(num_products,{})
     # print("\n\n\n\n\n" + str(len(available_pids)))
-    
     s_uids, uids = gen_sellers(num_sellers)
     prod_to_seller, products_for_sale = gen_forsales(num_forsale_items, s_uids, available_pids)
     #products_for_sale = ForSaleItems.get_pids()
     gen_carts(num_cart_items, uids, prod_to_seller)
     gen_transactions(num_purchases, products_for_sale, uids, s_uids)
     gen_ratings(num_ratings)
+    gen_coupons(num_coupons, products_for_sale)
     print("\n")

@@ -2,6 +2,14 @@
 
 {% block content %}
 
+<style>
+  .add_coupon{
+    position:absolute;
+    right:10%;
+    top:10%;
+  }
+</style>
+
 <h2>Cart Items:</h2>
 {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -15,9 +23,17 @@
 <form action="/carte/">
   <button>Clear Cart</button>
 </form>
+{% if not check %}
 <form action="/order/checkout">
   <button>Checkout All</button>
 </form>
+{% endif %}
+<form class = "add_coupon" method="POST" action="/coupon_apply">
+    <h5>Coupon Code:</h5>
+    <input type="text" value= ""  style="width:200px;margin:10px;" name="coupon">
+    <input type="submit" value="Update">
+  </form>
+
 <p>Total Price: ${{total_price}}</p>
 <form method="POST" action="/order/">
   <input type="submit" value="Checkout Selected Items">
@@ -45,10 +61,10 @@
           <td>{{cart_items[i].sid}}</td>
           <td>{{cart_items[i].quantity}}</td>
           <td>{{prices[i]}}</td>
-          <td><input type="checkbox" value="{{cart_items[i].pid, cart_items[i].sid, cart_items[i].quantity}}" name="selectfromcart"></td>
+          <td><input type="checkbox" value="{{cart_items[i].pid, cart_items[i].sid, cart_items[i].quantity, prices[i]}}" name="selectfromcart"></td>
         </tr>
       {% endfor %}
-    </tbody>
+    </tbody>                                                                                         
   </table>
 
 <br><br>

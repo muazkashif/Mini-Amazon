@@ -66,3 +66,11 @@ CREATE TABLE Ratings (
     votes INT NOT NULL,
     PRIMARY KEY (uid, sid, pid)
 );
+
+CREATE TABLE Coupons (
+    code VARCHAR(8000) NOT NULL, 
+    pid VARCHAR(255),
+    category VARCHAR(8000), 
+    effect DECIMAL(3, 2) NOT NULL,
+    PRIMARY KEY (code)
+);

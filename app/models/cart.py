@@ -22,6 +22,16 @@ WHERE uid = :uid
         return [Cart(*row) for row in rows]
 
     @staticmethod
+    def get_pid_category(uid):
+        rows = app.db.execute('''
+SELECT uid, category
+FROM Carts, Products
+WHERE pid = id and uid = :uid
+''',
+                              uid = uid)
+        return rows
+
+    @staticmethod
     def get_all():
         rows = app.db.execute('''
 SELECT uid, pid, sid, quantity
