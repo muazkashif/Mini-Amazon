@@ -213,7 +213,7 @@
             {% endif %}
 
           <option value="/sort_purchases/{{'ASC'}}">Least Purchased</option>
-          <option value="/sort_purchases//{{'DESC'}}">Most Purchased</option>
+          <option value="/sort_purchases/{{'DESC'}}">Most Purchased</option>
       </select>
      
   </form>
@@ -312,7 +312,7 @@
           <p class = "price">Avg Price: ${{product.avg}}</p>
           <p class = "rating">Rating: {{product.rating}}/5</p>
           <p class = "Category">Category: {{product.category}}</p>
-          <form action="/ind_prod/{{product.id}}/main" method = "POST" value = product name = "prod" style="text-allign:center;">
+          <form action="/ind_prod/{{product.id}}/main" method = "POST" value = product name = "prod">
             <input type="submit" value = "See more">  
         </form>
         </div>

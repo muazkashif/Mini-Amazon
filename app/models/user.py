@@ -113,5 +113,5 @@ UPDATE Users
 SET email = :email, password = :password, firstname = :firstname, lastname = :lastname, address = :address
 WHERE id = :id
 """,
-                              id=id, email=email, password=password, firstname=firstname, lastname=lastname, address=address)
-        #return User(*(rows[0])) if rows else None
+                              id=id, email=email, password=generate_password_hash(password), firstname=firstname, lastname=lastname, address=address)
+        return None
