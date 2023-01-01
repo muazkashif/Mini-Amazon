@@ -1,13 +1,10 @@
-Skeleton code for the CompSci 316 undergraduate course project.
-This course project is intended as a 'standard option'.
+Code for the final project of COMPSCI 316: Database Systems
 
-Originally created by [Rickard Stureborg](http://www.rickard.stureborg.com) and [Yihao Hu](https://www.linkedin.com/in/yihaoh/) for Fall 2021.
-Amended for Fall 2022.
 
-We assume you are in your class VM.
+This app is optimized for our class VM.
 If you have a different setup, your mileage with the following instructions may vary.
 
-## Installing the Current Skeleton
+## Installing the Project
 
 1. Fork this repo by clicking the small 'Fork' button at the very top right on Gitlab.
    It's important that you fork first, because if you clone the directory directly you won't be able to push changes (save your progress) back to Gitlab.
@@ -71,52 +68,6 @@ Under `db/generated/`, you will find alternate CSV files that will be used to in
   This rule applies to the password value in the CSV files too.
   To see what hashed password value you should put in a CSV file, see `db/data/gen.py` for example of how compute the hashed value.
 
-## Git Tips
-
-These instructions seem long, but they aren't complicated.
-If you've never worked with merge requests, make sure to read this thoroughly. 
-
-To work on a gitlab project with many team members, you want to avoid working directly on the `main` branch as much as possible.
-If multiple people work on this branch at the same time, you are likely to run into conflicts and be forced to restore old versions.
-This is a mess.
-Instead, use new branches every time you add a feature or make an edit, and then merge these into the main branch.
-This is how to do it:
-
-Let's imagine we want to create a new function to help with some specific query of the database. Before you begin, create and checkout a new branch for this feature.
-1. `git branch query-feature` will create a branch named `query-feature`.
-   You can change the name as you'd like.
-   Then switch to this branch using `git checkout query-feature`.
-2. Once you are on this branch, get to work.
-   Make the edits you need to the files you want to work on.
-3. Run the command `git status` to see what files have changed.
-   Let's say you only edit the file `app/db.py` to add the new function along with some comments, and `README.md` to include some information about this feature.
-   These files will then appear in red under the title `modified:`.
-4. Now that you're done editing, you want to save your changes.
-   Each save appears as a notification on gitlab in the form of a "commit".
-   To be helpful, we save our edits in small chunks so that others can easily read these notifications and follow along which changes were made.
-   Let's say we want to make two commits, one for `app/models/user.py` and another for `README.md`. 
-   1. We make the first commit ready by adding the changes to `app/models/user.py` using the command `git add app/models/user.py`.
-      Now, running `git status` will show this file in green, indicating it is being tracked.
-   2. Now we can commit this change using the command `git commit -m "MESSAGE"`.
-      We replace `MESSAGE` with a short description of what the change entailed.
-      This is what shows up in the notification on gitlab. For example: `git commit -m "created a new function to find the total amount spent by a user"`
-   3. Now repeat this process for the `README.md` file.
-      That is: `git add README.md`, then `git commit -m "updated readme to include description of 'all-time spending' feature"`.
-   4. You've saved your changes!
-      But they're still only local (to your VM).
-      To upload them to gitlab you need to run `git push --set-upstream origin query-feature`.
-      By now you (and your teammates) should be able to see that you've made changes on the gitlab website.
-      These changes appear in your repository under Repository -> Branches -> `query-feature`.
-5. For others to add on top of your work, you want to open a "merge" request to merge your branch into the `main` branch.
-   This request is an open invitation for your teammates to take a look at your code, make sure the changes look good to them, and then incorporate them onto the `main` branch for others to use.
-   To open a merge request, click on "merge requests" in the left navigation bar on gitlab, and then hit the blue "New merge request" button at the top right.
-   It will ask you to select a source branch.
-   For our example above this would be the `query-feature` branch.
-   For the target branch, leave it as `main`.
-6. Once the merge request is created, ping your teammates to take a look at it.
-   If they think it's acceptable, they just need to click "merge" and the code you've written gets incorporated.
-   Now you can safely delete the `query-feature` branch on gitlab.
-   Done!
 
 ## Note on Hiding Credentials
 
