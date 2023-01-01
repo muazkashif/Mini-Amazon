@@ -1,14 +1,12 @@
 Code for the final project of COMPSCI 316: Database Systems
 
 
-This app is optimized for our class VM.
+This app is optimized for the class VM.
 If you have a different setup, your mileage with the following instructions may vary.
 
 ## Installing the Project
 
 1. Fork this repo by clicking the small 'Fork' button at the very top right on Gitlab.
-   It's important that you fork first, because if you clone the directory directly you won't be able to push changes (save your progress) back to Gitlab.
-   Name your forked repo as you prefer.
 2. In your newly forked repo, find the blue "Clone" button.
    Copy the "Clone with SSH" text.
    In your terminal on the VM, you can now issue the command `git clone THE_TEXT_YOU_JUST_COPIED`.
@@ -34,16 +32,22 @@ You should only run Flask while inside this environment; otherwise it will produ
 If you are running a local Vagrant VM, to view the app in your browser, you simply need to visit [http://localhost:5000/](http://localhost:5000/).
 If you are running a Google VM, you will need to point your browser to `http://vm_external_ip_addr:5000/`, where `vm_external_ip_addr` is the external IP address of your Google VM.
 
-To stop your website, simply press <kbd>Ctrl</kbd><kbd>C</kbd> in the VM shell where flask is running.
+To stop the website, simply press <kbd>Ctrl</kbd><kbd>C</kbd> in the VM shell where flask is running.
 You can then deactivate the environment using
 ```
 deactiviate
 ```
 
+## Features of the Website
+
+The website comes with all the basic functionalities of an Amazon-like ecommerce website:
+* Users can register and log in with unique credentials and also change their personal info.
+* Users can browse an array of products and add to their cart or save for later.
+* Users can also easily become sellers to advertize and sell their own products.
+* Users have a balance that they can top up to buy products or cash out; they can also 
+
 ## Working with the Database
 
-Your Flask server interacts with a PostgreSQL database called `amazon` behind the scene.
-As part of the installation procedure above, this database has been created automatically for you.
 You can access the database directly by running the command `psql amazon` in your VM.
 
 For debugging, you can access the database while the Flask server is running.
