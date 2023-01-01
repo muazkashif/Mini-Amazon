@@ -4,6 +4,20 @@ Code for the final project of COMPSCI 316: Database Systems
 This app is optimized for the class VM.
 If you have a different setup, your mileage with the following instructions may vary.
 
+## Features of the Website
+
+The website comes with all the basic functionalities of an Amazon-like ecommerce website:
+* Users can register and log in with unique credentials and also change their personal info.
+* Users can browse an array of products and add to their cart or save for later.
+* Users can also easily become sellers to advertize and sell their own products.
+* Users have a balance that they can top up to buy products or cash out; balance can also change when products are sold.
+* Users can view summaries of their purchase and sell histories.
+* Users can leave reviews and ratings for products and sellers and upvotes/downvotes for reviews as well.
+* There are efficient input and selection validation checks throughout the backend process.
+* The products display is neat and intuitive for user ease.
+
+A full detailed list of the features can be found here: https://tinyurl.com/2p9a6dmc
+
 ## Installing the Project
 
 1. Fork this repo by clicking the small 'Fork' button at the very top right on Gitlab.
@@ -37,20 +51,6 @@ You can then deactivate the environment using
 ```
 deactiviate
 ```
-
-## Features of the Website
-
-The website comes with all the basic functionalities of an Amazon-like ecommerce website:
-* Users can register and log in with unique credentials and also change their personal info.
-* Users can browse an array of products and add to their cart or save for later.
-* Users can also easily become sellers to advertize and sell their own products.
-* Users have a balance that they can top up to buy products or cash out; balance can also change when products are sold.
-* Users can view summaries of their purchase and sell histories.
-* Users can leave reviews and ratings for products and sellers and upvotes/downvotes for reviews as well.
-* There are efficient input and selection validation checks throughout the backend process.
-* The products display is neat and intuitive for user ease.
-
-A full detailed list of the features can be found here: https://tinyurl.com/2p9a6dmc
 
 ## Working with the Project on Your Own
 
