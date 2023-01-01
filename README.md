@@ -45,6 +45,7 @@ The website comes with all the basic functionalities of an Amazon-like ecommerce
 * Users can browse an array of products and add to their cart or save for later.
 * Users can also easily become sellers to advertize and sell their own products.
 * Users have a balance that they can top up to buy products or cash out; balance can also change when products are sold.
+* Users can view summaries of their purchase and sell histories.
 * Users can leave reviews and ratings for products and sellers and upvotes/downvotes for reviews as well.
 * There are efficient input and selection validation checks throughout the backend process.
 * The products display is neat and intuitive for user ease.
