@@ -2,7 +2,6 @@ Code for the final project of COMPSCI 316: Database Systems
 
 
 This app is optimized for the class VM.
-If you have a different setup, your mileage with the following instructions may vary.
 
 ## Features of the Website
 
@@ -21,7 +20,7 @@ A full detailed list of the features can be found here: https://tinyurl.com/2p9a
 ## Installing the Project
 
 1. Fork this repo by clicking the small 'Fork' button at the very top right on Gitlab.
-2. In your newly forked repo, find the blue "Clone" button.
+2. In the newly forked repo, find the blue "Clone" button.
    Copy the "Clone with SSH" text.
    In your terminal on the VM, you can now issue the command `git clone THE_TEXT_YOU_JUST_COPIED`.
    Make sure to replace 'THE_TEXT_YOU_JUST_COPIED' with the "Clone with SSH" text.
@@ -57,7 +56,7 @@ deactiviate
 You can access the database directly by running the command `psql amazon` in your VM.
 
 For debugging, you can access the database while the Flask server is running.
-We recommend you open a second shell on your VM to run `psql amazon`.
+It is recommended you open a second shell on your VM to run `psql amazon`.
 After you perform some action on the website, you run a query inside `psql` to see the action has the intended effect on the database.
 
 The `db/` subdirectory of this repository contains files useful for (re-)initializing the database if needed.
